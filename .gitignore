@@ -1,3 +1,11 @@
 /Library
 /Logs
 /Temp
+/UpgradeLog.htm
+/obj/Debug
+/*.sln
+/.vs/oops-framework-cocos2unity/FileContentIndex/*.vsidx
+/.vs/oops-framework-cocos2unity/v16
+/.vs/oops-framework-cocos2unity/v17
+/*.csproj
+/*.vsconfig
