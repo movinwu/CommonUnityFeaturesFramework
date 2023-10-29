@@ -13,6 +13,8 @@ namespace OOPS
     {
         private static ELogType tags = 0;
 
+        private static bool inited = false;
+
         private static void Init()
         {
             tags = ELogType.Net
@@ -372,6 +374,11 @@ namespace OOPS
 
         private static bool IsOpen(ELogType tag)
         {
+            if (!inited)
+            {
+                inited = true;
+                Init();
+            }
             return (tags & tag) != ELogType.Null;
         }
     }

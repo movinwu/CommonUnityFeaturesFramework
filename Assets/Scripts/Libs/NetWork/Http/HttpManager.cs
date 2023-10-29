@@ -12,7 +12,7 @@ namespace OOPS
     /// <summary>
     /// Http连接请求
     /// </summary>
-    public class HttpRequest : MonoSingletonBase<HttpRequest>
+    public class HttpManager : MonoSingletonBase<HttpManager>
     {
         /// <summary>
         /// 服务器地址
@@ -55,7 +55,7 @@ namespace OOPS
                 urlSb.Append(name);
             }
             //检验参数
-            if (null != param)
+            if (null != param && param.Count > 0)
             {
                 if (!urlSb.ToString().Contains('?'))
                 {
@@ -87,8 +87,9 @@ namespace OOPS
             handler.Params = param;
             handler.Name = name;
             requestingHttpDic.Add(url, handler);
-            handler.Request = UnityWebRequest.Get("url");
+            handler.Request = UnityWebRequest.Get(url);
             handler.Request.timeout = timeout;
+            handler.Request.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
             handler.Request.SendWebRequest();
         }
 
@@ -108,7 +109,7 @@ namespace OOPS
                 Logger.NetError("http post请求地址不能为空");
             }
             //检验参数
-            if (null != param || param.Count == 0)
+            if (null == param || param.Count == 0)
             {
                 Logger.NetError("post请求表单不能为空");
                 return;
@@ -143,8 +144,9 @@ namespace OOPS
                 formData.Add(new MultipartFormFileSection(param[i].Key, param[i].Value));
             }
 
-            handler.Request = UnityWebRequest.Post("url", formData);
+            handler.Request = UnityWebRequest.Post(url, formData);
             handler.Request.timeout = timeout;
+            handler.Request.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
             handler.Request.SendWebRequest();
         }
 
