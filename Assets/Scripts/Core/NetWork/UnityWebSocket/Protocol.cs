@@ -6,19 +6,14 @@ namespace OOPS
     /// <summary>
     /// 通信协议
     /// </summary>
-    public abstract class Protocol<T> : IProtocol where T : IMessage<T>
+    public abstract class Protocol<T> : IProtocol, IReference where T : IMessage<T>
     {
-        public abstract short Key { get; }
+        public abstract short MsgId { get; }
 
         /// <summary>
         /// proto数据
         /// </summary>
         protected T Data { get; private set; }
-
-        public void SetData(T data)
-        {
-            this.Data = data;
-        }
 
         public void ReceiveMessage(byte[] data)
         {
@@ -54,15 +49,16 @@ namespace OOPS
         /// 发送消息
         /// </summary>
         /// <param name="msg"></param>
-        public void SendMessage()
+        public void SendMessage(T data)
         {
             try
             {
                 using (var ms = new System.IO.MemoryStream())
                 {
+                    this.Data = data;
                     this.Data.WriteTo(ms);
                     byte[] buffer = new byte[ms.Length + 2];
-                    var msgId = ProtocolManager.Instance.GetProtocolId(this.Data.GetType());
+                    var msgId = this.MsgId;
                     buffer[0] = (byte)(msgId >> 8);
                     buffer[1] = (byte)msgId;
                     ms.Position = 0;
@@ -75,11 +71,20 @@ namespace OOPS
                 Logger.NetError($"消息序列化失败,类型为: {this.Data.GetType()}");
                 Logger.NetException(ex);
             }
+            finally
+            {
+                ReferencePool.Back(this);
+            }
         }
 
         /// <summary>
         /// 当收到消息时(处理消息)
         /// </summary>
         protected abstract void OnReceive();
+
+        public void Reset()
+        {
+            
+        }
     }
 }

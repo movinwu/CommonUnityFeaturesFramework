@@ -13,7 +13,7 @@ namespace OOPS
         /// <summary>
         /// 通信id
         /// </summary>
-        short Key { get; }
+        short MsgId { get; }
 
         /// <summary>
         /// 处理消息

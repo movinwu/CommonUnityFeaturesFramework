@@ -12,72 +12,46 @@ namespace OOPS
         private ProtocolManager() { }
 
         /// <summary>
-        /// 所有协议生成函数
-        /// </summary>
-        private Dictionary<short, System.Func<IProtocol>> m_ProtocolGenerateFuncDic = new Dictionary<short, System.Func<IProtocol>>();
-
-        /// <summary>
         /// 所有协议类型
         /// </summary>
-        private Dictionary<System.Type, short> m_ProtocolTypeDic = new Dictionary<System.Type, short>();
+        private Dictionary<short, System.Type> m_ProtocolTypeDic = new Dictionary<short, System.Type>();
 
         /// <summary>
         /// 注册协议生成函数
         /// </summary>
         /// <param name="msgId"></param>
-        /// <param name="generateFunc"></param>
         /// <param name="protocolType"></param>
-        public void RegisterProtocolGenerate(short msgId, System.Func<IProtocol> generateFunc, System.Type protocolType)
+        public void RegisterProtocol(short msgId, System.Type protocolType)
         {
-            if (m_ProtocolTypeDic.ContainsKey(protocolType))
+            if (m_ProtocolTypeDic.ContainsKey(msgId))
             {
                 Logger.NetError($"协议生成器重复注册, 类型: {protocolType}, id: {msgId}");
             }
-            else if (m_ProtocolGenerateFuncDic.ContainsKey(msgId))
+            else if (!typeof(IProtocol).IsAssignableFrom(protocolType))
             {
-                Logger.NetError($"协议生成器重复注册, 类型: {protocolType}, id: {msgId}");
-            }
-            else if (!typeof(Google.Protobuf.IMessage).IsAssignableFrom(protocolType))
-            {
-                Logger.NetError($"协议生成器注册失败,类型{protocolType}必须是protobuf数据类型");
+                Logger.NetError($"协议生成器注册失败,类型{protocolType}必须继承 IProtocol 接口");
             }
             else
             {
-                m_ProtocolTypeDic.Add(protocolType, msgId);
-                m_ProtocolGenerateFuncDic.Add(msgId, generateFunc);
+                m_ProtocolTypeDic.Add(msgId, protocolType);
             }
         }
 
         /// <summary>
-        /// 根据id生成协议
+        /// 根据消息id生成处理协议
         /// </summary>
         /// <param name="msgId"></param>
         /// <returns></returns>
         public IProtocol GenerateProtocol(short msgId)
         {
-            if (m_ProtocolGenerateFuncDic.TryGetValue(msgId, out var func))
+            if (m_ProtocolTypeDic.TryGetValue(msgId, out var type))
             {
-                return func?.Invoke();
-            }
-            Logger.NetError($"协议生成器没有注册, id: {msgId}");
-            return null;
-        }
-
-        /// <summary>
-        /// 获取id
-        /// </summary>
-        /// <param name="protocolType"></param>
-        /// <returns></returns>
-        public short GetProtocolId(System.Type protocolType)
-        {
-            if (m_ProtocolTypeDic.TryGetValue(protocolType, out var id))
-            {
-                return id;
+                return (IProtocol)ReferencePool.Acquire(type);
             }
             else
             {
-                Logger.NetError($"协议生成器没有注册, 类型: {protocolType}");
-                return -1;
+                Logger.NetError($"协议生成器没有注册, id: {msgId}");
+                return null;
             }
         }
     }

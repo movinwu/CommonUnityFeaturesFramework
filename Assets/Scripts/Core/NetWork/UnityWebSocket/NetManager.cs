@@ -87,6 +87,7 @@ namespace OOPS
 
                 var protocol = ProtocolManager.Instance.GenerateProtocol(msgId);
                 protocol.ReceiveMessage(arg.RawData);
+                ReferencePool.Back((IReference)protocol);
             }
             else if (arg.IsText)
             {

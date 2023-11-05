@@ -4,19 +4,22 @@ using UnityEngine;
 
 namespace OOPS
 {
-    public class HeartProtocol : Protocol<Heart>
+    public class HeartProtocol : Protocol<PB_Heart>
     {
-        public override short Key => (short)EProtocolId.Heart;
+        public override short MsgId => (short)EProtocolId.Heart;
 
         protected override void OnReceive()
         {
-            this.Data.Id = this.Data.Id + 1;
+            var id = this.Data.Id + 1;
             System.Threading.Tasks.Task.Run(() =>
             {
                 System.Threading.Thread.Sleep(2000);
-                this.SendMessage();
+                var heart = ReferencePool.Acquire<HeartProtocol>();//每次读取或者写入消息都必须从缓存池中取用新的item
+                var data = new PB_Heart();
+                data.Id = id;
+                heart.SendMessage(data);
             });
-            //Logger.Trace($"收到心跳消息,id为 {this.Data.Id}");
+            Logger.Trace($"收到心跳消息,id为 {this.Data.Id}");
         }
     }
 }

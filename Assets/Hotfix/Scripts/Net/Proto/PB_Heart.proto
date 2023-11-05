@@ -1,5 +1,5 @@
 syntax = "proto3";
 
-message Heart {
+message PB_Heart {
     int32 id = 1;
 }

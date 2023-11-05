@@ -11,16 +11,12 @@ namespace OOPS
         private IEnumerator Start()
         {
             NetManager.Instance.StartConnect();
+            ProtocolManager.Instance.RegisterProtocol((short)EProtocolId.Heart, typeof(HeartProtocol));
             yield return new WaitForSeconds(5);
-            ProtocolManager.Instance.RegisterProtocolGenerate((short)EProtocolId.Heart, () => new HeartProtocol(), typeof(Heart));
-            var protocol = ProtocolManager.Instance.GenerateProtocol((short)EProtocolId.Heart);
-            if (protocol is HeartProtocol heart)
-            {
-                var data = new Heart();
-                data.Id = 0;
-                heart.SetData(data);
-                heart.SendMessage();
-            }
+            var protocol = ReferencePool.Acquire<HeartProtocol>();
+            var data = new PB_Heart();
+            data.Id = 0;
+            protocol.SendMessage(data);
         }
     }
 }
