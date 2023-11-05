@@ -1,3 +1,4 @@
+using Google.Protobuf;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -10,44 +11,54 @@ namespace OOPS
     {
         private const string Address = "wss://echo.websocket.events";
 
-        private WebSocket socket;
+        private WebSocket m_Socket;
 
         public void StartConnect()
         {
-            if (null != socket && socket.ReadyState != WebSocketState.Closed)
+            if (null != m_Socket && m_Socket.ReadyState != WebSocketState.Closed)
             {
                 Logger.NetError($"和 {Address} 的websocket连接没有完全关闭时尝试重新开始websocket连接");
                 return;
             }
 
-            socket = new WebSocket(Address);
+            m_Socket = new WebSocket(Address);
 
             //注册回调
-            socket.OnOpen += OnOpen;
-            socket.OnClose += OnClose;
-            socket.OnError += OnError;
-            socket.OnMessage += OnMessage;
+            m_Socket.OnOpen += OnOpen;
+            m_Socket.OnClose += OnClose;
+            m_Socket.OnError += OnError;
+            m_Socket.OnMessage += OnMessage;
 
             Logger.Net($"websocket开始连接{Address}...");
-            socket.ConnectAsync();
+            m_Socket.ConnectAsync();
         }
 
         public void SendMsg(string str)
         {
-            if (null == socket || socket.ReadyState != WebSocketState.Open)
+            if (null == m_Socket || m_Socket.ReadyState != WebSocketState.Open)
             {
                 Logger.NetError($"和 {Address} 的websocket的连接不可用,无法发送 {str}");
                 return;
             }
-            socket.SendAsync(Encoding.UTF8.GetBytes(str));
+            m_Socket.SendAsync(Encoding.UTF8.GetBytes(str));
+        }
+
+        public void SendMsg(byte[] data)
+        {
+            if (null == m_Socket || m_Socket.ReadyState != WebSocketState.Open)
+            {
+                Logger.NetError($"和 {Address} 的websocket的连接不可用,无法发送 {Encoding.UTF8.GetString(data)}");
+                return;
+            }
+            m_Socket.SendAsync(data);
         }
 
         public void CloseConnect()
         {
-            if (null != socket && socket.ReadyState != WebSocketState.Closed && socket.ReadyState != WebSocketState.Closing)
+            if (null != m_Socket && m_Socket.ReadyState != WebSocketState.Closed && m_Socket.ReadyState != WebSocketState.Closing)
             {
                 Logger.Net($"websocket开始关闭{Address}...");
-                socket.CloseAsync();
+                m_Socket.CloseAsync();
             }
         }
 
@@ -70,7 +81,12 @@ namespace OOPS
         {
             if (arg.IsBinary)
             {
-                Logger.Net($"websocket 收到来自 {Address} 的信息({arg.RawData.Length}): {arg.Data}");
+                short msgId = (short)((arg.RawData[0] << 8) + arg.RawData[1]);
+
+                Logger.Net($"websocket 收到来自 {Address} 的信息({arg.RawData.Length}), id为: {msgId}");
+
+                var protocol = ProtocolManager.Instance.GenerateProtocol(msgId);
+                protocol.ReceiveMessage(arg.RawData);
             }
             else if (arg.IsText)
             {

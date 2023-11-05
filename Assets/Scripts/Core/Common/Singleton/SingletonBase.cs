@@ -23,10 +23,10 @@ namespace OOPS
                 {
                     //反射加载,暂时不考虑多线程
                     var type = typeof(T);
-                    ConstructorInfo privateConstructor = type.GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null, new[] { typeof(int) }, null);
+                    ConstructorInfo privateConstructor = type.GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null, new System.Type[0], null);
                     if (null == privateConstructor)
                     {
-                        throw new System.NotImplementedException("单例类需要提供私有无参构造函数");
+                        throw new System.NotImplementedException($"单例类 {type} 需要提供私有无参构造函数");
                     }
                     _instance = privateConstructor.Invoke(null) as T;
                 }

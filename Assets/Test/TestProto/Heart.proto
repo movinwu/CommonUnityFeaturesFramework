@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+message Heart {
+    int32 id = 1;
+}
