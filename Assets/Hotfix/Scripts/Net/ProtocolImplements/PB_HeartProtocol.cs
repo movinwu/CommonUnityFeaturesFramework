@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 namespace OOPS
 {
-    public class HeartProtocol : Protocol<PB_Heart>
+    public class PB_HeartProtocol : Protocol<PB_Heart>
     {
         public override short MsgId => (short)EProtocolId.Heart;
 
@@ -14,7 +10,7 @@ namespace OOPS
             System.Threading.Tasks.Task.Run(() =>
             {
                 System.Threading.Thread.Sleep(2000);
-                var heart = ReferencePool.Acquire<HeartProtocol>();//每次读取或者写入消息都必须从缓存池中取用新的item
+                var heart = ReferencePool.Acquire<PB_HeartProtocol>();//每次读取或者写入消息都必须从缓存池中取用新的item
                 var data = new PB_Heart();
                 data.Id = id;
                 heart.SendMessage(data);
