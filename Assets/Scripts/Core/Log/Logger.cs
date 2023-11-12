@@ -274,7 +274,7 @@ namespace OOPS
         /// 数据层日志异常
         /// </summary>
         /// <param name="msg"></param>
-        public static void ModeException(object msg)
+        public static void ModelException(object msg)
         {
             Print(ELogType.Net, msg, LogType.Exception, "9370DB");
         }
