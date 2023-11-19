@@ -1,0 +1,17 @@
+{
+    "name": "CommonFeatures",
+    "rootNamespace": "",
+    "references": [
+        "GUID:8b65d8710c3b04373a41cbf6b777ee65",
+        "GUID:1d6664a81583eb44ea166e8fb8cba80e"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

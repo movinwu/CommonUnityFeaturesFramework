@@ -1,7 +1,8 @@
+using CommonFeatures.NetWork;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace OOPS
+namespace CommonFeatures.Test
 {
     public class TestHttp : MonoBehaviour
     {
@@ -16,11 +17,11 @@ namespace OOPS
                 null,
                 webrequest =>
                 {
-                    Logger.Net($"http请求成功, {webrequest.downloadHandler.text.ToString()}");
+                    CommonFeatures.Log.CommonLog.Net($"http请求成功, {webrequest.downloadHandler.text.ToString()}");
                 },
                 webrequest =>
                 {
-                    Logger.NetError($"http请求错误, {webrequest.result.ToString()}");
+                    CommonFeatures.Log.CommonLog.NetError($"http请求错误, {webrequest.result.ToString()}");
                 });
         }
     }

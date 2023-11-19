@@ -1,4 +1,14 @@
-using OOPS;
+//------------------------------------------------------------
+// oops-framework-cocos2unity
+// Copyright Â© 2023 movinwu. All rights reserved.
+//------------------------------------------------------------
+// æ­¤æ–‡ä»¶ç”±å·¥å…·è‡ªåŠ¨ç”Ÿæˆï¼Œè¯·å‹¿ç›´æ¥ä¿®æ”¹ã€‚
+// ç”Ÿæˆæ—¶é—´ï¼š2023/11/19 22:03:14
+//------------------------------------------------------------
+
+using CommonFeatures.Log;
+using CommonFeatures.NetWork;
+using CommonFeatures.Pool;
 
 namespace HotfixScripts
 {
@@ -12,12 +22,12 @@ namespace HotfixScripts
             System.Threading.Tasks.Task.Run(() =>
             {
                 System.Threading.Thread.Sleep(2000);
-                var heart = ReferencePool.Acquire<PB_HeartProtocol>();//Ã¿´Î¶ÁÈ¡»òÕßĞ´ÈëÏûÏ¢¶¼±ØĞë´Ó»º´æ³ØÖĞÈ¡ÓÃĞÂµÄitem
+                var heart = ReferencePool.Acquire<PB_HeartProtocol>();//æ¯æ¬¡è¯»å–æˆ–è€…å†™å…¥æ¶ˆæ¯éƒ½å¿…é¡»ä»ç¼“å­˜æ± ä¸­å–ç”¨æ–°çš„item
                 var data = new PB_Heart();
                 data.Id = id;
                 heart.SendMessage(data);
             });
-            Logger.Trace($"ÊÕµ½ĞÄÌøÏûÏ¢,idÎª {this.Data.Id}");
+            CommonLog.Trace($"æ”¶åˆ°å¿ƒè·³æ¶ˆæ¯,idä¸º {this.Data.Id}");
         }
     }
 }

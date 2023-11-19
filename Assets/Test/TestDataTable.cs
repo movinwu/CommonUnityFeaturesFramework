@@ -1,9 +1,9 @@
+using CommonFeatures.DataTable;
+using CommonFeatures.Log;
 using HotfixScripts;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace OOPS
+namespace CommonFeatures.Test
 {
     public class TestDataTable : MonoBehaviour
     {
@@ -13,7 +13,14 @@ namespace OOPS
             var datas = DataTableManager.Instance.GetDataRows<DR_Example>();
             for (int i = 0; i < datas.Count; i++)
             {
-                Logger.Model(LitJson.JsonMapper.ToJson(datas[i]));
+                CommonLog.Model(LitJson.JsonMapper.ToJson(datas[i]));
+                CommonLog.Model(datas[i].string_example);
+            }
+            var datas2 = DataTableManager.Instance.GetDataRows<DR_Example2>();
+            for (int i = 0; i < datas2.Count; i++)
+            {
+                CommonLog.Model(LitJson.JsonMapper.ToJson(datas2[i]));
+                CommonLog.Model(datas2[i].string_example);
             }
         }
     }

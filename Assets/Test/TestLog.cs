@@ -1,23 +1,24 @@
+using CommonFeatures.Log;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace OOPS
+namespace CommonFeatures.Test
 {
     public class TestLog : MonoBehaviour
     {
         private void Start()
         {
-            Logger.SetTags(ELogType.Trace);
+            CommonLog.SetTags(ELogType.Trace);
 
-            var sw = Logger.StartTimeWatch();
+            var sw = CommonLog.StartTimeWatch();
             for (int i = 0; i < 10000; i++)
             {
                 var sin = Mathf.Sin(i);
                 var cos = Mathf.Cos(i);
             }
-            Logger.StopTimeWatch(sw);
+            CommonLog.StopTimeWatch(sw);
 
             try
             {
@@ -26,7 +27,7 @@ namespace OOPS
             }
             catch (Exception ex)
             {
-                Logger.Trace(ex);
+                CommonLog.Trace(ex);
             }
         }
     }

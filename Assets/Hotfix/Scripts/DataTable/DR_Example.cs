@@ -3,10 +3,10 @@
 // Copyright © 2023 movinwu. All rights reserved.
 //------------------------------------------------------------
 // 此文件由工具自动生成，请勿直接修改。
-// 生成时间：2023/11/19 21:08:42
+// 生成时间：2023/11/19 22:09:13
 //------------------------------------------------------------
 
-using OOPS;
+using CommonFeatures.DataTable;
 using System.IO;
 
 namespace HotfixScripts
