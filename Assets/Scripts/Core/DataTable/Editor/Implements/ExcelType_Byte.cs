@@ -30,5 +30,15 @@ namespace OOPS
         {
             jsonData[this.Name] = this.m_Data;
         }
+
+        public override string CSTempleteByteReadFuncName(string name)
+        {
+            return name + " = (sbyte)br.ReadByte()";
+        }
+
+        public override string CSTemplateTypeName()
+        {
+            return "sbyte";
+        }
     }
 }

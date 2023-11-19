@@ -1,8 +1,5 @@
 using LitJson;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using UnityEngine;
 
 namespace OOPS
 {
@@ -65,5 +62,17 @@ namespace OOPS
         /// </summary>
         /// <param name="binaryWriter"></param>
         public void WriteByte(BinaryWriter binaryWriter);
+
+        /// <summary>
+        /// cs模板代码_byte读取函数
+        /// </summary>
+        /// <param name="name">类型名称</param>
+        public string CSTempleteByteReadFuncName(string name);
+
+        /// <summary>
+        /// cs模板代码_类型名
+        /// </summary>
+        /// <returns></returns>
+        public string CSTemplateTypeName();
     }
 }

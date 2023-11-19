@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace OOPS
@@ -39,7 +36,7 @@ namespace OOPS
                     _instance = childObj.GetComponent<T>();
                     if (null == _instance)
                     {
-                        _instance = childObj.AddComponent<T>();
+                        _instance = childObj.gameObject.AddComponent<T>();
                         _instance.Init();
                     }
                 }

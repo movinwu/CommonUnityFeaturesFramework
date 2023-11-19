@@ -32,7 +32,9 @@ namespace OOPS
         private const string DataSaveName = "Proto2CSharp";
 
         private const string GenerateCSTemplete =
-@"namespace OOPS
+@"using OOPS;
+
+namespace HotfixScripts
 {
     public class #NAME#Protocol : Protocol<#NAME#>
     {

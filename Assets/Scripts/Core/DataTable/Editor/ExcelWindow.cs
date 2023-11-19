@@ -1,6 +1,5 @@
-using LitJson;
+ï»¿using LitJson;
 using OfficeOpenXml;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
@@ -11,22 +10,22 @@ namespace OOPS
     public class ExcelWindowData : CustomEditorData 
     {
         /// <summary>
-        /// excelÎÄ¼ş¼ĞÂ·¾¶
+        /// excelæ–‡ä»¶å¤¹è·¯å¾„
         /// </summary>
         public string excelPath;
 
         /// <summary>
-        /// Éú³ÉµÄjsonÎÄ¼şÂ·¾¶
+        /// ç”Ÿæˆçš„jsonæ–‡ä»¶è·¯å¾„
         /// </summary>
         public string jsonPath;
 
         /// <summary>
-        /// Éú³ÉµÄbyteÎÄ¼şÂ·¾¶
+        /// ç”Ÿæˆçš„byteæ–‡ä»¶è·¯å¾„
         /// </summary>
         public string bytePath;
 
         /// <summary>
-        /// Éú³ÉµÄ´úÂëÎÄ¼şÂ·¾¶
+        /// ç”Ÿæˆçš„ä»£ç æ–‡ä»¶è·¯å¾„
         /// </summary>
         public string codeGeneratePath;
     }
@@ -35,9 +34,188 @@ namespace OOPS
     {
         private const string DataSavePath = "Excel";
 
+        /// <summary>
+        /// ä»£ç æ¨¡æ¿_å¤´éƒ¨
+        /// </summary>
+        private const string GenerateCSTemplete_DR_Header =
+@"//------------------------------------------------------------
+// oops-framework-cocos2unity
+// Copyright Â© #YEAR# movinwu. All rights reserved.
+//------------------------------------------------------------
+// æ­¤æ–‡ä»¶ç”±å·¥å…·è‡ªåŠ¨ç”Ÿæˆï¼Œè¯·å‹¿ç›´æ¥ä¿®æ”¹ã€‚
+// ç”Ÿæˆæ—¶é—´ï¼š#TIME#
+//------------------------------------------------------------
+
+using OOPS;
+using System.IO;
+
+namespace HotfixScripts
+{
+    /// <summary>
+    /// #NAME#æ•°æ®
+    /// </summary>
+    public class DR_#NAME# : DataRow
+    {
+        public override int ID { get => id; }
+
+";
+
+        /// <summary>
+        /// ä»£ç æ¨¡æ¿_æ•°æ®è¡Œ_å±æ€§
+        /// </summary>
+        private const string GenerateCSTemplete_DR_Attribute =
+@"        /// <summary>
+        /// #SUMMARY#
+        /// </summary>
+        public #TYPE# #NAME# { get; private set; }
+
+";
+
+        /// <summary>
+        /// ä»£ç æ¨¡æ¿_æ•°æ®è¡Œ_å‡½æ•°
+        /// </summary>
+        private const string GenerateCSTemplete_DR_Function =
+@"        public override void FromBinary(BinaryReader br)
+        {
+";
+
+        /// <summary>
+        /// ä»£ç æ¨¡æ¿_æ•°æ®è¡Œ_å‡½æ•°å†…å®¹
+        /// </summary>
+        private const string GenerateCSTemplete_DR_FunctionContent =
+@"            #READ#;
+";
+
+        /// <summary>
+        /// ä»£ç æ¨¡æ¿_æ•°æ®è¡Œ_å°¾éƒ¨
+        /// </summary>
+        private const string GenerateCSTemplete_DR_Tail =
+@"        }
+    }
+}
+";
+
+        /// <summary>
+        /// ä»£ç æ¨¡æ¿_æ•°æ®è¡¨
+        /// </summary>
+        private const string GenerateCSTemplete_DT = @"//------------------------------------------------------------
+// oops-framework-cocos2unity
+// Copyright Â© #YEAR# movinwu. All rights reserved.
+//------------------------------------------------------------
+// æ­¤æ–‡ä»¶ç”±å·¥å…·è‡ªåŠ¨ç”Ÿæˆï¼Œè¯·å‹¿ç›´æ¥ä¿®æ”¹ã€‚
+// ç”Ÿæˆæ—¶é—´ï¼š#TIME#
+//------------------------------------------------------------
+
+using LitJson;
+using OOPS;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+
+namespace HotfixScripts
+{
+    /// <summary>
+    /// æ•°æ®è¡¨åŸºç±»
+    /// </summary>
+    public class DT_#NAME# : IDataTable
+    {
+        /// <summary>
+        /// æ‰€æœ‰æ•°æ®
+        /// </summary>
+        private Dictionary<int, DR_#NAME#> m_AllDataDic;
+
+        /// <summary>
+        /// æ‰€æœ‰æ•°æ®
+        /// </summary>
+        private DR_#NAME#[] m_AllDataArray;
+
+        public void FromBinary(BinaryReader reader)
+        {
+            m_AllDataDic = new Dictionary<int, DR_#NAME#>();
+            int count = reader.ReadInt32();
+            m_AllDataArray = new DR_#NAME#[count];
+            for (int i = 0; i < count; i++)
+            {
+                var dataRow = new DR_#NAME#();
+                dataRow.FromBinary(reader);
+                m_AllDataDic.Add(dataRow.ID, dataRow);
+                m_AllDataArray[i] = dataRow;
+            }
+        }
+
+        public void FromJson(string json)
+        {
+            m_AllDataArray = JsonMapper.ToObject<DR_#NAME#[]>(json);
+            m_AllDataDic = new Dictionary<int, DR_#NAME#>();
+            for (int i = 0; i < m_AllDataArray.Length; i++)
+            {
+                m_AllDataDic.Add(m_AllDataArray[i].ID, m_AllDataArray[i]);
+            }
+        }
+
+        /// <summary>
+        /// è·å–å•è¡Œæ•°æ®
+        /// </summary>
+        /// <param name=""id""></param>
+        /// <returns></returns>
+        public T GetDataRow<T>(int id) where T : DataRow
+        {
+            if (null == m_AllDataDic)
+            {
+                Logger.ModelError($""è¯»å–è¡¨æ ¼ {typeof(T)} æ—¶å‘ç°è¡¨æ ¼æ²¡æœ‰åˆå§‹åŒ–"");
+                return default(T);
+            }
+
+            if (m_AllDataDic.TryGetValue(id, out var t))
+            {
+                return t as T;
+            }
+            return default(T);
+        }
+
+        /// <summary>
+        /// è·å–æ»¡è¶³æŒ‡å®šæ¡ä»¶,æŒ‰ç…§æŒ‡å®šé¡ºåºæ’åˆ—çš„æ‰€æœ‰æ•°æ®
+        /// </summary>
+        /// <param name=""predicate""></param>
+        /// <param name=""comparer""></param>
+        /// <returns></returns>
+        public List<T> GetDataRows<T>(Predicate<T> predicate = null, Comparer<T> comparer = null) where T : DataRow
+        {
+            if (null == m_AllDataArray)
+            {
+                Logger.ModelError($""è¯»å–è¡¨æ ¼ {typeof(T)} æ—¶å‘ç°è¡¨æ ¼æ²¡æœ‰åˆå§‹åŒ–"");
+                return new List<T>(0);
+            }
+
+            if (null == predicate && null == comparer)
+            {
+                return m_AllDataArray.Select(x => x as T).ToList();
+            }
+            else if (null == predicate)
+            {
+                var result = m_AllDataArray.Select(x => x as T).ToList();
+                result.Sort(comparer);
+                return result;
+            }
+            else if (null == comparer)
+            {
+                return m_AllDataArray.Select(x => x as T).Where(x => predicate(x)).ToList();
+            }
+            else
+            {
+                var result = m_AllDataArray.Select(x => x as T).Where(x => predicate(x)).ToList();
+                result.Sort(comparer);
+                return result;
+            }
+        }
+    }
+}
+";
+
         private ExcelWindowData m_Data;
 
-        [MenuItem("Tools/´ò¿ªµ¼±í´°¿Ú")]
+        [MenuItem("Tools/æ‰“å¼€å¯¼è¡¨çª—å£")]
         private static void OpenWindow()
         {
             var window = EditorWindow.GetWindow<ExcelWindow>(); 
@@ -55,10 +233,10 @@ namespace OOPS
             EditorGUILayout.BeginVertical();
 
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("ExcelÂ·¾¶:");
+            EditorGUILayout.LabelField("Excelè·¯å¾„:");
             if (GUILayout.Button(m_Data.excelPath))
             {
-                var newPath = EditorUtility.SaveFolderPanel("ÇëÑ¡ÔñexcelÎÄ¼şÂ·¾¶", m_Data.excelPath, "");
+                var newPath = EditorUtility.SaveFolderPanel("è¯·é€‰æ‹©excelæ–‡ä»¶è·¯å¾„", m_Data.excelPath, "");
                 if (!string.IsNullOrEmpty(newPath))
                 {
                     m_Data.excelPath = newPath;
@@ -68,10 +246,10 @@ namespace OOPS
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Éú³ÉjsonÎÄ¼şÂ·¾¶:");
+            EditorGUILayout.LabelField("ç”Ÿæˆjsonæ–‡ä»¶è·¯å¾„:");
             if (GUILayout.Button(m_Data.jsonPath))
             {
-                var newPath = EditorUtility.SaveFolderPanel("ÇëÑ¡ÔñÉú³ÉjsonÎÄ¼ş±£´æÂ·¾¶", m_Data.jsonPath, "");
+                var newPath = EditorUtility.SaveFolderPanel("è¯·é€‰æ‹©ç”Ÿæˆjsonæ–‡ä»¶ä¿å­˜è·¯å¾„", m_Data.jsonPath, "");
                 if (!string.IsNullOrEmpty(newPath))
                 {
                     m_Data.jsonPath = newPath;
@@ -81,10 +259,10 @@ namespace OOPS
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Éú³ÉbyteÎÄ¼şÂ·¾¶:");
+            EditorGUILayout.LabelField("ç”Ÿæˆbyteæ–‡ä»¶è·¯å¾„:");
             if (GUILayout.Button(m_Data.bytePath))
             {
-                var newPath = EditorUtility.SaveFolderPanel("ÇëÑ¡ÔñÉú³ÉbyteÎÄ¼ş±£´æÂ·¾¶", m_Data.bytePath, "");
+                var newPath = EditorUtility.SaveFolderPanel("è¯·é€‰æ‹©ç”Ÿæˆbyteæ–‡ä»¶ä¿å­˜è·¯å¾„", m_Data.bytePath, "");
                 if (!string.IsNullOrEmpty(newPath))
                 {
                     m_Data.bytePath = newPath;
@@ -93,22 +271,40 @@ namespace OOPS
             }
             EditorGUILayout.EndHorizontal();
 
-            //Éú³É°´Å¥
-            if (GUILayout.Button("Éú³É"))
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("ç”Ÿæˆä»£ç æ–‡ä»¶è·¯å¾„:");
+            if (GUILayout.Button(m_Data.codeGeneratePath))
+            {
+                var newPath = EditorUtility.SaveFolderPanel("è¯·é€‰æ‹©ç”Ÿæˆä»£ç æ–‡ä»¶ä¿å­˜è·¯å¾„", m_Data.codeGeneratePath, "");
+                if (!string.IsNullOrEmpty(newPath))
+                {
+                    m_Data.codeGeneratePath = newPath;
+                    CustomEditorDataFactory.WriteData(DataSavePath, m_Data);
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+
+            //ç”ŸæˆæŒ‰é’®
+            if (GUILayout.Button("ç”Ÿæˆ"))
             {
                 if (string.IsNullOrEmpty(m_Data.excelPath))
                 {
-                    Debug.LogError("ÇëÉèÖÃexcelÎÄ¼şÂ·¾¶");
+                    Debug.LogError("è¯·è®¾ç½®excelæ–‡ä»¶è·¯å¾„");
                     return;
                 }
                 if (string.IsNullOrEmpty(m_Data.jsonPath))
                 {
-                    Debug.LogError("ÇëÉèÖÃÉú³ÉjsonÎÄ¼şÂ·¾¶");
+                    Debug.LogError("è¯·è®¾ç½®ç”Ÿæˆjsonæ–‡ä»¶è·¯å¾„");
                     return;
                 }
-                if (string.IsNullOrEmpty(m_Data.jsonPath))
+                if (string.IsNullOrEmpty(m_Data.bytePath))
                 {
-                    Debug.LogError("ÇëÉèÖÃÉú³ÉbyteÎÄ¼şÂ·¾¶");
+                    Debug.LogError("è¯·è®¾ç½®ç”Ÿæˆbyteæ–‡ä»¶è·¯å¾„");
+                    return;
+                }
+                if (string.IsNullOrEmpty(m_Data.codeGeneratePath))
+                {
+                    Debug.LogError("è¯·è®¾ç½®ç”Ÿæˆä»£ç æ–‡ä»¶è·¯å¾„");
                     return;
                 }
 
@@ -136,7 +332,7 @@ namespace OOPS
                                 var sheet = package.Workbook.Worksheets[sheetIndex];
                                 if (sheet.Name.StartsWith("D_"))
                                 {
-                                    //¶ÁÈ¡Êı¾İ·¶Î§
+                                    //è¯»å–æ•°æ®èŒƒå›´
                                     int rowCount = sheet.Dimension.Rows;
                                     int colCount = sheet.Dimension.Columns;
                                     int row = rowCount + 1;
@@ -158,16 +354,16 @@ namespace OOPS
                                         }
                                     }
 
-                                    //Ğ£ÑéĞĞÁĞÊı¾İ
+                                    //æ ¡éªŒè¡Œåˆ—æ•°æ®
                                     if (row < 6 || col < 3)
                                     {
-                                        Logger.ModelError($"±í {file.Name} sheet {sheet.Name} Êı¾İ¶ÁÈ¡ĞĞÁĞÊı²»ÕıÈ·, ĞĞÊı {row} , ÁĞÊı {col}");
+                                        Logger.ModelError($"è¡¨ {file.Name} sheet {sheet.Name} æ•°æ®è¯»å–è¡Œåˆ—æ•°ä¸æ­£ç¡®, è¡Œæ•° {row} , åˆ—æ•° {col}");
                                         return;
                                     }
 
-                                    List<IExcelType> typeList = new List<IExcelType>(col - 2);//Êı¾İ´¦ÀíÀà
+                                    List<IExcelType> typeList = new List<IExcelType>(col - 2);//æ•°æ®å¤„ç†ç±»
                                     var name = sheet.Name.Substring(2);
-                                    //ĞòÁĞ»¯byteÊı¾İ
+                                    //åºåˆ—åŒ–byteæ•°æ®
                                     var byteName = name + ".byte";
                                     var byteFullPath = Path.Combine(m_Data.bytePath, byteName);
                                     if (File.Exists(byteFullPath))
@@ -176,14 +372,14 @@ namespace OOPS
                                     }
                                     using (var byteStream = File.Create(byteFullPath))
                                     {
-                                        using (var bw = new BinaryWriter(byteStream))
+                                        using (var bw = new BinaryWriter(byteStream, System.Text.Encoding.UTF8))
                                         {
                                             JsonData jsonData = new JsonData();
 
-                                            //Éú³ÉÊı¾İ´¦ÀíÀà
+                                            //ç”Ÿæˆæ•°æ®å¤„ç†ç±»
                                             for (int c = 2; c < col; c++)
                                             {
-                                                //Ö»¶ÁÈ¡¿Í»§¶Ë
+                                                //åªè¯»å–å®¢æˆ·ç«¯
                                                 var clientReadSymbol = sheet.Cells[3, c].Value?.ToString().ToLower();
                                                 if (string.IsNullOrEmpty(clientReadSymbol) || !clientReadSymbol.Contains('c'))
                                                 {
@@ -193,17 +389,17 @@ namespace OOPS
                                                 var type = sheet.Cells[2, c].Value?.ToString().ToLower();
                                                 if (string.IsNullOrEmpty(type))
                                                 {
-                                                    Logger.ModelError($"±í {file.Name} sheet {sheet.Name} Êı¾İÀàĞÍÎª¿Õ, ÁĞÊı {col}");
+                                                    Logger.ModelError($"è¡¨ {file.Name} sheet {sheet.Name} æ•°æ®ç±»å‹ä¸ºç©º, åˆ—æ•° {col}");
                                                     continue;
                                                 }
-                                                var excelType = ExcelType<int>.GenerateExcelType(type, $"±í {file.Name} sheet {sheet.Name} Êı¾İÀàĞÍ²»ÕıÈ·, ÁĞÊı {col}, ÀàĞÍ {type}");
+                                                var excelType = ExcelType<int>.GenerateExcelType(type, $"è¡¨ {file.Name} sheet {sheet.Name} æ•°æ®ç±»å‹ä¸æ­£ç¡®, åˆ—æ•° {col}, ç±»å‹ {type}");
                                                 if (null != excelType)
                                                 {
                                                     excelType.Col = c;
                                                     excelType.Name = sheet.Cells[4, c].Value?.ToString();
                                                     if (string.IsNullOrEmpty(excelType.Name))
                                                     {
-                                                        Logger.ModelError($"±í {file.Name} sheet {sheet.Name} Êı¾İÃû³ÆÎª¿Õ, ÁĞÊı {col}");
+                                                        Logger.ModelError($"è¡¨ {file.Name} sheet {sheet.Name} æ•°æ®åç§°ä¸ºç©º, åˆ—æ•° {col}");
                                                         continue;
                                                     }
                                                     excelType.Summary = sheet.Cells[1, c].Value?.ToString();
@@ -213,9 +409,9 @@ namespace OOPS
                                                 }
                                             }
 
-                                            bw.Write(row - 4);
+                                            bw.Write(row - 5);
 
-                                            //¶ÁÈ¡Êı¾İ
+                                            //è¯»å–æ•°æ®
                                             for (int r = 5; r < row; r++)
                                             {
                                                 var rowJsonData = new JsonData();
@@ -234,7 +430,7 @@ namespace OOPS
                                                 jsonData.Add(rowJsonData);
                                             }
 
-                                            //ĞòÁĞ»¯jsonÊı¾İ
+                                            //åºåˆ—åŒ–jsonæ•°æ®
                                             var jsonName = name + ".json";
                                             var jsonFullPath = Path.Combine(m_Data.jsonPath, jsonName);
                                             if (File.Exists(jsonFullPath))
@@ -243,7 +439,7 @@ namespace OOPS
                                             }
                                             using (var jsonStream = File.Create(jsonFullPath))
                                             {
-                                                using (var sw = new StreamWriter(jsonStream))
+                                                using (var sw = new StreamWriter(jsonStream, System.Text.Encoding.UTF8))
                                                 {
                                                     sw.Write(jsonData.ToJson());
                                                 }
@@ -251,24 +447,67 @@ namespace OOPS
                                         }
                                     }
 
-                                    //Éú³É´úÂë
+                                    //ç”Ÿæˆä»£ç 
                                     if (typeList.Count == 0)
                                     {
                                         continue;
                                     }
 
+                                    if (!Directory.Exists(m_Data.codeGeneratePath))
+                                    {
+                                        Directory.CreateDirectory(m_Data.codeGeneratePath);
+                                    }
+
+                                    var fileName = $"DR_{name}.cs";
+                                    var filePath = Path.Combine(m_Data.codeGeneratePath, fileName);
+                                    if (File.Exists(filePath))
+                                    {
+                                        File.Delete(filePath);
+                                    }
+                                    System.Text.StringBuilder generateCSTemplete = new System.Text.StringBuilder(GenerateCSTemplete_DR_Header
+                                        .Replace("#NAME#", name)
+                                        .Replace("#YEAR#", System.DateTime.Now.Year.ToString())
+                                        .Replace("#TIME#", System.DateTime.Now.ToString()));
+                                    for (int i = 0; i < typeList.Count; i++)
+                                    {
+                                        generateCSTemplete.Append(GenerateCSTemplete_DR_Attribute
+                                            .Replace("#NAME#", typeList[i].Name))
+                                            .Replace("#SUMMARY#", typeList[i].Summary)
+                                            .Replace("#TYPE#", typeList[i].CSTemplateTypeName());
+                                    }
+                                    generateCSTemplete.Append(GenerateCSTemplete_DR_Function);
+                                    for (int i = 0; i < typeList.Count; i++)
+                                    {
+                                        generateCSTemplete.Append(GenerateCSTemplete_DR_FunctionContent
+                                            .Replace("#READ#", typeList[i].CSTempleteByteReadFuncName("this." + typeList[i].Name)));
+                                    }
+                                    generateCSTemplete.Append(GenerateCSTemplete_DR_Tail);
+                                    File.WriteAllText(filePath, generateCSTemplete.ToString());
+
+                                    var dtFileName = $"DT_{name}.cs";
+                                    var dtFilePath = Path.Combine(m_Data.codeGeneratePath, dtFileName);
+                                    if (File.Exists(dtFilePath))
+                                    {
+                                        File.Delete(dtFilePath);
+                                    }
+
+                                    File.WriteAllText(dtFilePath, GenerateCSTemplete_DT
+                                        .Replace("#NAME#", name)
+                                        .Replace("#YEAR#", System.DateTime.Now.Year.ToString())
+                                        .Replace("#TIME#", System.DateTime.Now.ToString()));
                                 }
                             }
                         }
                     }
                     catch (System.Exception ex)
                     {
-                        Logger.ModelError($"±í¸ñ {file.FullName} ¶ÁÈ¡Ê§°Ü,¼ì²éÊÇ·ñÒÑ¾­´ò¿ª±í¸ñ");
+                        Logger.ModelError($"è¡¨æ ¼ {file.FullName} è¯»å–å¤±è´¥,æ£€æŸ¥æ˜¯å¦å·²ç»æ‰“å¼€è¡¨æ ¼");
                         Logger.ModelException(ex);
                     }
                 }
             }
-            
+
+            AssetDatabase.Refresh();
         }
     }
 }

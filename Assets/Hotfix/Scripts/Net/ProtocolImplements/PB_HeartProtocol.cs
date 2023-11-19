@@ -1,4 +1,6 @@
-namespace OOPS
+using OOPS;
+
+namespace HotfixScripts
 {
     public class PB_HeartProtocol : Protocol<PB_Heart>
     {

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace OOPS
+namespace HotfixScripts
 {
     /// <summary>
     /// 通信协议id定义

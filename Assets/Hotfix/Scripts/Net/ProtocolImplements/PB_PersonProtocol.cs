@@ -1,4 +1,6 @@
-namespace OOPS
+using OOPS;
+
+namespace HotfixScripts
 {
     public class PB_PersonProtocol : Protocol<PB_Person>
     {

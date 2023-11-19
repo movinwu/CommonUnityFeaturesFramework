@@ -1,36 +1,43 @@
+//------------------------------------------------------------
+// oops-framework-cocos2unity
+// Copyright Â© 2023 movinwu. All rights reserved.
+//------------------------------------------------------------
+// æ­¤æ–‡ä»¶ç”±å·¥å…·è‡ªåŠ¨ç”Ÿæˆï¼Œè¯·å‹¿ç›´æ¥ä¿®æ”¹ã€‚
+// ç”Ÿæˆæ—¶é—´ï¼š2023/11/19 21:08:42
+//------------------------------------------------------------
+
 using LitJson;
+using OOPS;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using UnityEngine;
 
-namespace OOPS
+namespace HotfixScripts
 {
     /// <summary>
-    /// Êı¾İ±í»ùÀà
+    /// æ•°æ®è¡¨åŸºç±»
     /// </summary>
-    public class DataTable<T> : IDataTable where T : IDataRow, new()
+    public class DT_Example : IDataTable
     {
         /// <summary>
-        /// ËùÓĞÊı¾İ
+        /// æ‰€æœ‰æ•°æ®
         /// </summary>
-        private Dictionary<int, T> m_AllDataDic;
+        private Dictionary<int, DR_Example> m_AllDataDic;
 
         /// <summary>
-        /// ËùÓĞÊı¾İ
+        /// æ‰€æœ‰æ•°æ®
         /// </summary>
-        private T[] m_AllDataArray;
+        private DR_Example[] m_AllDataArray;
 
         public void FromBinary(BinaryReader reader)
         {
-            m_AllDataDic = new Dictionary<int, T>();
+            m_AllDataDic = new Dictionary<int, DR_Example>();
             int count = reader.ReadInt32();
-            m_AllDataArray = new T[count];
+            m_AllDataArray = new DR_Example[count];
             for (int i = 0; i < count; i++)
             {
-                var dataRow = new T();
+                var dataRow = new DR_Example();
                 dataRow.FromBinary(reader);
                 m_AllDataDic.Add(dataRow.ID, dataRow);
                 m_AllDataArray[i] = dataRow;
@@ -39,8 +46,8 @@ namespace OOPS
 
         public void FromJson(string json)
         {
-            m_AllDataArray = JsonMapper.ToObject<T[]>(json);
-            m_AllDataDic = new Dictionary<int, T>();
+            m_AllDataArray = JsonMapper.ToObject<DR_Example[]>(json);
+            m_AllDataDic = new Dictionary<int, DR_Example>();
             for (int i = 0; i < m_AllDataArray.Length; i++)
             {
                 m_AllDataDic.Add(m_AllDataArray[i].ID, m_AllDataArray[i]);
@@ -48,56 +55,56 @@ namespace OOPS
         }
 
         /// <summary>
-        /// »ñÈ¡µ¥ĞĞÊı¾İ
+        /// è·å–å•è¡Œæ•°æ®
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public T GetDataRow(int id)
+        public T GetDataRow<T>(int id) where T : DataRow
         {
             if (null == m_AllDataDic)
             {
-                Logger.ModelError($"¶ÁÈ¡±í¸ñ {typeof(T)} Ê±·¢ÏÖ±í¸ñÃ»ÓĞ³õÊ¼»¯");
+                Logger.ModelError($"è¯»å–è¡¨æ ¼ {typeof(T)} æ—¶å‘ç°è¡¨æ ¼æ²¡æœ‰åˆå§‹åŒ–");
                 return default(T);
             }
 
             if (m_AllDataDic.TryGetValue(id, out var t))
             {
-                return t;
+                return t as T;
             }
             return default(T);
         }
 
         /// <summary>
-        /// »ñÈ¡Âú×ãÖ¸¶¨Ìõ¼ş,°´ÕÕÖ¸¶¨Ë³ĞòÅÅÁĞµÄËùÓĞÊı¾İ
+        /// è·å–æ»¡è¶³æŒ‡å®šæ¡ä»¶,æŒ‰ç…§æŒ‡å®šé¡ºåºæ’åˆ—çš„æ‰€æœ‰æ•°æ®
         /// </summary>
         /// <param name="predicate"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public List<T> GetDataRows(Predicate<T> predicate = null, Comparer<T> comparer = null)
+        public List<T> GetDataRows<T>(Predicate<T> predicate = null, Comparer<T> comparer = null) where T : DataRow
         {
             if (null == m_AllDataArray)
             {
-                Logger.ModelError($"¶ÁÈ¡±í¸ñ {typeof(T)} Ê±·¢ÏÖ±í¸ñÃ»ÓĞ³õÊ¼»¯");
+                Logger.ModelError($"è¯»å–è¡¨æ ¼ {typeof(T)} æ—¶å‘ç°è¡¨æ ¼æ²¡æœ‰åˆå§‹åŒ–");
                 return new List<T>(0);
             }
 
             if (null == predicate && null == comparer)
             {
-                return m_AllDataArray.ToList();
+                return m_AllDataArray.Select(x => x as T).ToList();
             }
             else if (null == predicate)
             {
-                var result = m_AllDataArray.ToList();
+                var result = m_AllDataArray.Select(x => x as T).ToList();
                 result.Sort(comparer);
                 return result;
             }
             else if (null == comparer)
             {
-                return m_AllDataArray.Where(x => predicate(x)).ToList();
+                return m_AllDataArray.Select(x => x as T).Where(x => predicate(x)).ToList();
             }
             else
             {
-                var result = m_AllDataArray.Where(x => predicate(x)).ToList();
+                var result = m_AllDataArray.Select(x => x as T).Where(x => predicate(x)).ToList();
                 result.Sort(comparer);
                 return result;
             }

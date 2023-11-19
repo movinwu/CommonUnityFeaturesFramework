@@ -1,10 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
+using System.Linq;
 using System.Text;
-using Unity.VisualScripting;
-using UnityEngine;
 using UnityEngine.Networking;
 
 namespace OOPS
@@ -154,7 +151,7 @@ namespace OOPS
         {
             if (requestingHttpDic.Count > 0)
             {
-                var handlers = requestingHttpDic.Values.ToArrayPooled();
+                var handlers = requestingHttpDic.Values.ToArray();
                 foreach (var handler in handlers)
                 {
                     if (handler.Request.isDone)

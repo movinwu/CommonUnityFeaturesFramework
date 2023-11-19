@@ -1,8 +1,5 @@
 using LitJson;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using UnityEngine;
 
 namespace OOPS
 {
@@ -108,5 +105,9 @@ namespace OOPS
                     return null;
             }
         }
+
+        public abstract string CSTempleteByteReadFuncName(string name);
+
+        public abstract string CSTemplateTypeName();
     }
 }

@@ -1,13 +1,16 @@
 using LitJson;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using UnityEngine;
 
 namespace OOPS
 {
     public class ExcelType_Array<T> : ExcelType<IExcelType[]> where T : IExcelType, new()
     {
+        private const string ArrayReadByte = @"#NAME# = new int[br.ReadInt32()];
+            for (int i = 0; i < #NAME#.Length; i++)
+            {
+                #SUB_FORMAT#;
+            }";
+
         public override void SetData(string data)
         {
             var datas = data.Split('#');
@@ -59,6 +62,18 @@ namespace OOPS
                 this.m_Data[i].AddJson(newJsonData);
             }
             jsonData[this.Name] = newJsonData;
+        }
+
+        public override string CSTempleteByteReadFuncName(string name)
+        {
+            return ArrayReadByte
+                .Replace("#NAME#", name)
+                .Replace("#SUB_FORMAT#", m_Data[0].CSTempleteByteReadFuncName(name + "[i]"));
+        }
+
+        public override string CSTemplateTypeName()
+        {
+            return m_Data[0].CSTemplateTypeName() + "[]";
         }
     }
 }
