@@ -20,7 +20,7 @@ namespace CommonFeatures.NetWork
 
     public class Proto2CSharpWindow : EditorWindow
     {
-        [MenuItem("Tools/Proto转C#")]
+        [MenuItem("Tools/Proto转C#窗口")]
         static void OpenWindow()
         {
             var window = GetWindow<Proto2CSharpWindow>("Proto转C#工具", true);
