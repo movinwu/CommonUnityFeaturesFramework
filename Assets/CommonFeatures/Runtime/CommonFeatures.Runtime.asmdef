@@ -1,8 +1,8 @@
 {
-    "name": "HotfixScripts",
+    "name": "CommonFeatures.Runtime",
     "rootNamespace": "",
     "references": [
-        "GUID:211b711bbbf6e6749abb406fece8a395",
+        "GUID:8b65d8710c3b04373a41cbf6b777ee65",
         "GUID:1d6664a81583eb44ea166e8fb8cba80e"
     ],
     "includePlatforms": [],
@@ -10,7 +10,7 @@
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
-    "autoReferenced": false,
+    "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],
     "noEngineReferences": false
