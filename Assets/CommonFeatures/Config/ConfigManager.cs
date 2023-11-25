@@ -1,3 +1,4 @@
+using CommonFeatures.Log;
 using CommonFeatures.Singleton;
 using System;
 using System.Collections;
@@ -18,21 +19,27 @@ namespace CommonFeatures.Config
         /// <summary>
         /// 配置文件地址
         /// </summary>
-        private const string ConfigPath = "CommonFeatures/Config/Toml/Config.toml";
+        private const string ConfigPath = "CommonFeatures/Config/Toml";
 
         /// <summary>
         /// 配置表格
         /// </summary>
-        private TomlTable m_Table;
+        private Dictionary<string, TomlTable> m_Table = new Dictionary<string, TomlTable>();
 
         /// <summary>
         /// 获取节点
         /// </summary>
+        /// <param name="name"></param>
         /// <param name="tableNames"></param>
         /// <returns></returns>
-        public TomlNode GetNode(params string[] tableNames)
+        public TomlNode GetNode(string name, params string[] tableNames)
         {
-            var table = m_Table;
+            if (!m_Table.ContainsKey(name))
+            {
+                CommonLog.ConfigError($"不存在名称为{name}的配置");
+                return null;
+            }
+            var table = m_Table[name];
             for (int i = 0; i < tableNames.Length; i++)
             {
                 var node = table[tableNames[i]];
@@ -51,11 +58,17 @@ namespace CommonFeatures.Config
         /// <summary>
         /// 获取字符串配置
         /// </summary>
+        /// <param name="name"></param>
         /// <param name="tableNames"></param>
         /// <returns></returns>
-        public string GetStrConfig(params string[] tableNames)
+        public string GetStrConfig(string name, params string[] tableNames)
         {
-            var table = m_Table;
+            if (!m_Table.ContainsKey(name))
+            {
+                CommonLog.ConfigError($"不存在名称为{name}的配置");
+                return null;
+            }
+            var table = m_Table[name];
             for (int i = 0; i < tableNames.Length; i++)
             {
                 var node = table[tableNames[i]];
@@ -74,11 +87,17 @@ namespace CommonFeatures.Config
         /// <summary>
         /// 获取整型配置
         /// </summary>
+        /// <param name="name"></param>
         /// <param name="tableNames"></param>
         /// <returns></returns>
-        public long GetLongConfig(params string[] tableNames)
+        public long GetLongConfig(string name, params string[] tableNames)
         {
-            var table = m_Table;
+            if (!m_Table.ContainsKey(name))
+            {
+                CommonLog.ConfigError($"不存在名称为{name}的配置");
+                return 0L;
+            }
+            var table = m_Table[name];
             for (int i = 0; i < tableNames.Length; i++)
             {
                 var node = table[tableNames[i]];
@@ -97,11 +116,17 @@ namespace CommonFeatures.Config
         /// <summary>
         /// 获取浮点型配置
         /// </summary>
+        /// <param name="name"></param>
         /// <param name="tableNames"></param>
         /// <returns></returns>
-        public double GetDoubleConfig(params string[] tableNames)
+        public double GetDoubleConfig(string name, params string[] tableNames)
         {
-            var table = m_Table;
+            if (!m_Table.ContainsKey(name))
+            {
+                CommonLog.ConfigError($"不存在名称为{name}的配置");
+                return 0d;
+            }
+            var table = m_Table[name];
             for (int i = 0; i < tableNames.Length; i++)
             {
                 var node = table[tableNames[i]];
@@ -120,11 +145,17 @@ namespace CommonFeatures.Config
         /// <summary>
         /// 获取日期配置
         /// </summary>
+        /// <param name="name"></param>
         /// <param name="tableNames"></param>
         /// <returns></returns>
-        public DateTime GetDateTimeConfig(params string[] tableNames)
+        public DateTime GetDateTimeConfig(string name, params string[] tableNames)
         {
-            var table = m_Table;
+            if (!m_Table.ContainsKey(name))
+            {
+                CommonLog.ConfigError($"不存在名称为{name}的配置");
+                return default(DateTime);
+            }
+            var table = m_Table[name];
             for (int i = 0; i < tableNames.Length; i++)
             {
                 var node = table[tableNames[i]];
@@ -143,11 +174,17 @@ namespace CommonFeatures.Config
         /// <summary>
         /// 获取日期配置
         /// </summary>
+        /// <param name="name"></param>
         /// <param name="tableNames"></param>
         /// <returns></returns>
-        public DateTimeOffset GetDateTimeOffsetConfig(params string[] tableNames)
+        public DateTimeOffset GetDateTimeOffsetConfig(string name, params string[] tableNames)
         {
-            var table = m_Table;
+            if (!m_Table.ContainsKey(name))
+            {
+                CommonLog.ConfigError($"不存在名称为{name}的配置");
+                return default(DateTimeOffset);
+            }
+            var table = m_Table[name];
             for (int i = 0; i < tableNames.Length; i++)
             {
                 var node = table[tableNames[i]];
@@ -166,11 +203,17 @@ namespace CommonFeatures.Config
         /// <summary>
         /// 获取布尔配置
         /// </summary>
+        /// <param name="name"></param>
         /// <param name="tableNames"></param>
         /// <returns></returns>
-        public bool GetBooleanConfig(params string[] tableNames)
+        public bool GetBooleanConfig(string name, params string[] tableNames)
         {
-            var table = m_Table;
+            if (!m_Table.ContainsKey(name))
+            {
+                CommonLog.ConfigError($"不存在名称为{name}的配置");
+                return false;
+            }
+            var table = m_Table[name];
             for (int i = 0; i < tableNames.Length; i++)
             {
                 var node = table[tableNames[i]];
@@ -189,11 +232,17 @@ namespace CommonFeatures.Config
         /// <summary>
         /// 获取整型数组配置
         /// </summary>
+        /// <param name="name"></param>
         /// <param name="tableNames"></param>
         /// <returns></returns>
-        public long[] GetLongArrayConfig(params string[] tableNames)
+        public long[] GetLongArrayConfig(string name, params string[] tableNames)
         {
-            var table = m_Table;
+            if (!m_Table.ContainsKey(name))
+            {
+                CommonLog.ConfigError($"不存在名称为{name}的配置");
+                return null;
+            }
+            var table = m_Table[name];
             for (int i = 0; i < tableNames.Length; i++)
             {
                 var node = table[tableNames[i]];
@@ -225,11 +274,17 @@ namespace CommonFeatures.Config
         /// <summary>
         /// 获取字符串数组配置
         /// </summary>
+        /// <param name="name"></param>
         /// <param name="tableNames"></param>
         /// <returns></returns>
-        public string[] GetStringArrayConfig(params string[] tableNames)
+        public string[] GetStringArrayConfig(string name, params string[] tableNames)
         {
-            var table = m_Table;
+            if (!m_Table.ContainsKey(name))
+            {
+                CommonLog.ConfigError($"不存在名称为{name}的配置");
+                return null;
+            }
+            var table = m_Table[name];
             for (int i = 0; i < tableNames.Length; i++)
             {
                 var node = table[tableNames[i]];
@@ -261,11 +316,17 @@ namespace CommonFeatures.Config
         /// <summary>
         /// 获取浮点型数组配置
         /// </summary>
+        /// <param name="name"></param>
         /// <param name="tableNames"></param>
         /// <returns></returns>
-        public double[] GetDoubleArrayConfig(params string[] tableNames)
+        public double[] GetDoubleArrayConfig(string name, params string[] tableNames)
         {
-            var table = m_Table;
+            if (!m_Table.ContainsKey(name))
+            {
+                CommonLog.ConfigError($"不存在名称为{name}的配置");
+                return null;
+            }
+            var table = m_Table[name];
             for (int i = 0; i < tableNames.Length; i++)
             {
                 var node = table[tableNames[i]];
@@ -297,11 +358,17 @@ namespace CommonFeatures.Config
         /// <summary>
         /// 获取日期数组配置
         /// </summary>
+        /// <param name="name"></param>
         /// <param name="tableNames"></param>
         /// <returns></returns>
-        public DateTime[] GetDateTimeArrayConfig(params string[] tableNames)
+        public DateTime[] GetDateTimeArrayConfig(string name, params string[] tableNames)
         {
-            var table = m_Table;
+            if (!m_Table.ContainsKey(name))
+            {
+                CommonLog.ConfigError($"不存在名称为{name}的配置");
+                return null;
+            }
+            var table = m_Table[name];
             for (int i = 0; i < tableNames.Length; i++)
             {
                 var node = table[tableNames[i]];
@@ -333,11 +400,17 @@ namespace CommonFeatures.Config
         /// <summary>
         /// 获取日期数组配置
         /// </summary>
+        /// <param name="name"></param>
         /// <param name="tableNames"></param>
         /// <returns></returns>
-        public DateTimeOffset[] GetDateTimeOffsetArrayConfig(params string[] tableNames)
+        public DateTimeOffset[] GetDateTimeOffsetArrayConfig(string name, params string[] tableNames)
         {
-            var table = m_Table;
+            if (!m_Table.ContainsKey(name))
+            {
+                CommonLog.ConfigError($"不存在名称为{name}的配置");
+                return null;
+            }
+            var table = m_Table[name];
             for (int i = 0; i < tableNames.Length; i++)
             {
                 var node = table[tableNames[i]];
@@ -369,11 +442,17 @@ namespace CommonFeatures.Config
         /// <summary>
         /// 获取布尔数组配置
         /// </summary>
+        /// <param name="name"></param>
         /// <param name="tableNames"></param>
         /// <returns></returns>
-        public bool[] GetBooleanArrayConfig(params string[] tableNames)
+        public bool[] GetBooleanArrayConfig(string name, params string[] tableNames)
         {
-            var table = m_Table;
+            if (!m_Table.ContainsKey(name))
+            {
+                CommonLog.ConfigError($"不存在名称为{name}的配置");
+                return null;
+            }
+            var table = m_Table[name];
             for (int i = 0; i < tableNames.Length; i++)
             {
                 var node = table[tableNames[i]];
@@ -407,11 +486,23 @@ namespace CommonFeatures.Config
         /// </summary>
         private void ReadToml()
         {
-            if (null == m_Table)
+            m_Table.Clear();
+            var directoryPath = Path.Combine(Application.dataPath, ConfigPath);
+            if (!Directory.Exists(directoryPath))
             {
-                using (StreamReader reader = File.OpenText(Path.Combine(Application.dataPath, ConfigPath)))
+                return;
+            }
+            var files = Directory.GetFiles(directoryPath, "*.toml");
+            foreach (var file in files)
+            {
+                using (StreamReader reader = File.OpenText(file))
                 {
-                    m_Table = TOML.Parse(reader);
+                    var table = TOML.Parse(reader);
+                    var newFile = file.Replace('\\', '/');
+                    var nameStartIndex = newFile.LastIndexOf('/') + 1;
+                    var nameEndIndex = newFile.LastIndexOf('.');
+                    var name = file.Substring(nameStartIndex, nameEndIndex - nameStartIndex);
+                    m_Table.Add(name, table);
                 }
             }
         }

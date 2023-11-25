@@ -1,5 +1,6 @@
 using CommonFeatures.Config;
 using CommonFeatures.Log;
+using LitJson;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,8 +11,8 @@ namespace CommonFeatures.Test
     {
         private void Start()
         {
-            CommonLog.Trace(ConfigManager.Instance.GetStrConfig("NetWork", "server"));
-            CommonLog.Trace(ConfigManager.Instance.GetLongArrayConfig("NetWork", "ports"));
+            CommonLog.Trace(ConfigManager.Instance.GetStrConfig("Config", "NetWork", "server"));
+            CommonLog.Trace(JsonMapper.ToJson(ConfigManager.Instance.GetLongArrayConfig("Config", "NetWork", "ports")));
         }
     }
 }
