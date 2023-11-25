@@ -9,3 +9,7 @@
 /.vs/oops-framework-cocos2unity/v17
 /*.csproj
 /*.vsconfig
+/Assets/HybridCLRGenerate.meta
+/Assets/HybridCLRGenerate/AOTGenericReferences.cs.meta
+/Assets/HybridCLRGenerate
+/HybridCLRData
