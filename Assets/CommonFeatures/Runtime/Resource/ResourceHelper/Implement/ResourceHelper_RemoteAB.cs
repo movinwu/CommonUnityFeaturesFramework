@@ -3,6 +3,7 @@ using CommonFeatures.NetWork;
 using LitJson;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 namespace CommonFeatures.Resource
@@ -22,6 +23,21 @@ namespace CommonFeatures.Resource
         /// </summary>
         private ResourceVersionInfo m_LocalVersionInfo;
 
+        /// <summary>
+        /// 本地版本文件地址
+        /// </summary>
+        private string m_LocalVersionFilePath;
+
+        /// <summary>
+        /// 远端ab文件地址
+        /// </summary>
+        private string m_RemoteABFilePath;
+
+        /// <summary>
+        /// 本地AB文件地址
+        /// </summary>
+        private string m_LocalABFilePath;
+
         protected override void Load()
         {
             this.m_OnLoadStart?.Invoke();
@@ -33,15 +49,14 @@ namespace CommonFeatures.Resource
         /// </summary>
         private void LoadVersionFile()
         {
-            this.m_OnLoading("加载版本信息", 0f, 1f);
+            this.m_OnLoading?.Invoke("校验本地文件", 0f, 1f);
 
             var versionPath = ConfigManager.Instance.GetStrConfig("Resource", "RemoteAB", "remote_version_path");
             HttpManager.Instance.Get(versionPath, null, 
                 completeCallback: request =>
                 {
-                    this.m_OnLoading("加载版本信息", 1f, 1f);
                     m_RemoteVersionInfo = JsonMapper.ToObject<ResourceVersionInfo>(request.downloadHandler.text);
-                    AnalysisVersionFile();
+                    AnalysisLocalVersionFile();
                 }, 
                 errorCallback: request =>
                 {
@@ -50,9 +65,65 @@ namespace CommonFeatures.Resource
         }
 
         /// <summary>
-        /// 分析版本文件
+        /// 分析本地版本文件
         /// </summary>
-        private void AnalysisVersionFile()
+        private void AnalysisLocalVersionFile()
+        {
+            m_LocalVersionFilePath = Path.Combine(Application.persistentDataPath, ConfigManager.Instance.GetStrConfig("Resource", "RemoteAB", "local_version_path"));
+            if (!File.Exists(m_LocalVersionFilePath))
+            {
+                m_LocalVersionInfo = null;
+                CompareVersionFile();
+                return;
+            }
+
+            var text = File.ReadAllText(m_LocalVersionFilePath);
+            m_LocalVersionInfo = JsonMapper.ToObject<ResourceVersionInfo>(text);
+            CompareVersionFile();
+        }
+
+        /// <summary>
+        /// 比对版本文件
+        /// </summary>
+        private void CompareVersionFile()
+        {
+            if (null == m_LocalVersionInfo)
+            {
+                DownloadFileList();
+                return;
+            }
+
+            //版本相同
+            if (m_LocalVersionInfo.FullVersion.Equals(m_RemoteVersionInfo.FullVersion))
+            {
+                this.m_OnLoading?.Invoke("校验本地文件", 1f, 1f);
+                this.m_OnLoadEnd?.Invoke();
+            }
+            //版本不同
+            else
+            {
+                m_RemoteABFilePath = Path.Combine(Application.persistentDataPath, ConfigManager.Instance.GetStrConfig("Resource", "RemoteAB", "remote_AB_directory_path"));
+                HttpManager.Instance.Get(m_RemoteABFilePath, null,
+                    completeCallback: webrequest =>
+                    {
+
+                    },
+                    errorCallback: webrequest =>
+                    {
+
+                    });
+            }
+        }
+
+        /// <summary>
+        /// 下载文件列表
+        /// </summary>
+        private void DownloadFileList()
+        {
+
+        }
+
+        private void DownloadRemoteFiles()
         {
 
         }
