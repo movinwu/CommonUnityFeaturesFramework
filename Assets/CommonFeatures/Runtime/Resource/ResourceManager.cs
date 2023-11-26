@@ -50,11 +50,11 @@ namespace CommonFeatures.Resource
         /// <param name="onLoadStart">资源加载开始回调</param>
         /// <param name="onLoading">资源加载中回调</param>
         /// <param name="onLoadEnd">资源加载结束回调</param>
-        public void LoadResource(System.Action onLoadStart, System.Action<float, float> onLoading, System.Action onLoadEnd)
+        public void LoadResource(System.Action onLoadStart, System.Action<string, float, float> onLoading, System.Action onLoadEnd, System.Action<System.Exception> onLoadError)
         {
             try
             {
-                m_Helper.Load(onLoadStart, onLoading, onLoadEnd);
+                m_Helper.Load(onLoadStart, onLoading, onLoadEnd, onLoadError);
             }
             catch (System.Exception ex)
             {

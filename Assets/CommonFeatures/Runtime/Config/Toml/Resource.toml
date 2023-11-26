@@ -11,8 +11,8 @@ resource_load_type = 2
 # 远端AB资源加载配置
 [RemoteAB]
 remote_version_path = "" # 版本文件地址
-remote_AB_manifest_path = "" # AB清单文件地址
 remote_AB_directory_path = "" # AB资源文件夹地址
+local_version_path = "" # 本地存储版本文件地址
 
 # 本地AB资源加载配置
 [LocalAB]

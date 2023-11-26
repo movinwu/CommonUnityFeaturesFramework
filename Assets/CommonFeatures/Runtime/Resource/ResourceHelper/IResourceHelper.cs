@@ -12,6 +12,6 @@ namespace CommonFeatures.Resource
         /// <summary>
         /// º”‘ÿ◊ ‘¥
         /// </summary>
-        void Load(System.Action onLoadStart, System.Action<float, float> onLoading, System.Action onLoadEnd);
+        void Load(System.Action onLoadStart, System.Action<string, float, float> onLoading, System.Action onLoadEnd, System.Action<System.Exception> onLoadError);
     }
 }

@@ -500,6 +500,8 @@ namespace HotfixScripts
                                 }
                             }
                         }
+
+                        CommonLog.Config($"成功导出数据表格{file.Name}");
                     }
                     catch (System.Exception ex)
                     {
