@@ -10,7 +10,7 @@ namespace CommonFeatures.Test
     {
         private void Start()
         {
-            CommonLog.SetTags(ELogType.Trace);
+            //CommonLog.SetTags(ELogType.Trace);
 
             var sw = CommonLog.StartTimeWatch();
             for (int i = 0; i < 10000; i++)

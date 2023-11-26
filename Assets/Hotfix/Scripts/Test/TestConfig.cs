@@ -11,8 +11,8 @@ namespace CommonFeatures.Test
     {
         private void Start()
         {
-            CommonLog.Trace(ConfigManager.Instance.GetStrConfig("Config", "NetWork", "server"));
-            CommonLog.Trace(JsonMapper.ToJson(ConfigManager.Instance.GetLongArrayConfig("Config", "NetWork", "ports")));
+            CommonLog.Trace(ConfigManager.Instance.GetStrConfig("ConfigTest", "NetWork", "server"));
+            CommonLog.Trace(JsonMapper.ToJson(ConfigManager.Instance.GetLongArrayConfig("ConfigTest", "NetWork", "ports")));
         }
     }
 }

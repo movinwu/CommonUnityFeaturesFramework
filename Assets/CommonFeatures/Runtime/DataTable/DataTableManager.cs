@@ -1,3 +1,4 @@
+using CommonFeatures.Log;
 using CommonFeatures.Singleton;
 using System;
 using System.Collections.Generic;
@@ -75,7 +76,7 @@ namespace CommonFeatures.DataTable
                         }
                         catch (System.Exception ex)
                         {
-                            CommonFeatures.Log.CommonLog.ModelException(ex);
+                            CommonLog.ConfigException(ex);
                         }
                     }
                 }
@@ -109,7 +110,7 @@ namespace CommonFeatures.DataTable
                         }
                         catch (System.Exception ex)
                         {
-                            CommonFeatures.Log.CommonLog.ModelException(ex);
+                           CommonLog.ConfigException(ex);
                         }
                     }
                 }

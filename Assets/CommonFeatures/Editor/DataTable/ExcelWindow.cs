@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using CommonFeatures.Log;
 
 namespace CommonFeatures.DataTable
 {
@@ -164,7 +165,7 @@ namespace HotfixScripts
         {
             if (null == m_AllDataDic)
             {
-                CommonLog.ModelError($""读取表格 {typeof(T)} 时发现表格没有初始化"");
+                CommonLog.ConfigError($""读取表格 {typeof(T)} 时发现表格没有初始化"");
                 return default(T);
             }
 
@@ -185,7 +186,7 @@ namespace HotfixScripts
         {
             if (null == m_AllDataArray)
             {
-                CommonLog.ModelError($""读取表格 {typeof(T)} 时发现表格没有初始化"");
+                CommonLog.ConfigError($""读取表格 {typeof(T)} 时发现表格没有初始化"");
                 return new List<T>(0);
             }
 
@@ -358,7 +359,7 @@ namespace HotfixScripts
                                     //校验行列数据
                                     if (row < 6 || col < 3)
                                     {
-                                        CommonFeatures.Log.CommonLog.ModelError($"表 {file.Name} sheet {sheet.Name} 数据读取行列数不正确, 行数 {row} , 列数 {col}");
+                                        CommonLog.ConfigError($"表 {file.Name} sheet {sheet.Name} 数据读取行列数不正确, 行数 {row} , 列数 {col}");
                                         return;
                                     }
 
@@ -390,7 +391,7 @@ namespace HotfixScripts
                                                 var type = sheet.Cells[2, c].Value?.ToString().ToLower();
                                                 if (string.IsNullOrEmpty(type))
                                                 {
-                                                    CommonFeatures.Log.CommonLog.ModelError($"表 {file.Name} sheet {sheet.Name} 数据类型为空, 列数 {col}");
+                                                    CommonLog.ConfigError($"表 {file.Name} sheet {sheet.Name} 数据类型为空, 列数 {col}");
                                                     continue;
                                                 }
                                                 var excelType = ExcelType<int>.GenerateExcelType(type, $"表 {file.Name} sheet {sheet.Name} 数据类型不正确, 列数 {col}, 类型 {type}");
@@ -400,7 +401,7 @@ namespace HotfixScripts
                                                     excelType.Name = sheet.Cells[4, c].Value?.ToString();
                                                     if (string.IsNullOrEmpty(excelType.Name))
                                                     {
-                                                        CommonFeatures.Log.CommonLog.ModelError($"表 {file.Name} sheet {sheet.Name} 数据名称为空, 列数 {col}");
+                                                        CommonLog.ConfigError($"表 {file.Name} sheet {sheet.Name} 数据名称为空, 列数 {col}");
                                                         continue;
                                                     }
                                                     excelType.Summary = sheet.Cells[1, c].Value?.ToString();
@@ -502,8 +503,8 @@ namespace HotfixScripts
                     }
                     catch (System.Exception ex)
                     {
-                        CommonFeatures.Log.CommonLog.ModelError($"表格 {file.FullName} 读取失败,检查是否已经打开表格");
-                        CommonFeatures.Log.CommonLog.ModelException(ex);
+                        CommonLog.ConfigError($"表格 {file.FullName} 读取失败,检查是否已经打开表格");
+                        CommonLog.ConfigException(ex);
                     }
                 }
             }

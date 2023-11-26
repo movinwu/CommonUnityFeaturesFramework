@@ -1,3 +1,4 @@
+using CommonFeatures.Config;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,22 +17,53 @@ namespace CommonFeatures.Log
 
         private static void Init()
         {
-            tags = ELogType.Net
-                | ELogType.Model
-                | ELogType.Business
-                | ELogType.View
-                | ELogType.Config
-                | ELogType.Trace;
+            //tags = ELogType.Net
+            //    | ELogType.Model
+            //    | ELogType.Business
+            //    | ELogType.View
+            //    | ELogType.Config
+            //    | ELogType.Trace;
+
+            tags = ELogType.Null;
+            //检查配置
+            if (ConfigManager.Instance.GetBooleanConfig("Log", "net"))
+            {
+                tags |= ELogType.Net;
+            }
+            if (ConfigManager.Instance.GetBooleanConfig("Log", "model"))
+            {
+                tags |= ELogType.Model;
+            }
+            if (ConfigManager.Instance.GetBooleanConfig("Log", "business"))
+            {
+                tags |= ELogType.Business;
+            }
+            if (ConfigManager.Instance.GetBooleanConfig("Log", "view"))
+            {
+                tags |= ELogType.View;
+            }
+            if (ConfigManager.Instance.GetBooleanConfig("Log", "config"))
+            {
+                tags |= ELogType.Config;
+            }
+            if (ConfigManager.Instance.GetBooleanConfig("Log", "trace"))
+            {
+                tags |= ELogType.Trace;
+            }
+            if (ConfigManager.Instance.GetBooleanConfig("Log", "resource"))
+            {
+                tags |= ELogType.Resource;
+            }
         }
 
         /// <summary>
         /// 设置显示的日志类型,默认值不现实任何类型日志
         /// </summary>
         /// <param name="tag"></param>
-        public static void SetTags(ELogType tag = ELogType.Null)
-        {
-            tags = tag;
-        }
+        //public static void SetTags(ELogType tag = ELogType.Null)
+        //{
+        //    tags = tag;
+        //}
 
         /// <summary>
         /// 打印某操作时间消耗,开始监视,配合<see cref="StopTimeWatch(System.Diagnostics.Stopwatch, string)"/>函数使用
@@ -141,6 +173,15 @@ namespace CommonFeatures.Log
         }
 
         /// <summary>
+        /// 资源日志打印
+        /// </summary>
+        /// <param name="msg"></param>
+        public static void Resource(object msg)
+        {
+            Print(ELogType.Resource, msg, LogType.Log, "DAA520");
+        }
+
+        /// <summary>
         /// 打印标准警告
         /// </summary>
         /// <param name="msg"></param>
@@ -193,6 +234,15 @@ namespace CommonFeatures.Log
         public static void ConfigWarning(object msg)
         {
             Print(ELogType.Net, msg, LogType.Warning, "708090");
+        }
+
+        /// <summary>
+        /// 资源日志警告
+        /// </summary>
+        /// <param name="msg"></param>
+        public static void ResourceWarning(object msg)
+        {
+            Print(ELogType.Resource, msg, LogType.Warning, "DAA520");
         }
 
         /// <summary>
@@ -251,6 +301,15 @@ namespace CommonFeatures.Log
         }
 
         /// <summary>
+        /// 资源日志错误
+        /// </summary>
+        /// <param name="msg"></param>
+        public static void ResourceError(object msg)
+        {
+            Print(ELogType.Resource, msg, LogType.Error, "DAA520");
+        }
+
+        /// <summary>
         /// 打印标准异常
         /// </summary>
         /// <param name="msg"></param>
@@ -306,6 +365,15 @@ namespace CommonFeatures.Log
         }
 
         /// <summary>
+        /// 资源日志异常
+        /// </summary>
+        /// <param name="msg"></param>
+        public static void ResourceException(object msg)
+        {
+            Print(ELogType.Resource, msg, LogType.Exception, "DAA520");
+        }
+
+        /// <summary>
         /// 打印函数
         /// </summary>
         /// <param name="logType"></param>
@@ -324,14 +392,14 @@ namespace CommonFeatures.Log
                 {
                     case LogType.Exception:
                     case LogType.Error:
-                        Debug.LogError($"<color=#{color}>{msg}</color>");
+                        Debug.LogError($"<color=#{color}>{str}</color>");
                         break;
                     case LogType.Warning:
-                        Debug.LogWarning($"<color=#{color}>{msg}</color>");
+                        Debug.LogWarning($"<color=#{color}>{str}</color>");
                         break;
                     case LogType.Log:
                     default:
-                        Debug.Log($"<color=#{color}>{msg}</color>");
+                        Debug.Log($"<color=#{color}>{str}</color>");
                         break;
                 }
             }
@@ -421,5 +489,10 @@ namespace CommonFeatures.Log
         /// 标准日志
         /// </summary>
         Trace = 32,
+
+        /// <summary>
+        /// 资源日志
+        /// </summary>
+        Resource = 64,
     }
 }

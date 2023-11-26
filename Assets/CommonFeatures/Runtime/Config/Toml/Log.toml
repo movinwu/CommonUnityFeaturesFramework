@@ -1,0 +1,16 @@
+# Log.toml
+
+# 是否网络日志
+net = true
+# 是否开启数据日志
+model = true
+# 是否开启业务日志
+business = true
+# 是否开启视图日志
+view = true
+# 是否开启配置日志
+config = true
+# 是否开启标准日志
+trace = true
+# 是否开启资源日志
+resource = true

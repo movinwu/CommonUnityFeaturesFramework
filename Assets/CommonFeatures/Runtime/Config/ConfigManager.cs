@@ -19,7 +19,7 @@ namespace CommonFeatures.Config
         /// <summary>
         /// 配置文件地址
         /// </summary>
-        private const string ConfigPath = "CommonFeatures/Config/Toml";
+        private const string ConfigPath = "CommonFeatures/Runtime/Config/Toml";
 
         /// <summary>
         /// 配置表格

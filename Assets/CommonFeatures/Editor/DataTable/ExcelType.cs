@@ -31,7 +31,7 @@ namespace CommonFeatures.DataTable
 
         protected void LogError(string content)
         {
-            CommonLog.ModelError($"数据表 {ExcelName} sheet {SheetName} 转化数据出错, 行数: {Row}, 列数: {Col}, 内容: {content}");
+            CommonLog.ConfigError($"数据表 {ExcelName} sheet {SheetName} 转化数据出错, 行数: {Row}, 列数: {Col}, 内容: {content}");
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace CommonFeatures.DataTable
                 default:
                     if (!typeName.ToLower().Equals("none"))
                     {
-                        CommonLog.ModelError($"数据表格式转化错误, 类型: {typeName}, 信息: {errorContent}");
+                        CommonLog.ConfigError($"数据表格式转化错误, 类型: {typeName}, 信息: {errorContent}");
                     }
                     return null;
             }

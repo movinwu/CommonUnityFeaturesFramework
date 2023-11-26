@@ -3,7 +3,7 @@
 // Copyright © 2023 movinwu. All rights reserved.
 //------------------------------------------------------------
 // 此文件由工具自动生成，请勿直接修改。
-// 生成时间：2023/11/19 22:09:14
+// 生成时间：2023/11/26 15:01:55
 //------------------------------------------------------------
 
 using CommonFeatures.DataTable;
@@ -64,7 +64,7 @@ namespace HotfixScripts
         {
             if (null == m_AllDataDic)
             {
-                CommonLog.ModelError($"读取表格 {typeof(T)} 时发现表格没有初始化");
+                CommonLog.ConfigError($"读取表格 {typeof(T)} 时发现表格没有初始化");
                 return default(T);
             }
 
@@ -85,7 +85,7 @@ namespace HotfixScripts
         {
             if (null == m_AllDataArray)
             {
-                CommonLog.ModelError($"读取表格 {typeof(T)} 时发现表格没有初始化");
+                CommonLog.ConfigError($"读取表格 {typeof(T)} 时发现表格没有初始化");
                 return new List<T>(0);
             }
 
