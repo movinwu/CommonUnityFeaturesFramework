@@ -20,11 +20,28 @@ namespace CommonFeatures.NetWork
 
     public class Proto2CSharpWindow : EditorWindow
     {
-        [MenuItem("Tools/Proto转C#窗口")]
+        [MenuItem("Tools/Proto代码生成窗口", priority = CMenuItemPriority.Proto2CSharpWindow)]
         static void OpenWindow()
         {
             var window = GetWindow<Proto2CSharpWindow>("Proto转C#工具", true);
             window.minSize = new Vector2(700, 300);
+        }
+
+        [MenuItem("Tools/Proto代码一键生成", priority = CMenuItemPriority.Proto2CSharpOneKey)]
+        private static void Proto2CSharpOneKey()
+        {
+            CustomEditorDataFactory.ReadData<Proto2CSharpWindowData>(DataSaveName, out var data);
+            if (null == data
+                || string.IsNullOrEmpty(data.GenerateCSharpProtocolPath)
+                || string.IsNullOrEmpty(data.ProtoExePath)
+                || !Directory.Exists(data.GenerateCSharpProtocolPath)
+                || !Directory.Exists(data.ProtoExePath))
+            {
+                Debug.LogError("路径不正确,请打开proto代码生成窗口设置正确的路径");
+                return;
+            }
+
+            Generate(data);
         }
 
         private Proto2CSharpWindowData m_Data;
@@ -110,16 +127,16 @@ namespace HotfixScripts
                     return;
                 }
 
-                Generate();
+                Generate(m_Data);
             }
 
             EditorGUILayout.EndVertical();
         }
 
-        void Generate()
+        private static void Generate(Proto2CSharpWindowData windowData)
         {
             string exeFilePath = string.Empty;
-            var dir = new DirectoryInfo(m_Data.ProtoExePath);
+            var dir = new DirectoryInfo(windowData.ProtoExePath);
             var files = dir.GetFiles();
             foreach(var file in files)
             {
@@ -130,7 +147,7 @@ namespace HotfixScripts
             }
             if (string.IsNullOrEmpty(exeFilePath))
             {
-                Debug.LogError($"proto文件路径 {m_Data.ProtoExePath} 中没有找到protoc.exe文件");
+                Debug.LogError($"proto文件路径 {windowData.ProtoExePath} 中没有找到protoc.exe文件");
                 return;
             }
             List<string> fileNames = new List<string>();
@@ -166,15 +183,15 @@ namespace HotfixScripts
 
             Debug.Log("proto相关文件生成完毕");
 
-            if (!Directory.Exists(m_Data.GenerateCSharpProtocolPath))
+            if (!Directory.Exists(windowData.GenerateCSharpProtocolPath))
             {
-                Directory.CreateDirectory(m_Data.GenerateCSharpProtocolPath);
+                Directory.CreateDirectory(windowData.GenerateCSharpProtocolPath);
             }
 
             for (int i = 0; i < fileNames.Count; i++)
             {
                 var fileName = fileNames[i] + "Protocol.cs";
-                var filePath = Path.Combine(m_Data.GenerateCSharpProtocolPath, fileName);
+                var filePath = Path.Combine(windowData.GenerateCSharpProtocolPath, fileName);
                 if (!File.Exists(filePath))
                 {
                     File.WriteAllText(filePath, GenerateCSTemplete

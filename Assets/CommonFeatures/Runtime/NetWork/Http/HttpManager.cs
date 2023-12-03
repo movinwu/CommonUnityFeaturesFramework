@@ -1,3 +1,5 @@
+using CommonFeatures.Log;
+using CommonFeatures.Pool;
 using CommonFeatures.Singleton;
 using System;
 using System.Collections.Generic;
@@ -40,7 +42,7 @@ namespace CommonFeatures.NetWork
             //检验给定地址名
             if (string.IsNullOrEmpty(name))
             {
-                CommonFeatures.Log.CommonLog.NetError("http get请求地址不能为空");
+                CommonLog.NetError("http get请求地址不能为空");
             }
             StringBuilder urlSb;
             if (name.ToLower().StartsWith("http"))
@@ -74,11 +76,11 @@ namespace CommonFeatures.NetWork
             //检验正在发送
             if (requestingHttpDic.ContainsKey(url))
             {
-                CommonFeatures.Log.CommonLog.NetWarning($"网络请求{url}已经在请求中,不能重复请求");
+                CommonLog.NetWarning($"网络请求{url}已经在请求中,不能重复请求");
                 return;
             }
 
-            var handler = new HttpRequestHandler();
+            var handler = ReferencePool.Acquire<HttpRequestHandler>();
             handler.URL = url;
             handler.OnSuccessCallback = completeCallback;
             handler.OnErrorCallback = errorCallback;
@@ -128,7 +130,7 @@ namespace CommonFeatures.NetWork
                 return;
             }
 
-            var handler = new HttpRequestHandler();
+            var handler = ReferencePool.Acquire<HttpRequestHandler>();
             handler.URL = url;
             handler.OnSuccessCallback = completeCallback;
             handler.OnErrorCallback = errorCallback;
@@ -169,6 +171,15 @@ namespace CommonFeatures.NetWork
                                 handler.OnErrorCallback?.Invoke(handler.Request);
                                 break;
                         }
+                        handler.Request.Dispose();
+                        if (null != handler.Params)
+                        {
+                            for (int i = 0; i < handler.Params.Count; i++)
+                            {
+                                ReferencePool.Back(handler.Params[i]);
+                            }
+                        }
+                        ReferencePool.Back(handler);
                     }
                 }
             }

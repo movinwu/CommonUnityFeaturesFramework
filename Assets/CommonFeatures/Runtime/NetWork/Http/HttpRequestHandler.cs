@@ -1,3 +1,4 @@
+using CommonFeatures.Pool;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace CommonFeatures.NetWork
     /// <summary>
     /// Http请求句柄,封装Http请求信息
     /// </summary>
-    public class HttpRequestHandler
+    public class HttpRequestHandler : IReference
     {
         /// <summary>
         /// 请求url地址
@@ -40,5 +41,15 @@ namespace CommonFeatures.NetWork
         /// 实际请求
         /// </summary>
         public UnityWebRequest Request { get; set; }
+
+        public void Reset()
+        {
+            URL = string.Empty;
+            Name = string.Empty;
+            Params = null;
+            OnSuccessCallback = null;
+            OnErrorCallback = null;
+            Request = null;
+        }
     }
 }

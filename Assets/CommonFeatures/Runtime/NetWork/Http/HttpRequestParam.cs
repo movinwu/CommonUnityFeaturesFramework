@@ -1,3 +1,4 @@
+using CommonFeatures.Pool;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,16 +8,16 @@ namespace CommonFeatures.NetWork
     /// <summary>
     /// Http«Î«Û≤Œ ˝
     /// </summary>
-    public class HttpRequestParam
+    public class HttpRequestParam : IReference
     {
-        public string Key { get; private set; }
+        public string Key { get; set; }
 
-        public string Value { get; private set; }
+        public string Value { get; set; }
 
-        public HttpRequestParam(string key, string value)
+        public void Reset()
         {
-            this.Key = key;
-            this.Value = value;
+            Key = string.Empty;
+            Value = string.Empty;
         }
     }
 }

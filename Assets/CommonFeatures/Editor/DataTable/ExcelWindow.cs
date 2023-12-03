@@ -217,11 +217,32 @@ namespace HotfixScripts
 
         private ExcelWindowData m_Data;
 
-        [MenuItem("Tools/打开导表窗口")]
+        [MenuItem("Tools/导表窗口", priority = CMenuItemPriority.DataTableWindow)]
         private static void OpenWindow()
         {
             var window = EditorWindow.GetWindow<ExcelWindow>(); 
             window.minSize = new Vector2(700, 400);
+        }
+
+        [MenuItem("Tools/一键导表", priority = CMenuItemPriority.DataTableOneKey)]
+        private static void DataTableOneKey()
+        {
+            CustomEditorDataFactory.ReadData<ExcelWindowData>(DataSavePath, out var data);
+            if (null == data
+                || string.IsNullOrEmpty(data.bytePath)
+                || string.IsNullOrEmpty(data.excelPath)
+                || string.IsNullOrEmpty(data.codeGeneratePath)
+                || string.IsNullOrEmpty(data.jsonPath)
+                || !Directory.Exists(data.bytePath)
+                || !Directory.Exists(data.jsonPath)
+                || !Directory.Exists(data.excelPath)
+                || !Directory.Exists(data.codeGeneratePath))
+            {
+                Debug.LogError("路径不正确,请打开导表窗口设置正确的路径");
+                return;
+            }
+
+            Generate(data);
         }
 
         private void OnGUI()
@@ -310,15 +331,15 @@ namespace HotfixScripts
                     return;
                 }
 
-                Generate();
+                Generate(m_Data);
             }
 
             EditorGUILayout.EndVertical();
         }
 
-        private void Generate()
+        private static void Generate(ExcelWindowData pathData)
         {
-            var directory = new DirectoryInfo(m_Data.excelPath);
+            var directory = new DirectoryInfo(pathData.excelPath);
             var files = directory.GetFiles();
             for (int fileIndex = 0; fileIndex < files.Length; fileIndex++)
             {
@@ -367,7 +388,7 @@ namespace HotfixScripts
                                     var name = sheet.Name.Substring(2);
                                     //序列化byte数据
                                     var byteName = name + ".byte";
-                                    var byteFullPath = Path.Combine(m_Data.bytePath, byteName);
+                                    var byteFullPath = Path.Combine(pathData.bytePath, byteName);
                                     if (File.Exists(byteFullPath))
                                     {
                                         File.Delete(byteFullPath);
@@ -434,7 +455,7 @@ namespace HotfixScripts
 
                                             //序列化json数据
                                             var jsonName = name + ".json";
-                                            var jsonFullPath = Path.Combine(m_Data.jsonPath, jsonName);
+                                            var jsonFullPath = Path.Combine(pathData.jsonPath, jsonName);
                                             if (File.Exists(jsonFullPath))
                                             {
                                                 File.Delete(jsonFullPath);
@@ -455,13 +476,13 @@ namespace HotfixScripts
                                         continue;
                                     }
 
-                                    if (!Directory.Exists(m_Data.codeGeneratePath))
+                                    if (!Directory.Exists(pathData.codeGeneratePath))
                                     {
-                                        Directory.CreateDirectory(m_Data.codeGeneratePath);
+                                        Directory.CreateDirectory(pathData.codeGeneratePath);
                                     }
 
                                     var fileName = $"DR_{name}.cs";
-                                    var filePath = Path.Combine(m_Data.codeGeneratePath, fileName);
+                                    var filePath = Path.Combine(pathData.codeGeneratePath, fileName);
                                     if (File.Exists(filePath))
                                     {
                                         File.Delete(filePath);
@@ -487,7 +508,7 @@ namespace HotfixScripts
                                     File.WriteAllText(filePath, generateCSTemplete.ToString());
 
                                     var dtFileName = $"DT_{name}.cs";
-                                    var dtFilePath = Path.Combine(m_Data.codeGeneratePath, dtFileName);
+                                    var dtFilePath = Path.Combine(pathData.codeGeneratePath, dtFileName);
                                     if (File.Exists(dtFilePath))
                                     {
                                         File.Delete(dtFilePath);

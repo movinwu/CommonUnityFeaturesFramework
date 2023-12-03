@@ -138,6 +138,10 @@ namespace CommonFeatures.Config
                 {
                     return node.AsFloat.Value;
                 }
+                else if (node.IsInteger)
+                {
+                    return node.AsInteger.Value;
+                }
             }
             return 0d;
         }
@@ -347,6 +351,10 @@ namespace CommonFeatures.Config
                         if (array.RawArray[j].IsFloat)
                         {
                             value[j] = array.RawArray[j].AsFloat.Value;
+                        }
+                        else if (array.RawArray[j].IsInteger)
+                        {
+                            value[j] = array.RawArray[j].AsInteger.Value;
                         }
                     }
                     return value;

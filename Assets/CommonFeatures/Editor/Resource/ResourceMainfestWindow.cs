@@ -37,11 +37,28 @@ namespace CommonFeatures.Resource
     /// </summary>
     public class ResourceMainfestWindow : EditorWindow
     {
-        [MenuItem("Tools/资源清单文件生成窗口")]
+        [MenuItem("Tools/资源清单文件生成窗口", priority = CMenuItemPriority.ResourceManifestWindow)]
         static void OpenWindow()
         {
             var window = GetWindow<ResourceMainfestWindow>("资源清单生成窗口", true);
             window.minSize = new Vector2(700, 300);
+        }
+
+        [MenuItem("Tools/资源清单文件一键生成", priority = CMenuItemPriority.ResourceManifestOneKey)]
+        private static void ResourceManifestOneKey()
+        {
+            CustomEditorDataFactory.ReadData<ResourceManifestWindowData>(DataSaveName, out var data);
+            if (null == data
+                || null == data.ManifestDirectoryList 
+                || data.ManifestDirectoryList.Count == 0
+                || null == data.GenerateRegexList
+                || data.GenerateRegexList.Count == 0)
+            {
+                Debug.LogError("参数不正确,请打开资源清单文件生成窗口设置正确的参数");
+                return;
+            }
+
+            GenerateManifest(data);
         }
 
         private const string DataSaveName = "ResourceManifest";
@@ -211,16 +228,16 @@ namespace CommonFeatures.Resource
 
             if (GUILayout.Button("生成清单文件"))
             {
-                GenerateManifest();
+                GenerateManifest(m_Data);
             }
 
             EditorGUILayout.EndVertical();
         }
 
-        private void GenerateManifest()
+        private static void GenerateManifest(ResourceManifestWindowData windowData)
         {
             //检查文件路径
-            if (m_Data.ManifestDirectoryList.Count == 0 || m_Data.GenerateRegexList.Count == 0)
+            if (windowData.ManifestDirectoryList.Count == 0 || windowData.GenerateRegexList.Count == 0)
             {
                 CommonLog.ResourceError("资源清单文件生成失败, 没有指定清单生成文件夹或者没有指定清单生成后缀");
                 return;
@@ -228,14 +245,14 @@ namespace CommonFeatures.Resource
 
             Dictionary<string, string> manifest = new Dictionary<string, string>();
             HashSet<string> ignoreFolderSet = new HashSet<string>();
-            for (int i = 0; i < m_Data.IgnoreDirectoryList.Count; i++)
+            for (int i = 0; i < windowData.IgnoreDirectoryList.Count; i++)
             {
-                ignoreFolderSet.Add(m_Data.IgnoreDirectoryList[i]);
+                ignoreFolderSet.Add(windowData.IgnoreDirectoryList[i]);
             }
 
-            for (int i = 0; i < m_Data.ManifestDirectoryList.Count; i++)
+            for (int i = 0; i < windowData.ManifestDirectoryList.Count; i++)
             {
-                var path = m_Data.ManifestDirectoryList[i];
+                var path = windowData.ManifestDirectoryList[i];
                 var directoryInfo = new DirectoryInfo(path);
                 AddFileIntoManifest(manifest, directoryInfo, ignoreFolderSet);
             }
@@ -272,9 +289,9 @@ namespace CommonFeatures.Resource
                     string full = files[i].FullName;
                     full = full.Replace('\\', '/');
                     var name = full.Substring(full.LastIndexOf('/'));
-                    for (int j = 0; j < m_Data.GenerateRegexList.Count; j++)
+                    for (int j = 0; j < windowData.GenerateRegexList.Count; j++)
                     {
-                        if (Regex.IsMatch(name, m_Data.GenerateRegexList[j]))
+                        if (Regex.IsMatch(name, windowData.GenerateRegexList[j]))
                         {
                             if (manifest.ContainsKey(name))
                             {

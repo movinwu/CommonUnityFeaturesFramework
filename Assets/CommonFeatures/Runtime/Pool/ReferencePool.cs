@@ -1,3 +1,4 @@
+using CommonFeatures.Log;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,7 +77,7 @@ namespace CommonFeatures.Pool
             var hashSet = m_PoolDic[type];
             if (hashSet.Contains(item))
             {
-                CommonFeatures.Log.CommonLog.TraceError("向缓存池中重复归还元素");
+                CommonLog.TraceError("向缓存池中重复归还元素");
                 return;
             }
             hashSet.Add(item);

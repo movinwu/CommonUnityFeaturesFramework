@@ -1,4 +1,5 @@
 using CommonFeatures.NetWork;
+using CommonFeatures.Pool;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,9 +9,12 @@ namespace CommonFeatures.Test
     {
         private void Start()
         {
+            var p0 = ReferencePool.Acquire<HttpRequestParam>();
+            p0.Key = "q";
+            p0.Value = "百度";
             var param = new List<HttpRequestParam>()
             {
-                new HttpRequestParam("q", "百度"),
+                p0,
             };
             HttpManager.Instance.Get("https://cn.bing.com", 
                 //param,

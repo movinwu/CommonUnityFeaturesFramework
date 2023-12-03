@@ -1,6 +1,6 @@
 # Log.toml
 
-# 是否网络日志
+# 是否开启网络日志
 net = true
 # 是否开启数据日志
 model = true
