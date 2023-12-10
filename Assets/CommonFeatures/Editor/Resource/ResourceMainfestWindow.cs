@@ -258,7 +258,7 @@ namespace CommonFeatures.Resource
             }
 
             //读取清单文件地址
-            var filePath = Path.Combine(Application.dataPath, ConfigManager.Instance.GetStrConfig("Resource", "manifest_path"));
+            var filePath = Path.Combine(Application.dataPath, CFM.Config.GetStringConfig("Resource", "manifest_path"));
             if (File.Exists(filePath))
             {
                 File.Delete(filePath);
@@ -266,7 +266,7 @@ namespace CommonFeatures.Resource
 
             StringBuilder sb = new StringBuilder();
             sb.AppendLine(manifest.Count.ToString());
-            char spliteChar = ConfigManager.Instance.GetStrConfig("Resource", "manifest_split_symbol")[0];
+            char spliteChar = CFM.Config.GetStringConfig("Resource", "manifest_split_symbol")[0];
             foreach (var file in manifest)
             {
                 if (file.Value.Contains(spliteChar))

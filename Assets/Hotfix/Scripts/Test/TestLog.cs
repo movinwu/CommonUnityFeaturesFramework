@@ -27,7 +27,7 @@ namespace CommonFeatures.Test
             }
             catch (Exception ex)
             {
-                CommonLog.Trace(ex);
+                CommonLog.Log(ex);
             }
         }
     }

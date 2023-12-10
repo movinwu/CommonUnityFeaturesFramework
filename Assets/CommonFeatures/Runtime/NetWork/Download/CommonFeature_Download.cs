@@ -15,7 +15,7 @@ namespace CommonFeatures.NetWork
     /// <summary>
     /// 下载管理器
     /// </summary>
-    public class DownloadManager : MonoSingletonBase<DownloadManager>
+    public class CommonFeature_Download : CommonFeature
     {
         /// <summary>
         /// 所有下载
@@ -42,16 +42,14 @@ namespace CommonFeatures.NetWork
         /// </summary>
         private int m_TimeoutRepeatedTime = 0;
 
-        protected override void Awake()
+        public override void Init()
         {
-            base.Awake();
+            m_EachDownloadByteLength = (ulong)CFM.Config.GetLongConfig("Download", "each_bytes_length");
 
-            m_EachDownloadByteLength = (ulong)ConfigManager.Instance.GetLongConfig("Download", "each_bytes_length");
-
-            m_Timeout = (float)ConfigManager.Instance.GetDoubleConfig("Download", "timeout");
+            m_Timeout = (float)CFM.Config.GetDoubleConfig("Download", "timeout");
             m_Timeout = Mathf.Max(0, m_Timeout);
 
-            m_TimeoutRepeatedTime = (int)ConfigManager.Instance.GetLongConfig("Download", "repeated_time");
+            m_TimeoutRepeatedTime = (int)CFM.Config.GetLongConfig("Download", "repeated_time");
             m_TimeoutRepeatedTime = Mathf.Max(0, m_TimeoutRepeatedTime);
         }
 

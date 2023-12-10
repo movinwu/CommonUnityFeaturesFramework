@@ -1,41 +1,15 @@
 using CommonFeatures.Log;
-using CommonFeatures.Singleton;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using UnityEngine;
 
 namespace CommonFeatures.DataTable
 {
     /// <summary>
     /// 数据表管理器
     /// </summary>
-    public class DataTableManager : SingletonBase<DataTableManager>
+    public class CommonFeature_DataTable : CommonFeature
     {
-        private DataTableManager() { }
-
-        #region 数据表相关配置
-        /// <summary>
-        /// byte文件路径
-        /// </summary>
-        private const string BinaryPath = "Assets/Hotfix/Resources/Data/Binary";
-
-        /// <summary>
-        /// json文件路径
-        /// </summary>
-        private const string JsonPath = "Assets/Hotfix/Resources/Data/Json";
-
-        /// <summary>
-        /// data所在程序集名称
-        /// </summary>
-        private const string AssemblyName = "HotfixScripts";
-
-        /// <summary>
-        /// 数据表读取类型
-        /// </summary>
-        private const EDataReadType m_DataReadType = EDataReadType.Binary;
-        #endregion 数据表相关配置
-
         /// <summary>
         /// 所有数据表
         /// </summary>
@@ -46,10 +20,14 @@ namespace CommonFeatures.DataTable
         /// </summary>
         public void ReadDataTable()
         {
+            var assemblyName = CFM.Config.GetStringConfig("DataTable", "assembly_name");
+            var dataReadType = (EDataReadType)CFM.Config.GetLongConfig("DataTable", "data_read_type");
+
             m_AllDataTable.Clear();
-            if (m_DataReadType == EDataReadType.Binary)
+            if (dataReadType == EDataReadType.Binary)
             {
-                var directory = new DirectoryInfo(BinaryPath);
+                var binaryPath = CFM.Config.GetStringConfig("DataTable", "binary_path");
+                var directory = new DirectoryInfo(binaryPath);
                 var files = directory.GetFiles();
                 for (int fileIndex = 0; fileIndex < files.Length; fileIndex++)
                 {
@@ -60,7 +38,7 @@ namespace CommonFeatures.DataTable
                         {
                             string name = file.Name.Substring(0, file.Name.LastIndexOf('.'));
                             var typeName = $"HotfixScripts.DT_{name}";
-                            var assembly = System.Reflection.Assembly.Load(AssemblyName);
+                            var assembly = System.Reflection.Assembly.Load(assemblyName);
                             var type = assembly.GetType(typeName);
                             IDataTable table = assembly.CreateInstance(typeName) as IDataTable;
                             using (var stream = new FileStream(file.FullName, FileMode.Open))
@@ -82,10 +60,11 @@ namespace CommonFeatures.DataTable
                 }
             }
 #pragma warning disable CS0162 // 检测到无法访问的代码
-            else if (m_DataReadType == EDataReadType.Json)
+            else if (dataReadType == EDataReadType.Json)
 #pragma warning restore CS0162 // 检测到无法访问的代码
             {
-                var directory = new DirectoryInfo(JsonPath);
+                var jsonPath = CFM.Config.GetStringConfig("DataTable", "json_path");
+                var directory = new DirectoryInfo(jsonPath);
                 var files = directory.GetFiles();
                 for (int fileIndex = 0; fileIndex < files.Length; fileIndex++)
                 {
@@ -96,7 +75,7 @@ namespace CommonFeatures.DataTable
                         {
                             string name = file.Name.Substring(0, file.Name.LastIndexOf('.'));
                             string typeName = $"OOPS.DataTable<DT_{name}>";
-                            var assembly = System.Reflection.Assembly.Load(AssemblyName);
+                            var assembly = System.Reflection.Assembly.Load(assemblyName);
                             var type = assembly.GetType(typeName);
                             IDataTable table = assembly.CreateInstance(typeName) as IDataTable;
                             using (var stream = new FileStream(file.FullName, FileMode.Open))

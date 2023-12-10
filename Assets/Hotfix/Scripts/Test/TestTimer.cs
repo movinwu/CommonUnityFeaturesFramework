@@ -11,12 +11,12 @@ namespace CommonFeatures.Test
         private void Start()
         {
             ulong id = 1;
-            id = TimerManager.Instance.AddTimer(1f, 2, () =>
+            id = CFM.Timer.AddTimer(1f, 2, () =>
             {
-                CommonLog.Trace($"正在计时, 时间 {TimerManager.Instance.GetCurrentTime(id)}");
+                CommonLog.Log($"正在计时, 时间 {CFM.Timer.GetCurrentTime(id)}");
             }, () =>
             {
-                CommonLog.Trace("计时结束");
+                CommonLog.Log("计时结束");
             });
         }
     }

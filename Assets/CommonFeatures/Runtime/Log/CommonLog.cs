@@ -26,31 +26,31 @@ namespace CommonFeatures.Log
 
             tags = ELogType.Null;
             //ºÏ≤È≈‰÷√
-            if (ConfigManager.Instance.GetBooleanConfig("Log", "net"))
+            if (CFM.Config.GetBooleanConfig("Log", "net"))
             {
                 tags |= ELogType.Net;
             }
-            if (ConfigManager.Instance.GetBooleanConfig("Log", "model"))
+            if (CFM.Config.GetBooleanConfig("Log", "model"))
             {
                 tags |= ELogType.Model;
             }
-            if (ConfigManager.Instance.GetBooleanConfig("Log", "business"))
+            if (CFM.Config.GetBooleanConfig("Log", "business"))
             {
                 tags |= ELogType.Business;
             }
-            if (ConfigManager.Instance.GetBooleanConfig("Log", "view"))
+            if (CFM.Config.GetBooleanConfig("Log", "view"))
             {
                 tags |= ELogType.View;
             }
-            if (ConfigManager.Instance.GetBooleanConfig("Log", "config"))
+            if (CFM.Config.GetBooleanConfig("Log", "config"))
             {
                 tags |= ELogType.Config;
             }
-            if (ConfigManager.Instance.GetBooleanConfig("Log", "trace"))
+            if (CFM.Config.GetBooleanConfig("Log", "trace"))
             {
                 tags |= ELogType.Trace;
             }
-            if (ConfigManager.Instance.GetBooleanConfig("Log", "resource"))
+            if (CFM.Config.GetBooleanConfig("Log", "resource"))
             {
                 tags |= ELogType.Resource;
             }
@@ -122,7 +122,7 @@ namespace CommonFeatures.Log
         /// </summary>
         /// <param name="msg"></param>
         /// <param name="color"></param>
-        public static void Trace(object msg, string color = "ffffff")
+        public static void Log(object msg, string color = "ffffff")
         {
             Print(ELogType.Trace, msg, LogType.Log, color);
         }
@@ -186,7 +186,7 @@ namespace CommonFeatures.Log
         /// </summary>
         /// <param name="msg"></param>
         /// <param name="color"></param>
-        public static void TraceWarning(object msg, string color = "ffff00")
+        public static void LogWarning(object msg, string color = "ffff00")
         {
             Print(ELogType.Trace, msg, LogType.Warning, color);
         }
@@ -250,7 +250,7 @@ namespace CommonFeatures.Log
         /// </summary>
         /// <param name="msg"></param>
         /// <param name="color"></param>
-        public static void TraceError(object msg, string color = "dc143c")
+        public static void LogError(object msg, string color = "dc143c")
         {
             Print(ELogType.Trace, msg, LogType.Error, color);
         }

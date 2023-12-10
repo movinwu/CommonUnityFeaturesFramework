@@ -1,8 +1,6 @@
 using CommonFeatures.Pool;
-using CommonFeatures.Singleton;
 using CommonFeatures.Utility;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -12,7 +10,7 @@ namespace CommonFeatures.Timer
     /// <summary>
     /// 计时器管理器
     /// </summary>
-    public class TimerManager : MonoSingletonBase<TimerManager>
+    public class CommonFeature_Timer : CommonFeature
     {
         #region 字段和属性
         /// <summary>
@@ -135,9 +133,9 @@ namespace CommonFeatures.Timer
         }
 
         /// <summary>
-        /// update函数，每帧调用所有计时器和销毁已完成的计时器
+        /// 每帧调用所有计时器和销毁已完成的计时器
         /// </summary>
-        void Update()
+        public override void Tick()
         {
             var deltaTime = Time.deltaTime;
             if(_timerDic.Count > 0)

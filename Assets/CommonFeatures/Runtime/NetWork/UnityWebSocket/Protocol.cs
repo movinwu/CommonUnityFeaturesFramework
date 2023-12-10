@@ -44,7 +44,7 @@ namespace CommonFeatures.NetWork
 
         public void SendMessage(byte[] data)
         {
-            NetManager.Instance.SendMsg(data);
+            CFM.Net.SendMsg(data);
         }
 
         /// <summary>

@@ -51,8 +51,8 @@ namespace CommonFeatures.Resource
         {
             this.m_OnLoading?.Invoke("校验本地文件", 0f, 1f);
 
-            var versionPath = ConfigManager.Instance.GetStrConfig("Resource", "RemoteAB", "remote_version_path");
-            HttpManager.Instance.Get(versionPath, null, 
+            var versionPath = CFM.Config.GetStringConfig("Resource", "RemoteAB", "remote_version_path");
+            CFM.Http.Get(versionPath, null, 
                 completeCallback: request =>
                 {
                     m_RemoteVersionInfo = JsonMapper.ToObject<ResourceVersionInfo>(request.downloadHandler.text);
@@ -69,7 +69,7 @@ namespace CommonFeatures.Resource
         /// </summary>
         private void AnalysisLocalVersionFile()
         {
-            m_LocalVersionFilePath = Path.Combine(Application.persistentDataPath, ConfigManager.Instance.GetStrConfig("Resource", "RemoteAB", "local_version_path"));
+            m_LocalVersionFilePath = Path.Combine(Application.persistentDataPath, CFM.Config.GetStringConfig("Resource", "RemoteAB", "local_version_path"));
             if (!File.Exists(m_LocalVersionFilePath))
             {
                 m_LocalVersionInfo = null;
@@ -102,8 +102,8 @@ namespace CommonFeatures.Resource
             //版本不同
             else
             {
-                m_RemoteABFilePath = Path.Combine(Application.persistentDataPath, ConfigManager.Instance.GetStrConfig("Resource", "RemoteAB", "remote_AB_directory_path"));
-                HttpManager.Instance.Get(m_RemoteABFilePath, null,
+                m_RemoteABFilePath = Path.Combine(Application.persistentDataPath, CFM.Config.GetStringConfig("Resource", "RemoteAB", "remote_AB_directory_path"));
+                CFM.Http.Get(m_RemoteABFilePath, null,
                     completeCallback: webrequest =>
                     {
 

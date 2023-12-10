@@ -12,7 +12,7 @@ namespace CommonFeatures.NetWork
     /// <summary>
     /// Http连接请求
     /// </summary>
-    public class HttpManager : MonoSingletonBase<HttpManager>
+    public class CommonFeature_Http : CommonFeature
     {
         /// <summary>
         /// 服务器地址
@@ -150,7 +150,7 @@ namespace CommonFeatures.NetWork
             handler.Request.SendWebRequest();
         }
 
-        private void Update()
+        public override void Tick()
         {
             if (requestingHttpDic.Count > 0)
             {

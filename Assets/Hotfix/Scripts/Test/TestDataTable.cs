@@ -9,14 +9,14 @@ namespace CommonFeatures.Test
     {
         private void Start()
         {
-            DataTableManager.Instance.ReadDataTable();
-            var datas = DataTableManager.Instance.GetDataRows<DR_Example>();
+            CFM.DataTable.ReadDataTable();
+            var datas = CFM.DataTable.GetDataRows<DR_Example>();
             for (int i = 0; i < datas.Count; i++)
             {
                 CommonLog.Config(LitJson.JsonMapper.ToJson(datas[i]));
                 CommonLog.Config(datas[i].string_example);
             }
-            var datas2 = DataTableManager.Instance.GetDataRows<DR_Example2>();
+            var datas2 = CFM.DataTable.GetDataRows<DR_Example2>();
             for (int i = 0; i < datas2.Count; i++)
             {
                 CommonLog.Config(LitJson.JsonMapper.ToJson(datas2[i]));

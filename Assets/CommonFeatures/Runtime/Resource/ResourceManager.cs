@@ -26,7 +26,7 @@ namespace CommonFeatures.Resource
 
         private void Init()
         {
-            m_ResourceLoadType = (EResourceLoadType)ConfigManager.Instance.GetLongConfig("Resource", "resource_load_type");
+            m_ResourceLoadType = (EResourceLoadType)CFM.Config.GetLongConfig("Resource", "resource_load_type");
             switch (m_ResourceLoadType)
             {
                 case EResourceLoadType.RemoteAB:
@@ -39,7 +39,7 @@ namespace CommonFeatures.Resource
                     m_Helper = new ResourceHelper_Editor();
                     break;
                 default:
-                    CommonLog.TraceError("资源辅助类加载错误,检查配置文件Resource中resource_load_type配置");
+                    CommonLog.LogError("资源辅助类加载错误,检查配置文件Resource中resource_load_type配置");
                     break;
             }
         }

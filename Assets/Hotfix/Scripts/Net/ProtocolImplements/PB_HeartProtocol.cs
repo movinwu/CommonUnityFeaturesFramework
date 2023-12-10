@@ -27,7 +27,7 @@ namespace HotfixScripts
                 data.Id = id;
                 heart.SendMessage(data);
             });
-            CommonLog.Trace($"收到心跳消息,id为 {this.Data.Id}");
+            CommonLog.Log($"收到心跳消息,id为 {this.Data.Id}");
         }
     }
 }

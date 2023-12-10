@@ -12,10 +12,8 @@ namespace CommonFeatures.Config
     /// <summary>
     /// 配置管理
     /// </summary>
-    public class ConfigManager : SingletonBase<ConfigManager>
+    public class CommonFeature_Config : CommonFeature
     {
-        private ConfigManager() { ReadToml(); }
-
         /// <summary>
         /// 配置文件地址
         /// </summary>
@@ -61,7 +59,7 @@ namespace CommonFeatures.Config
         /// <param name="name"></param>
         /// <param name="tableNames"></param>
         /// <returns></returns>
-        public string GetStrConfig(string name, params string[] tableNames)
+        public string GetStringConfig(string name, params string[] tableNames)
         {
             if (!m_Table.ContainsKey(name))
             {
@@ -492,7 +490,7 @@ namespace CommonFeatures.Config
         /// <summary>
         /// 读取toml文件
         /// </summary>
-        private void ReadToml()
+        public override void Init()
         {
             m_Table.Clear();
             var directoryPath = Path.Combine(Application.dataPath, ConfigPath);

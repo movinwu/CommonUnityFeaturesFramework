@@ -1,15 +1,10 @@
 using CommonFeatures.Pool;
-using CommonFeatures.Singleton;
-using Google.Protobuf;
-using System.Collections;
-using System.Collections.Generic;
 using System.Text;
-using UnityEngine;
 using UnityWebSocket;
 
 namespace CommonFeatures.NetWork
 {
-    public class NetManager : MonoSingletonBase<NetManager>
+    public class CommonFeature_Net : CommonFeature
     {
         private const string Address = "wss://echo.websocket.events";
 
