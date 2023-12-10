@@ -17,30 +17,11 @@ namespace CommonFeatures.Log
 
         private static void Init()
         {
-            //tags = ELogType.Net
-            //    | ELogType.Model
-            //    | ELogType.Business
-            //    | ELogType.View
-            //    | ELogType.Config
-            //    | ELogType.Trace;
-
             tags = ELogType.Null;
             //检查配置
             if (CFM.Config.GetBooleanConfig("Log", "net"))
             {
                 tags |= ELogType.Net;
-            }
-            if (CFM.Config.GetBooleanConfig("Log", "model"))
-            {
-                tags |= ELogType.Model;
-            }
-            if (CFM.Config.GetBooleanConfig("Log", "business"))
-            {
-                tags |= ELogType.Business;
-            }
-            if (CFM.Config.GetBooleanConfig("Log", "view"))
-            {
-                tags |= ELogType.View;
             }
             if (CFM.Config.GetBooleanConfig("Log", "config"))
             {
@@ -137,33 +118,6 @@ namespace CommonFeatures.Log
         }
 
         /// <summary>
-        /// 数据层日志打印
-        /// </summary>
-        /// <param name="msg"></param>
-        public static void Model(object msg)
-        {
-            Print(ELogType.Net, msg, LogType.Log, "9370DB");
-        }
-
-        /// <summary>
-        /// 业务层日志打印
-        /// </summary>
-        /// <param name="msg"></param>
-        public static void Business(object msg)
-        {
-            Print(ELogType.Net, msg, LogType.Log, "0000cd");
-        }
-
-        /// <summary>
-        /// 视图层日志打印
-        /// </summary>
-        /// <param name="msg"></param>
-        public static void View(object msg)
-        {
-            Print(ELogType.Net, msg, LogType.Log, "20B2AA");
-        }
-
-        /// <summary>
         /// 配置日志打印
         /// </summary>
         /// <param name="msg"></param>
@@ -201,33 +155,6 @@ namespace CommonFeatures.Log
         }
 
         /// <summary>
-        /// 数据层日志警告
-        /// </summary>
-        /// <param name="msg"></param>
-        public static void ModelWarning(object msg)
-        {
-            Print(ELogType.Net, msg, LogType.Warning, "9370DB");
-        }
-
-        /// <summary>
-        /// 业务层日志警告
-        /// </summary>
-        /// <param name="msg"></param>
-        public static void BusinessWarning(object msg)
-        {
-            Print(ELogType.Net, msg, LogType.Warning, "0000cd");
-        }
-
-        /// <summary>
-        /// 视图层日志警告
-        /// </summary>
-        /// <param name="msg"></param>
-        public static void ViewWarning(object msg)
-        {
-            Print(ELogType.Net, msg, LogType.Warning, "20B2AA");
-        }
-
-        /// <summary>
         /// 配置日志警告
         /// </summary>
         /// <param name="msg"></param>
@@ -262,33 +189,6 @@ namespace CommonFeatures.Log
         public static void NetError(object msg)
         {
             Print(ELogType.Net, msg, LogType.Error, "ee7700");
-        }
-
-        /// <summary>
-        /// 数据层日志错误
-        /// </summary>
-        /// <param name="msg"></param>
-        public static void ModelError(object msg)
-        {
-            Print(ELogType.Net, msg, LogType.Error, "9370DB");
-        }
-
-        /// <summary>
-        /// 业务层日志错误
-        /// </summary>
-        /// <param name="msg"></param>
-        public static void BusinessError(object msg)
-        {
-            Print(ELogType.Net, msg, LogType.Error, "0000cd");
-        }
-
-        /// <summary>
-        /// 视图层日志错误
-        /// </summary>
-        /// <param name="msg"></param>
-        public static void ViewError(object msg)
-        {
-            Print(ELogType.Net, msg, LogType.Error, "20B2AA");
         }
 
         /// <summary>
@@ -466,33 +366,18 @@ namespace CommonFeatures.Log
         Net = 1,
 
         /// <summary>
-        /// 数据结构层日志
-        /// </summary>
-        Model = 2,
-
-        /// <summary>
-        /// 业务逻辑层日志
-        /// </summary>
-        Business = 4,
-
-        /// <summary>
-        /// 视图层日志
-        /// </summary>
-        View = 8,
-
-        /// <summary>
         /// 配置日志
         /// </summary>
-        Config = 16,
+        Config = 2,
 
         /// <summary>
         /// 标准日志
         /// </summary>
-        Trace = 32,
+        Trace = 4,
 
         /// <summary>
         /// 资源日志
         /// </summary>
-        Resource = 64,
+        Resource = 8,
     }
 }

@@ -8,7 +8,7 @@ using UnityEngine;
 namespace CommonFeatures.Timer
 {
     /// <summary>
-    /// 计时器管理器
+    /// 通用功能-计时器
     /// </summary>
     public class CommonFeature_Timer : CommonFeature
     {

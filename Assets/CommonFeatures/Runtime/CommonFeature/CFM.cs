@@ -1,11 +1,10 @@
 using CommonFeatures.Config;
 using CommonFeatures.DataTable;
+using CommonFeatures.FSM;
+using CommonFeatures.GML;
 using CommonFeatures.Log;
 using CommonFeatures.NetWork;
-using CommonFeatures.Singleton;
 using CommonFeatures.Timer;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace CommonFeatures
@@ -52,6 +51,16 @@ namespace CommonFeatures
         /// </summary>
         public static CommonFeature_Timer Timer;
 
+        /// <summary>
+        /// 状态机
+        /// </summary>
+        public static CommonFeature_FSM FSM;
+
+        /// <summary>
+        /// 游戏主循环
+        /// </summary>
+        public static CommonFeature_GML GML;
+
         private void Awake()
         {
             if (string.IsNullOrEmpty(BelongGameObjectName))
@@ -97,6 +106,26 @@ namespace CommonFeatures
                     Timer = child.GetComponent<CommonFeature_Timer>();
                     Timer.Init();
                 }
+                else if ("FSM".Equals(child.name))
+                {
+                    FSM = child.GetComponent<CommonFeature_FSM>();
+                    FSM.Init();
+                }
+                else if ("GML".Equals(child.name))
+                {
+                    GML = child.GetComponent<CommonFeature_GML>();
+                    GML.Init();
+                }
+            }
+
+            //正式开始游戏
+            if (null == GML)
+            {
+                CommonLog.LogError("缺少游戏主循环,无法开始游戏");
+            }
+            else
+            {
+                GML.StartGame();
             }
         }
 
@@ -108,6 +137,7 @@ namespace CommonFeatures
             Http.Tick();
             Net.Tick();
             Timer.Tick();
+            FSM.Tick();
         }
 
         private void OnDestroy()
@@ -118,6 +148,7 @@ namespace CommonFeatures
             Http.Release();
             Net.Release();
             Timer.Release();
+            FSM.Release();
         }
     }
 }

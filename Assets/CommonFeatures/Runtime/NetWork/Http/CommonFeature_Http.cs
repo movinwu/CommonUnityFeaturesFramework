@@ -10,7 +10,7 @@ using UnityEngine.Networking;
 namespace CommonFeatures.NetWork
 {
     /// <summary>
-    /// Http连接请求
+    /// 通用功能-Http连接请求
     /// </summary>
     public class CommonFeature_Http : CommonFeature
     {

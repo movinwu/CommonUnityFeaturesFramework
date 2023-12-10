@@ -6,7 +6,7 @@ using System.IO;
 namespace CommonFeatures.DataTable
 {
     /// <summary>
-    /// 数据表管理器
+    /// 通用功能-数据表
     /// </summary>
     public class CommonFeature_DataTable : CommonFeature
     {

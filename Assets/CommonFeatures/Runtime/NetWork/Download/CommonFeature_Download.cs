@@ -13,7 +13,7 @@ using UnityEngine.Networking;
 namespace CommonFeatures.NetWork
 {
     /// <summary>
-    /// 下载管理器
+    /// 通用功能-下载
     /// </summary>
     public class CommonFeature_Download : CommonFeature
     {

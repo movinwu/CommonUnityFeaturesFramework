@@ -4,6 +4,9 @@ using UnityWebSocket;
 
 namespace CommonFeatures.NetWork
 {
+    /// <summary>
+    /// 通用功能-网络长连接
+    /// </summary>
     public class CommonFeature_Net : CommonFeature
     {
         private const string Address = "wss://echo.websocket.events";

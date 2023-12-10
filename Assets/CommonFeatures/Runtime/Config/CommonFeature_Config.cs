@@ -10,7 +10,7 @@ using UnityEngine;
 namespace CommonFeatures.Config
 {
     /// <summary>
-    /// 配置管理
+    /// 通用功能-配置
     /// </summary>
     public class CommonFeature_Config : CommonFeature
     {
