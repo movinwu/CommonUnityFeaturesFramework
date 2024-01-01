@@ -1,6 +1,9 @@
 using CommonFeatures.Log;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -33,6 +36,26 @@ namespace CommonFeatures.Resource
         /// </summary>
         public List<string> PackResourceFilter;
 
+        /// <summary>
+        /// 打包类名称
+        /// </summary>
+        public string PackerClassName;
+
+        /// <summary>
+        /// 热更新包输出文件夹
+        /// </summary>
+        public string OutputPath;
+
+        /// <summary>
+        /// 是否自动将打包好的文件拷贝到streamingAssets下
+        /// </summary>
+        public bool CopyToStreamingAssets;
+
+        /// <summary>
+        /// AB包版本号
+        /// </summary>
+        public int ABVersion;
+
         public bool StaticPathFold = true;
         public bool StaticIgnorePathFold = true;
         public bool StreamingPathFold = true;
@@ -64,6 +87,10 @@ namespace CommonFeatures.Resource
 
         private AssetBundlePackerWindowData m_Data;
 
+        private string[] m_AllPackerClass;
+
+        private int m_PackerClassIndex = -1;
+
         private void OnGUI()
         {
             if (null == m_Data)
@@ -81,6 +108,27 @@ namespace CommonFeatures.Resource
                 {
                     m_Data.PackResourceFilter = new List<string>();
                 }
+            }
+
+            if (null == m_AllPackerClass)
+            {
+                var parentType = typeof(AssetBundleBuildHandlerBase);
+                m_AllPackerClass = Assembly.GetAssembly(parentType)
+                    .GetTypes()
+                    .Where(t => t.IsSubclassOf(parentType))
+                    .Select(t => t.ToString())
+                    .ToArray();
+
+                //找到上次选中的类
+                for (int i = 0; i < m_AllPackerClass.Length; i++)
+                {
+                    if (m_AllPackerClass[i].Equals(m_Data.PackerClassName))
+                    {
+                        m_PackerClassIndex = i;
+                        break;
+                    }
+                }
+                m_PackerClassIndex = Mathf.Max(m_PackerClassIndex, 0);
             }
 
             EditorGUILayout.Space();
@@ -338,6 +386,62 @@ namespace CommonFeatures.Resource
             }
             #endregion 文件筛选正则
 
+            EditorGUILayout.Space();
+
+            #region 打包实现类
+            var packerIndex = EditorGUILayout.Popup("选择打包操作类", m_PackerClassIndex, m_AllPackerClass);
+            if (packerIndex != m_PackerClassIndex)
+            {
+                m_PackerClassIndex = packerIndex;
+                m_Data.PackerClassName = m_AllPackerClass[m_PackerClassIndex];
+                CustomEditorDataFactory.WriteData(DataSaveName, m_Data);
+            }
+            #endregion 打包实现类
+
+            EditorGUILayout.Space();
+
+            #region AB包输出地址
+            EditorGUILayout.BeginHorizontal();
+
+            GUILayout.Label("AB包输出地址");
+
+            if (GUILayout.Button(m_Data.OutputPath))
+            {
+                var newPath = EditorUtility.OpenFolderPanel("选择输出地址", m_Data.OutputPath, "");
+                if (!string.IsNullOrEmpty(newPath))
+                {
+                    m_Data.OutputPath = newPath;
+                    CustomEditorDataFactory.WriteData(DataSaveName, m_Data);
+                }
+            }
+
+            EditorGUILayout.EndHorizontal();
+            #endregion AB包输出地址
+
+            EditorGUILayout.Space();
+
+            #region 是否自动拷贝及版本号
+            EditorGUILayout.BeginHorizontal();
+
+            var isCopy = GUILayout.Toggle(m_Data.CopyToStreamingAssets, "打包完成后自动拷贝到StreamingAssets下");
+            if (isCopy != m_Data.CopyToStreamingAssets)
+            {
+                m_Data.CopyToStreamingAssets = isCopy;
+                CustomEditorDataFactory.WriteData(DataSaveName, m_Data);
+            }
+
+            var version = EditorGUILayout.TextField("版本号", m_Data.ABVersion.ToString());
+            if (int.TryParse(version, out var v))
+            {
+                m_Data.ABVersion = v;
+                CustomEditorDataFactory.WriteData(DataSaveName, m_Data);
+            }
+
+            EditorGUILayout.EndHorizontal();
+            #endregion 是否自动拷贝及版本号
+
+            EditorGUILayout.Space();
+
             if (GUILayout.Button("开始打包AB包"))
             {
                 PackAssetBundle(m_Data);
@@ -362,8 +466,18 @@ namespace CommonFeatures.Resource
                 CommonLog.LogError("请设置要打包的资源筛选正则");
                 return;
             }
+            if (string.IsNullOrEmpty(windowData.PackerClassName))
+            {
+                CommonLog.LogError("打包类不正确");
+                return;
+            }
 
+            var packerType = Assembly.GetAssembly(typeof(AssetBundleBuildHandlerBase)).GetType(windowData.PackerClassName);
+            var packer = packerType.Assembly.CreateInstance(packerType.ToString()) as AssetBundleBuildHandlerBase;
+            packer.PackAssetBundle();
 
+            ++windowData.ABVersion;
+            CustomEditorDataFactory.WriteData(DataSaveName, windowData);
         }
     }
 }

@@ -4,10 +4,10 @@
 data_read_type = 0
 
 # 数据字节文件地址
-binary_path = 'Assets/Hotfix/Resource/DataTable/Binary'
+binary_path = 'Assets/Hotfix/Res/DataTable/Binary'
 
 # 数据json文件地址
-json_path = 'Assets/Hotfix/Resource/DataTable/Json'
+json_path = 'Assets/Hotfix/Res/DataTable/Json'
 
 # 热更程序集名称
 assembly_name = 'HotfixScripts'

@@ -8,7 +8,7 @@ namespace CommonFeatures.Resource
     /// <summary>
     /// AB包打包基类
     /// </summary>
-    public abstract class AssetBundlePackerBase
+    public abstract class AssetBundleBuildHandlerBase
     {
         protected AssetBundleBuild[] m_BuildDatasOnPack;
 
@@ -16,5 +16,13 @@ namespace CommonFeatures.Resource
         /// 打包
         /// </summary>
         public abstract void PackAssetBundle();
+
+        /// <summary>
+        /// 静态资源打包分析
+        /// </summary>
+        public virtual void AnalysisStaticResources()
+        {
+
+        }
     }
 }
