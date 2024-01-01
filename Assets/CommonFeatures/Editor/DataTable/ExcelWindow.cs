@@ -228,19 +228,6 @@ namespace HotfixScripts
         private static void DataTableOneKey()
         {
             CustomEditorDataFactory.ReadData<ExcelWindowData>(DataSavePath, out var data);
-            if (null == data
-                || string.IsNullOrEmpty(data.bytePath)
-                || string.IsNullOrEmpty(data.excelPath)
-                || string.IsNullOrEmpty(data.codeGeneratePath)
-                || string.IsNullOrEmpty(data.jsonPath)
-                || !Directory.Exists(data.bytePath)
-                || !Directory.Exists(data.jsonPath)
-                || !Directory.Exists(data.excelPath)
-                || !Directory.Exists(data.codeGeneratePath))
-            {
-                Debug.LogError("路径不正确,请打开导表窗口设置正确的路径");
-                return;
-            }
 
             Generate(data);
         }
@@ -310,27 +297,6 @@ namespace HotfixScripts
             //生成按钮
             if (GUILayout.Button("生成"))
             {
-                if (string.IsNullOrEmpty(m_Data.excelPath))
-                {
-                    Debug.LogError("请设置excel文件路径");
-                    return;
-                }
-                if (string.IsNullOrEmpty(m_Data.jsonPath))
-                {
-                    Debug.LogError("请设置生成json文件路径");
-                    return;
-                }
-                if (string.IsNullOrEmpty(m_Data.bytePath))
-                {
-                    Debug.LogError("请设置生成byte文件路径");
-                    return;
-                }
-                if (string.IsNullOrEmpty(m_Data.codeGeneratePath))
-                {
-                    Debug.LogError("请设置生成代码文件路径");
-                    return;
-                }
-
                 Generate(m_Data);
             }
 
@@ -339,6 +305,27 @@ namespace HotfixScripts
 
         private static void Generate(ExcelWindowData pathData)
         {
+            if (string.IsNullOrEmpty(pathData.excelPath))
+            {
+                CommonLog.LogError("请设置excel文件路径");
+                return;
+            }
+            if (string.IsNullOrEmpty(pathData.jsonPath))
+            {
+                CommonLog.LogError("请设置生成json文件路径");
+                return;
+            }
+            if (string.IsNullOrEmpty(pathData.bytePath))
+            {
+                CommonLog.LogError("请设置生成byte文件路径");
+                return;
+            }
+            if (string.IsNullOrEmpty(pathData.codeGeneratePath))
+            {
+                CommonLog.LogError("请设置生成代码文件路径");
+                return;
+            }
+
             var directory = new DirectoryInfo(pathData.excelPath);
             var files = directory.GetFiles();
             for (int fileIndex = 0; fileIndex < files.Length; fileIndex++)

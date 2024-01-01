@@ -38,5 +38,15 @@ namespace CommonFeatures
         /// 资源清单文件一键生成
         /// </summary>
         public const int ResourceManifestOneKey = 301;
+
+        /// <summary>
+        /// AB包资源打包窗口
+        /// </summary>
+        public const int AssetBundlePackerWindow = 400;
+
+        /// <summary>
+        /// AB包资源一键打包
+        /// </summary>
+        public const int AssetBundlePackerOneKey = 401;
     }
 }

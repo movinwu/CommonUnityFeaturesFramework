@@ -1,4 +1,0 @@
-3
-/Example.byte*Hotfix/Resource/DataTable/Binary/Example.byte
-/Example2.byte*Hotfix/Resource/DataTable/Binary/Example2.byte
-/Example3.byte*Hotfix/Resource/DataTable/Binary/Example3.byte

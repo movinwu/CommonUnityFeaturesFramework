@@ -16,7 +16,7 @@ namespace CommonFeatures.Test
             {
                 p0,
             };
-            CFM.Http.Get("https://cn.bing.com", 
+            CommonFeaturesManager.Http.Get("https://cn.bing.com", 
                 //param,
                 null,
                 webrequest =>

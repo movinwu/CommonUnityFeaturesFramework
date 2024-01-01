@@ -13,7 +13,7 @@ namespace CommonFeatures.Test
 
         private IEnumerator Start()
         {
-            CFM.Net.StartConnect();
+            CommonFeaturesManager.Net.StartConnect();
             ProtocolManager.Instance.RegisterProtocol((short)EProtocolId.Heart, typeof(PB_HeartProtocol));
             yield return new WaitForSeconds(5);
             var protocol = ReferencePool.Acquire<PB_HeartProtocol>();

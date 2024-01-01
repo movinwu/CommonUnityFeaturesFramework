@@ -11,9 +11,9 @@ namespace CommonFeatures.Test
         private void Start()
         {
             ulong id = 1;
-            id = CFM.Timer.AddTimer(1f, 2, () =>
+            id = CommonFeaturesManager.Timer.AddTimer(1f, 2, () =>
             {
-                CommonLog.Log($"正在计时, 时间 {CFM.Timer.GetCurrentTime(id)}");
+                CommonLog.Log($"正在计时, 时间 {CommonFeaturesManager.Timer.GetCurrentTime(id)}");
             }, () =>
             {
                 CommonLog.Log("计时结束");

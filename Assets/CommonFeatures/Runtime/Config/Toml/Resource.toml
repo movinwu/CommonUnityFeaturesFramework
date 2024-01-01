@@ -1,7 +1,7 @@
 # Resource.toml
 
 # 资源清单文件地址
-manifest_path = "Hotfix/Resource/manifest.txt"
+manifest_path = "Hotfix/Res/manifest.txt"
 # 资源清单名称和地址分隔符
 manifest_split_symbol = "*"
 

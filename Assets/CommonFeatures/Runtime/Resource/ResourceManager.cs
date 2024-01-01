@@ -26,7 +26,7 @@ namespace CommonFeatures.Resource
 
         private void Init()
         {
-            m_ResourceLoadType = (EResourceLoadType)CFM.Config.GetLongConfig("Resource", "resource_load_type");
+            m_ResourceLoadType = (EResourceLoadType)CommonConfig.GetLongConfig("Resource", "resource_load_type");
             switch (m_ResourceLoadType)
             {
                 case EResourceLoadType.RemoteAB:

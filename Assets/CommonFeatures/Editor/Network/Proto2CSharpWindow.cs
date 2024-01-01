@@ -31,15 +31,6 @@ namespace CommonFeatures.NetWork
         private static void Proto2CSharpOneKey()
         {
             CustomEditorDataFactory.ReadData<Proto2CSharpWindowData>(DataSaveName, out var data);
-            if (null == data
-                || string.IsNullOrEmpty(data.GenerateCSharpProtocolPath)
-                || string.IsNullOrEmpty(data.ProtoExePath)
-                || !Directory.Exists(data.GenerateCSharpProtocolPath)
-                || !Directory.Exists(data.ProtoExePath))
-            {
-                Debug.LogError("路径不正确,请打开proto代码生成窗口设置正确的路径");
-                return;
-            }
 
             Generate(data);
         }
@@ -116,17 +107,6 @@ namespace HotfixScripts
             //生成按钮
             if (GUILayout.Button("生成"))
             {
-                if (string.IsNullOrEmpty(m_Data.ProtoExePath))
-                {
-                    Debug.LogError("请设置proto.exe及proto文件路径");
-                    return;
-                }
-                if (string.IsNullOrEmpty(m_Data.GenerateCSharpProtocolPath))
-                {
-                    Debug.LogError("请设置通信协议文件保存路径");
-                    return;
-                }
-
                 Generate(m_Data);
             }
 
@@ -135,6 +115,16 @@ namespace HotfixScripts
 
         private static void Generate(Proto2CSharpWindowData windowData)
         {
+            if (null == windowData
+                || string.IsNullOrEmpty(windowData.GenerateCSharpProtocolPath)
+                || string.IsNullOrEmpty(windowData.ProtoExePath)
+                || !Directory.Exists(windowData.GenerateCSharpProtocolPath)
+                || !Directory.Exists(windowData.ProtoExePath))
+            {
+                Debug.LogError("路径不正确,请打开proto代码生成窗口设置正确的路径");
+                return;
+            }
+
             string exeFilePath = string.Empty;
             var dir = new DirectoryInfo(windowData.ProtoExePath);
             var files = dir.GetFiles();

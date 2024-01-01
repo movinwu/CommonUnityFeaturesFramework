@@ -44,12 +44,12 @@ namespace CommonFeatures.NetWork
 
         public override void Init()
         {
-            m_EachDownloadByteLength = (ulong)CFM.Config.GetLongConfig("Download", "each_bytes_length");
+            m_EachDownloadByteLength = (ulong)CommonConfig.GetLongConfig("Download", "each_bytes_length");
 
-            m_Timeout = (float)CFM.Config.GetDoubleConfig("Download", "timeout");
+            m_Timeout = (float)CommonConfig.GetDoubleConfig("Download", "timeout");
             m_Timeout = Mathf.Max(0, m_Timeout);
 
-            m_TimeoutRepeatedTime = (int)CFM.Config.GetLongConfig("Download", "repeated_time");
+            m_TimeoutRepeatedTime = (int)CommonConfig.GetLongConfig("Download", "repeated_time");
             m_TimeoutRepeatedTime = Mathf.Max(0, m_TimeoutRepeatedTime);
         }
 
@@ -159,7 +159,7 @@ namespace CommonFeatures.NetWork
 
                 if (!string.IsNullOrEmpty(headRequest.error))
                 {
-                    Debug.LogError("获取不到资源文件");
+                    CommonLog.LogError("获取不到资源文件");
                     yield break;
                 }
                 //获取文件总大小

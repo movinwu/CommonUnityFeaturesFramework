@@ -1,3 +1,4 @@
+using CommonFeatures.Config;
 using CommonFeatures.Log;
 using System;
 using System.Collections.Generic;
@@ -20,13 +21,13 @@ namespace CommonFeatures.DataTable
         /// </summary>
         public void ReadDataTable()
         {
-            var assemblyName = CFM.Config.GetStringConfig("DataTable", "assembly_name");
-            var dataReadType = (EDataReadType)CFM.Config.GetLongConfig("DataTable", "data_read_type");
+            var assemblyName = CommonConfig.GetStringConfig("DataTable", "assembly_name");
+            var dataReadType = (EDataReadType)CommonConfig.GetLongConfig("DataTable", "data_read_type");
 
             m_AllDataTable.Clear();
             if (dataReadType == EDataReadType.Binary)
             {
-                var binaryPath = CFM.Config.GetStringConfig("DataTable", "binary_path");
+                var binaryPath = CommonConfig.GetStringConfig("DataTable", "binary_path");
                 var directory = new DirectoryInfo(binaryPath);
                 var files = directory.GetFiles();
                 for (int fileIndex = 0; fileIndex < files.Length; fileIndex++)
@@ -63,7 +64,7 @@ namespace CommonFeatures.DataTable
             else if (dataReadType == EDataReadType.Json)
 #pragma warning restore CS0162 // 检测到无法访问的代码
             {
-                var jsonPath = CFM.Config.GetStringConfig("DataTable", "json_path");
+                var jsonPath = CommonConfig.GetStringConfig("DataTable", "json_path");
                 var directory = new DirectoryInfo(jsonPath);
                 var files = directory.GetFiles();
                 for (int fileIndex = 0; fileIndex < files.Length; fileIndex++)

@@ -16,9 +16,9 @@ namespace CommonFeatures.Test
 
             string savePath = Path.Combine(Application.dataPath, "../TestResource/Download");
 
-            CFM.Download.AddDownload(url1, savePath,
+            CommonFeaturesManager.Download.AddDownload(url1, savePath,
                 onDownloading: handler => CommonLog.Log($"下载文件1, 进度 {handler.downloadedLength} / {handler.downloadTotalLength}, 百分比: {(double)handler.downloadedLength / handler.downloadTotalLength * 100d}%"));
-            CFM.Download.AddDownload(url2, savePath,
+            CommonFeaturesManager.Download.AddDownload(url2, savePath,
                 onDownloading: handler => CommonLog.Log($"下载文件1, 进度 {handler.downloadedLength} / {handler.downloadTotalLength}, 百分比: {(double)handler.downloadedLength / handler.downloadTotalLength * 100d}%"), 
                 onDownloadComplete: null);
         }

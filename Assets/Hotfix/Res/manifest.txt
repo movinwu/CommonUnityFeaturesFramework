@@ -1,0 +1,4 @@
+3
+/Example.byte*Hotfix/Res/DataTable/Binary/Example.byte
+/Example2.byte*Hotfix/Res/DataTable/Binary/Example2.byte
+/Example3.byte*Hotfix/Res/DataTable/Binary/Example3.byte

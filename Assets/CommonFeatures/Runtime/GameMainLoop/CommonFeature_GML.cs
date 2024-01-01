@@ -23,7 +23,7 @@ namespace CommonFeatures.GML
             {
                 new FSMState_GML_StartGame(),
             };
-            m_FSM = CFM.FSM.CreateFSM(states, this);
+            m_FSM = CommonFeaturesManager.FSM.CreateFSM(states, this);
             m_FSM.StartFSM<FSMState_GML_StartGame>();
         }
     }

@@ -19,19 +19,19 @@ namespace CommonFeatures.Log
         {
             tags = ELogType.Null;
             //ºÏ≤È≈‰÷√
-            if (CFM.Config.GetBooleanConfig("Log", "net"))
+            if (CommonConfig.GetBooleanConfig("Log", "net"))
             {
                 tags |= ELogType.Net;
             }
-            if (CFM.Config.GetBooleanConfig("Log", "config"))
+            if (CommonConfig.GetBooleanConfig("Log", "config"))
             {
                 tags |= ELogType.Config;
             }
-            if (CFM.Config.GetBooleanConfig("Log", "trace"))
+            if (CommonConfig.GetBooleanConfig("Log", "trace"))
             {
                 tags |= ELogType.Trace;
             }
-            if (CFM.Config.GetBooleanConfig("Log", "resource"))
+            if (CommonConfig.GetBooleanConfig("Log", "resource"))
             {
                 tags |= ELogType.Resource;
             }
