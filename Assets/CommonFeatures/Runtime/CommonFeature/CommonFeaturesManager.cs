@@ -4,6 +4,7 @@ using CommonFeatures.FSM;
 using CommonFeatures.GML;
 using CommonFeatures.Log;
 using CommonFeatures.NetWork;
+using CommonFeatures.PSM;
 using CommonFeatures.Timer;
 using UnityEngine;
 
@@ -52,9 +53,14 @@ namespace CommonFeatures
         public static CommonFeature_Timer Timer;
 
         /// <summary>
-        /// 状态机
+        /// 有限状态机
         /// </summary>
         public static CommonFeature_FSM FSM;
+
+        /// <summary>
+        /// 并行状态机
+        /// </summary>
+        public static CommonFeature_PSM PSM;
 
         /// <summary>
         /// 游戏主循环
@@ -105,6 +111,11 @@ namespace CommonFeatures
                 {
                     FSM = child.GetComponent<CommonFeature_FSM>();
                     FSM.Init();
+                }
+                else if ("PSM".Equals(child.name))
+                {
+                    PSM = child.GetComponent<CommonFeature_PSM>();
+                    PSM.Init();
                 }
                 else if ("GML".Equals(child.name))
                 {
