@@ -5,7 +5,6 @@ using CommonFeatures.GML;
 using CommonFeatures.Log;
 using CommonFeatures.NetWork;
 using CommonFeatures.PSM;
-using CommonFeatures.Timer;
 using UnityEngine;
 
 namespace CommonFeatures
@@ -46,11 +45,6 @@ namespace CommonFeatures
         /// 网络
         /// </summary>
         public static CommonFeature_Net Net;
-
-        /// <summary>
-        /// 时间
-        /// </summary>
-        public static CommonFeature_Timer Timer;
 
         /// <summary>
         /// 有限状态机
@@ -102,11 +96,6 @@ namespace CommonFeatures
                     Net = child.GetComponent<CommonFeature_Net>();
                     Net.Init();
                 }
-                else if ("Timer".Equals(child.name))
-                {
-                    Timer = child.GetComponent<CommonFeature_Timer>();
-                    Timer.Init();
-                }
                 else if ("FSM".Equals(child.name))
                 {
                     FSM = child.GetComponent<CommonFeature_FSM>();
@@ -141,7 +130,6 @@ namespace CommonFeatures
             Download.Tick();
             Http.Tick();
             Net.Tick();
-            Timer.Tick();
             FSM.Tick();
         }
 
@@ -151,7 +139,6 @@ namespace CommonFeatures
             Download.Release();
             Http.Release();
             Net.Release();
-            Timer.Release();
             FSM.Release();
         }
     }
