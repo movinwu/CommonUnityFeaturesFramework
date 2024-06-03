@@ -124,15 +124,6 @@ namespace CommonFeatures
             }
         }
 
-        private void Update()
-        {
-            DataTable.Tick();
-            Download.Tick();
-            Http.Tick();
-            Net.Tick();
-            FSM.Tick();
-        }
-
         private void OnDestroy()
         {
             DataTable.Release();

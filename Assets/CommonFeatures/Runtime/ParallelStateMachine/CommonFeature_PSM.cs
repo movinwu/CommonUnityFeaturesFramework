@@ -47,17 +47,6 @@ namespace CommonFeatures.PSM
             psm.OnDestroy();
         }
 
-        public override void Tick()
-        {
-            base.Tick();
-
-            var psms = m_AllPSM.Values.ToArray();
-            for (int i = 0; i < psms.Length; i++)
-            {
-                psms[i].OnTick();
-            }
-        }
-
         public override void Release()
         {
             base.Release();

@@ -1,5 +1,6 @@
 using CommonFeatures.Config;
 using CommonFeatures.NetWork;
+using Cysharp.Threading.Tasks;
 using LitJson;
 using System.Collections;
 using System.Collections.Generic;
@@ -47,21 +48,21 @@ namespace CommonFeatures.Resource
         /// <summary>
         /// 加载版本文件
         /// </summary>
-        private void LoadVersionFile()
+        private async void LoadVersionFile()
         {
             this.m_OnLoading?.Invoke("校验本地文件", 0f, 1f);
 
             var versionPath = CommonConfig.GetStringConfig("Resource", "RemoteAB", "remote_version_path");
-            CommonFeaturesManager.Http.Get(versionPath, null, 
-                completeCallback: request =>
-                {
-                    m_RemoteVersionInfo = JsonMapper.ToObject<ResourceVersionInfo>(request.downloadHandler.text);
-                    AnalysisLocalVersionFile();
-                }, 
-                errorCallback: request =>
-                {
-                    this.m_OnLoadError?.Invoke(new System.Exception(request.error));
-                });
+            var result = await CommonFeaturesManager.Http.Get(versionPath, null);
+            if (result.result == UnityEngine.Networking.UnityWebRequest.Result.Success)
+            {
+                m_RemoteVersionInfo = JsonMapper.ToObject<ResourceVersionInfo>(result.downloadHandler.text);
+                AnalysisLocalVersionFile();
+            }
+            else
+            {
+                this.m_OnLoadError?.Invoke(new System.Exception(result.error));
+            }
         }
 
         /// <summary>
@@ -85,7 +86,7 @@ namespace CommonFeatures.Resource
         /// <summary>
         /// 比对版本文件
         /// </summary>
-        private void CompareVersionFile()
+        private async UniTaskVoid CompareVersionFile()
         {
             if (null == m_LocalVersionInfo)
             {
@@ -103,15 +104,7 @@ namespace CommonFeatures.Resource
             else
             {
                 m_RemoteABFilePath = Path.Combine(Application.persistentDataPath, CommonConfig.GetStringConfig("Resource", "RemoteAB", "remote_AB_directory_path"));
-                CommonFeaturesManager.Http.Get(m_RemoteABFilePath, null,
-                    completeCallback: webrequest =>
-                    {
-
-                    },
-                    errorCallback: webrequest =>
-                    {
-
-                    });
+                await CommonFeaturesManager.Http.Get(m_RemoteABFilePath, null);
             }
         }
 

@@ -7,26 +7,21 @@ namespace CommonFeatures.Test
 {
     public class TestHttp : MonoBehaviour
     {
-        private void Start()
+        private async void Start()
         {
-            var p0 = ReferencePool.Acquire<HttpRequestParam>();
-            p0.Key = "q";
-            p0.Value = "百度";
-            var param = new List<HttpRequestParam>()
+            var param = new Dictionary<string, string>()
             {
-                p0,
+                { "q", "百度" },
             };
-            CommonFeaturesManager.Http.Get("https://cn.bing.com", 
-                //param,
-                null,
-                webrequest =>
-                {
-                    CommonFeatures.Log.CommonLog.Net($"http请求成功, {webrequest.downloadHandler.text.ToString()}");
-                },
-                webrequest =>
-                {
-                    CommonFeatures.Log.CommonLog.NetError($"http请求错误, {webrequest.result.ToString()}");
-                });
+            var result = await CommonFeaturesManager.Http.Get("https://cn.bing.com", param);
+            if (result.result == UnityEngine.Networking.UnityWebRequest.Result.Success)
+            {
+                CommonFeatures.Log.CommonLog.Net($"http请求成功, {result.downloadHandler.text.ToString()}");
+            }
+            else
+            {
+                CommonFeatures.Log.CommonLog.NetError($"http请求错误, {result.result.ToString()}");
+            }
         }
     }
 }

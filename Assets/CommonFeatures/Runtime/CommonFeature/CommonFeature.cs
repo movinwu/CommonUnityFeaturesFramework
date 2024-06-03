@@ -20,15 +20,6 @@ namespace CommonFeatures
         }
 
         /// <summary>
-        /// 每帧轮询函数
-        /// <para>替换生命周期函数Update</para>
-        /// </summary>
-        public virtual void Tick()
-        {
-
-        }
-
-        /// <summary>
         /// 释放函数
         /// <para>替换生命周期函数OnDestroy</para>
         /// </summary>

@@ -1,10 +1,8 @@
 using CommonFeatures.Log;
-using CommonFeatures.Pool;
-using CommonFeatures.Singleton;
-using System;
+using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using System.Threading;
 using UnityEngine.Networking;
 
 namespace CommonFeatures.NetWork
@@ -15,29 +13,27 @@ namespace CommonFeatures.NetWork
     public class CommonFeature_Http : CommonFeature
     {
         /// <summary>
-        /// 服务器地址
+        /// 默认服务器地址
         /// </summary>
-        private const string Server = "http://127.0.0.1/";
+        private const string DEFAULT_SERVER = "http://127.0.0.1/";
 
         /// <summary>
         /// 默认请求超时时间(秒)
         /// </summary>
-        private const int Timeout = 10;
-
-        /// <summary>
-        /// 所有正在请求的http
-        /// </summary>
-        private Dictionary<string, HttpRequestHandler> requestingHttpDic = new Dictionary<string, HttpRequestHandler>();
+        private const int TIMEOUT = 5;
 
         /// <summary>
         /// Http Get请求
         /// </summary>
         /// <param name="name"></param>
         /// <param name="param"></param>
-        /// <param name="completeCallback"></param>
-        /// <param name="errorCallback"></param>
+        /// <param name="requetsHeader"></param>
         /// <param name="timeout"></param>
-        public void Get(string name, List<HttpRequestParam> param, Action<UnityWebRequest> completeCallback, Action<UnityWebRequest> errorCallback, int timeout = Timeout)
+        public async UniTask<UnityWebRequest> Get(
+            string name,
+            Dictionary<string, string> param, 
+            Dictionary<string, string> requetsHeader = null, 
+            int timeout = TIMEOUT)
         {
             //检验给定地址名
             if (string.IsNullOrEmpty(name))
@@ -51,7 +47,7 @@ namespace CommonFeatures.NetWork
             }
             else
             {
-                urlSb = new StringBuilder(Server);
+                urlSb = new StringBuilder(DEFAULT_SERVER);
                 urlSb.Append(name);
             }
             //检验参数
@@ -61,36 +57,30 @@ namespace CommonFeatures.NetWork
                 {
                     urlSb.Append('?');
                 }
-                for (int i = 0; i < param.Count; i++)
+                foreach (var pair in param)
                 {
-                    urlSb.Append(param[i].Key);
+                    urlSb.Append(pair.Key);
                     urlSb.Append("=");
-                    urlSb.Append(param[i].Value);
-                    if (i < param.Count - 1)
-                    {
-                        urlSb.Append("&");
-                    }
+                    urlSb.Append(pair.Value);
+                    urlSb.Append("&");
                 }
+                //移除多拼接的最后一个 & 字符
+                urlSb.Remove(urlSb.Length - 1, 1);
             }
             string url = urlSb.ToString();
-            //检验正在发送
-            if (requestingHttpDic.ContainsKey(url))
-            {
-                CommonLog.NetWarning($"网络请求{url}已经在请求中,不能重复请求");
-                return;
-            }
 
-            var handler = ReferencePool.Acquire<HttpRequestHandler>();
-            handler.URL = url;
-            handler.OnSuccessCallback = completeCallback;
-            handler.OnErrorCallback = errorCallback;
-            handler.Params = param;
-            handler.Name = name;
-            requestingHttpDic.Add(url, handler);
-            handler.Request = UnityWebRequest.Get(url);
-            handler.Request.timeout = timeout;
-            handler.Request.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
-            handler.Request.SendWebRequest();
+            var request = UnityWebRequest.Get(url);
+            request.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+            if (null != requetsHeader)
+            {
+                foreach (var header in requetsHeader)
+                {
+                    request.SetRequestHeader(header.Key, header.Value);
+                }
+            }
+            request.timeout = timeout;
+            var result = await request.SendWebRequest().ToUniTask();
+            return result;
         }
 
         /// <summary>
@@ -98,21 +88,18 @@ namespace CommonFeatures.NetWork
         /// </summary>
         /// <param name="name"></param>
         /// <param name="param"></param>
-        /// <param name="completeCallback"></param>
-        /// <param name="errorCallback"></param>
+        /// <param name="requetsHeader"></param>
         /// <param name="timeout"></param>
-        public void Post(string name, List<HttpRequestParam> param, Action<UnityWebRequest> completeCallback, Action<UnityWebRequest> errorCallback, int timeout = Timeout)
+        public async UniTask<UnityWebRequest> Post(
+            string name, 
+            Dictionary<string, string> param, 
+            Dictionary<string, string> requetsHeader = null, 
+            int timeout = TIMEOUT)
         {
             //检验给定地址名
             if (string.IsNullOrEmpty(name))
             {
                 CommonFeatures.Log.CommonLog.NetError("http post请求地址不能为空");
-            }
-            //检验参数
-            if (null == param || param.Count == 0)
-            {
-                CommonFeatures.Log.CommonLog.NetError("post请求表单不能为空");
-                return;
             }
             string url;
             if (name.ToLower().StartsWith("http"))
@@ -121,68 +108,91 @@ namespace CommonFeatures.NetWork
             }
             else
             {
-                url = Server + name;
+                url = DEFAULT_SERVER + name;
             }
-            //检验正在发送
-            if (requestingHttpDic.ContainsKey(url))
-            {
-                CommonFeatures.Log.CommonLog.NetWarning($"网络请求{url}已经在请求中,不能重复请求");
-                return;
-            }
-
-            var handler = ReferencePool.Acquire<HttpRequestHandler>();
-            handler.URL = url;
-            handler.OnSuccessCallback = completeCallback;
-            handler.OnErrorCallback = errorCallback;
-            handler.Params = param;
-            handler.Name = name;
-            requestingHttpDic.Add(url, handler);
 
             List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
-            for (int i = 0; i < param.Count; i++)
+            if (null != param)
             {
-                formData.Add(new MultipartFormFileSection(param[i].Key, param[i].Value));
-            }
-
-            handler.Request = UnityWebRequest.Post(url, formData);
-            handler.Request.timeout = timeout;
-            handler.Request.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
-            handler.Request.SendWebRequest();
-        }
-
-        public override void Tick()
-        {
-            if (requestingHttpDic.Count > 0)
-            {
-                var handlers = requestingHttpDic.Values.ToArray();
-                foreach (var handler in handlers)
+                foreach (var pair in param)
                 {
-                    if (handler.Request.isDone)
-                    {
-                        requestingHttpDic.Remove(handler.URL);
-                        switch (handler.Request.result)
-                        {
-                            case UnityWebRequest.Result.Success:
-                                handler.OnSuccessCallback?.Invoke(handler.Request);
-                                break;
-                            case UnityWebRequest.Result.ConnectionError:
-                            case UnityWebRequest.Result.ProtocolError:
-                            case UnityWebRequest.Result.DataProcessingError:
-                                handler.OnErrorCallback?.Invoke(handler.Request);
-                                break;
-                        }
-                        handler.Request.Dispose();
-                        if (null != handler.Params)
-                        {
-                            for (int i = 0; i < handler.Params.Count; i++)
-                            {
-                                ReferencePool.Back(handler.Params[i]);
-                            }
-                        }
-                        ReferencePool.Back(handler);
-                    }
+                    formData.Add(new MultipartFormFileSection(pair.Key, pair.Value));
                 }
             }
+
+            var request = UnityWebRequest.Post(url, formData);
+            request.timeout = timeout;
+            request.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+            if (null != requetsHeader)
+            {
+                foreach (var header in requetsHeader)
+                {
+                    request.SetRequestHeader(header.Key, header.Value);
+                }
+            }
+            var result = await request.SendWebRequest().ToUniTask();
+            return result;
+        }
+
+        /// <summary>
+        /// Http Head请求
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="param"></param>
+        /// <param name="requetsHeader"></param>
+        /// <param name="timeout"></param>
+        public async UniTask<UnityWebRequest> Head(
+            string name, 
+            Dictionary<string, string> param, 
+            Dictionary<string, string> requetsHeader = null, 
+            int timeout = TIMEOUT)
+        {
+            //检验给定地址名
+            if (string.IsNullOrEmpty(name))
+            {
+                CommonLog.NetError("http get请求地址不能为空");
+            }
+            StringBuilder urlSb;
+            if (name.ToLower().StartsWith("http"))
+            {
+                urlSb = new StringBuilder(name);
+            }
+            else
+            {
+                urlSb = new StringBuilder(DEFAULT_SERVER);
+                urlSb.Append(name);
+            }
+            //检验参数
+            if (null != param && param.Count > 0)
+            {
+                if (!urlSb.ToString().Contains('?'))
+                {
+                    urlSb.Append('?');
+                }
+                foreach (var pair in param)
+                {
+                    urlSb.Append(pair.Key);
+                    urlSb.Append("=");
+                    urlSb.Append(pair.Value);
+                    urlSb.Append("&");
+                }
+                //移除多拼接的最后一个 & 字符
+                urlSb.Remove(urlSb.Length - 1, 1);
+            }
+            string url = urlSb.ToString();
+
+            var request = UnityWebRequest.Head(url);
+            request.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+            if (null != requetsHeader)
+            {
+                foreach (var header in requetsHeader)
+                {
+                    request.SetRequestHeader(header.Key, header.Value);
+                }
+            }
+            request.timeout = timeout;
+            var result = await request.SendWebRequest().ToUniTask();
+            return result;
         }
     }
 }

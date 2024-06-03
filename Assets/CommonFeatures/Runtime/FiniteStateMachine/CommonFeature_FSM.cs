@@ -47,17 +47,6 @@ namespace CommonFeatures.FSM
             fsm.OnDestroy();
         }
 
-        public override void Tick()
-        {
-            base.Tick();
-
-            var fsms = m_AllFSM.Values.ToArray();
-            for (int i = 0; i < fsms.Length; i++)
-            {
-                fsms[i].OnTick();
-            }
-        }
-
         public override void Release()
         {
             base.Release();
