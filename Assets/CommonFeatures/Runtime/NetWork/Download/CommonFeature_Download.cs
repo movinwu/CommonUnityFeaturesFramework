@@ -27,23 +27,50 @@ namespace CommonFeatures.NetWork
         /// <returns>下载唯一id</returns>
         public async UniTask<DownloadModel> AddDownload(string url, string saveDirectoryPath, int timeout = DEFAULT_TIMEOUT, bool forget = true)
         {
-            var downloadTask = ReferencePool.Acquire<DownloadTask>();
-
-            await downloadTask.InitDownload(url, saveDirectoryPath, timeout);
+            var downloadModel = await InitDownload(url, saveDirectoryPath, timeout);
 
             if (forget)
             {
-                downloadTask
-                    .StartDonwload()
-                    .Forget();
+                StartDownload(downloadModel).Forget();
             }
             else
             {
-                return await downloadTask
-                    .StartDonwload();
+
+                await StartDownload(downloadModel);
             }
 
-            return downloadTask.DownloadModel;
+            return downloadModel;
+        }
+
+        /// <summary>
+        /// 初始化下载
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="saveDirectoryPath"></param>
+        /// <param name="timeout"></param>
+        /// <returns></returns>
+        public async UniTask<DownloadModel> InitDownload(string url, string saveDirectoryPath, int timeout = DEFAULT_TIMEOUT)
+        {
+            var downloadTask = ReferencePool.Acquire<DownloadTask>();
+
+            return await downloadTask.InitDownload(url, saveDirectoryPath, timeout);
+        }
+
+        /// <summary>
+        /// 开始下载
+        /// </summary>
+        /// <param name="downloadModel"></param>
+        /// <param name="forget"></param>
+        /// <returns></returns>
+        public async UniTask<DownloadModel> StartDownload(DownloadModel downloadModel)
+        {
+            if (null == downloadModel)
+            {
+                return downloadModel;
+            }
+
+            return await downloadModel.task
+                .StartDonwload();
         }
 
         /// <summary>

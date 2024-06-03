@@ -34,19 +34,19 @@ namespace CommonFeatures.NetWork
         public AsyncReactiveProperty<ulong> downloadTotalLength;
 
         /// <summary>
-        /// 之前request已经完成下载的长度
+        /// 已经完成下载的长度
         /// </summary>
-        public AsyncReactiveProperty<ulong> preDownloadedCompletedLength;
+        public AsyncReactiveProperty<ulong> downloadedLength;
 
         /// <summary>
-        /// 当前request已经下载完成的长度
+        /// 当前request下载完成的长度
         /// </summary>
         public AsyncReactiveProperty<ulong> curDownloadedCompletedLength;
 
         /// <summary>
-        /// 文件已下载长度
+        /// 文件已下载长度进度
         /// </summary>
-        public AsyncReactiveProperty<ulong> downloadedLength;
+        public ulong curDownloadedProgressLength { get => downloadedLength + curDownloadedCompletedLength; }
 
         /// <summary>
         /// 下载重置次数

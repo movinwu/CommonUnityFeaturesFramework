@@ -44,11 +44,10 @@ namespace CommonFeatures.NetWork
             //没有下载完成的文件以.download作为临时后缀
             saveDirectoryPath = Path.Combine(saveDirectoryPath, $"{fileName}.download");
 
-            if (File.Exists(saveDirectoryPath))
+            if (!File.Exists(saveDirectoryPath))
             {
-                File.Delete(saveDirectoryPath);
+                File.WriteAllText(saveDirectoryPath, string.Empty);//创建空文件
             }
-            File.WriteAllText(saveDirectoryPath, string.Empty);//创建空文件
             this.DownloadModel.downloadUrl = url;
             this.DownloadModel.savePath = saveDirectoryPath;
             this.DownloadModel.timeout = timeout;
@@ -67,6 +66,8 @@ namespace CommonFeatures.NetWork
             this.DownloadModel.downloadState = EDownloadState.Downloading;
 
             var (result, downloadModel) = await BreakpointResume().SuppressCancellationThrow();
+
+            ReferencePool.Back(this);
 
             return downloadModel;
         }
@@ -135,9 +136,12 @@ namespace CommonFeatures.NetWork
                     var fileInfo = new FileInfo(newSavePath);
                     if (this.DownloadModel.downloadTotalLength == (ulong)fileInfo.Length)
                     {
-                        this.DownloadModel.preDownloadedCompletedLength.Value = this.DownloadModel.downloadTotalLength.Value;
+                        this.DownloadModel.downloadedLength.Value = this.DownloadModel.downloadTotalLength.Value;
                         //移除临时下载文件
-                        File.Delete(this.DownloadModel.savePath);
+                        if (File.Exists(this.DownloadModel.savePath))
+                        {
+                            File.Delete(this.DownloadModel.savePath);
+                        }
                         return this.DownloadModel;
                     }
                     File.Delete(newSavePath);
@@ -164,29 +168,57 @@ namespace CommonFeatures.NetWork
                 //创建文件
                 FileInfo file = new FileInfo(this.DownloadModel.savePath);
                 //当前下载的文件长度
-                this.DownloadModel.preDownloadedCompletedLength.Value = (ulong)file.Length;
+                this.DownloadModel.downloadedLength.Value = (ulong)file.Length;
                 this.DownloadModel.curDownloadedCompletedLength.Value = 0;
-                this.DownloadModel.downloadedLength.Value = this.DownloadModel.preDownloadedCompletedLength.Value + this.DownloadModel.curDownloadedCompletedLength.Value;
-                if (this.DownloadModel.preDownloadedCompletedLength.Value >= this.DownloadModel.downloadTotalLength.Value)
-                {
-                    return this.DownloadModel;
-                }
+            }
+            if (this.DownloadModel.downloadedLength.Value >= this.DownloadModel.downloadTotalLength.Value)
+            {
+                return this.DownloadModel;
             }
 
             this.DownloadModel.webRequest = UnityWebRequest.Get(this.DownloadModel.downloadUrl);
-            this.DownloadModel.webRequest.timeout = this.DownloadModel.timeout;
+            this.DownloadModel.webRequest.timeout = this.DownloadModel.timeout + 1;
             this.DownloadModel.webRequest.downloadHandler = new DownloadHandlerFile(this.DownloadModel.savePath, true);
             //请求网络数据从第fileLength到最后的字节
-            this.DownloadModel.webRequest.SetRequestHeader("Range", $"bytes={this.DownloadModel.preDownloadedCompletedLength.Value}-");
+            this.DownloadModel.webRequest.SetRequestHeader("Range", $"bytes={this.DownloadModel.downloadedLength.Value}-");
             this.DownloadModel.cancellationTokenSource?.Dispose();
             this.DownloadModel.cancellationTokenSource = new CancellationTokenSource();
-            var (isCancel, _) = await this.DownloadModel.webRequest.SendWebRequest()
-                .ToUniTask(progress: this, cancellationToken: this.DownloadModel.cancellationTokenSource.Token)
-                .SuppressCancellationThrow();
+            this.DownloadModel.cancellationTokenSource.CancelAfterSlim(this.DownloadModel.timeout * 1000);
+            try
+            {
+                var (isCancel, _) = await this.DownloadModel.webRequest.SendWebRequest()
+                    .ToUniTask(progress: this, cancellationToken: this.DownloadModel.cancellationTokenSource.Token)
+                    .SuppressCancellationThrow();
+            }
+            catch
+            {
+                this.DownloadModel.downloadedLength.Value += this.DownloadModel.webRequest?.downloadedBytes ?? 0;
+                if (!string.IsNullOrEmpty(this.DownloadModel.webRequest?.error))
+                {
+                    CommonLog.NetError($"从地址 {this.DownloadModel.downloadUrl} 下载资源失败, 失败原因: \n{this.DownloadModel.webRequest.error}");
+                }
+                else
+                {
+                    CommonLog.NetError($"从地址 {this.DownloadModel.downloadUrl} 下载资源失败, 失败原因未知, 结果类型: \n{this.DownloadModel.webRequest?.result}");
+                }
+
+                this.DownloadModel.downloadRepeatedCounter.Value++;
+                if (this.DownloadModel.downloadRepeatedCounter.Value >= TIMEOUT_REPEATE_COUNT || !UnityEngine.Application.isPlaying)
+                {
+                    AbortDownload();
+                    throw new OperationCanceledException();
+                }
+                else
+                {
+                    AbortDownload();
+                    await StartWebrequestGet(true);
+                }
+            }
 
             //成功下载一次文件
-            if (isCancel || this.DownloadModel.webRequest.result == UnityWebRequest.Result.Success)
+            if (this.DownloadModel.webRequest.downloadedBytes > 0)
             {
+                this.DownloadModel.downloadedLength.Value += this.DownloadModel.webRequest.downloadedBytes;
                 this.DownloadModel.downloadRepeatedCounter.Value = 0;
                 if (this.DownloadModel.webRequest.result != UnityWebRequest.Result.Success)
                 {
@@ -213,7 +245,6 @@ namespace CommonFeatures.NetWork
                 }
                 else
                 {
-                    await UniTask.Yield();
                     AbortDownload();
                     await StartWebrequestGet(true);
                 }
@@ -224,12 +255,16 @@ namespace CommonFeatures.NetWork
 
         public void Report(float value)
         {
-            this.DownloadModel.curDownloadedCompletedLength.Value = this.DownloadModel.webRequest.downloadedBytes;
-            this.DownloadModel.downloadedLength.Value = this.DownloadModel.curDownloadedCompletedLength.Value + this.DownloadModel.preDownloadedCompletedLength.Value;
-            //超过一定的字节关闭现在的协程，开启新的协程，将资源分段下载
-            if (this.DownloadModel.curDownloadedCompletedLength.Value >= EACH_DOWNLOAD_BYTE_LENGTH || this.DownloadModel.downloadedLength.Value >= this.DownloadModel.downloadTotalLength.Value)
+            if (!UnityEngine.Application.isPlaying)
             {
-                this.DownloadModel.preDownloadedCompletedLength.Value = this.DownloadModel.downloadedLength.Value;
+                AbortDownload();
+                return;
+            }
+            this.DownloadModel.curDownloadedCompletedLength.Value = this.DownloadModel.webRequest.downloadedBytes;
+            //超过一定的字节关闭现在的协程，开启新的协程，将资源分段下载
+            if (this.DownloadModel.curDownloadedCompletedLength.Value >= EACH_DOWNLOAD_BYTE_LENGTH
+                || this.DownloadModel.curDownloadedProgressLength >= this.DownloadModel.downloadTotalLength.Value)
+            {
                 //停止当前下载
                 this.DownloadModel.cancellationTokenSource.Cancel();
             }
@@ -242,9 +277,8 @@ namespace CommonFeatures.NetWork
                 this.DownloadModel = new DownloadModel();
                 this.DownloadModel.task = this;
                 this.DownloadModel.downloadTotalLength = new AsyncReactiveProperty<ulong>(0);
-                this.DownloadModel.preDownloadedCompletedLength = new AsyncReactiveProperty<ulong>(0);
-                this.DownloadModel.curDownloadedCompletedLength = new AsyncReactiveProperty<ulong>(0);
                 this.DownloadModel.downloadedLength = new AsyncReactiveProperty<ulong>(0);
+                this.DownloadModel.curDownloadedCompletedLength = new AsyncReactiveProperty<ulong>(0);
                 this.DownloadModel.downloadRepeatedCounter = new AsyncReactiveProperty<int>(0);
             }
         }

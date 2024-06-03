@@ -15,16 +15,18 @@ namespace CommonFeatures.Test
 
             string savePath = Path.Combine(Application.dataPath, "../TestResource/Download");
 
-            var download1 = await CommonFeaturesManager.Download.AddDownload(url1, savePath);
-            download1.preDownloadedCompletedLength.ForEachAsync(x =>
+            var download1 = await CommonFeaturesManager.Download.InitDownload(url1, savePath);
+            download1.downloadedLength.ForEachAsync(x =>
             {
-                CommonLog.Log($"下载文件1, 进度 {download1.preDownloadedCompletedLength} / {download1.downloadTotalLength}, 百分比: {(double)download1.preDownloadedCompletedLength / download1.downloadTotalLength * 100d}%");
+                CommonLog.Log($"下载文件1, 进度 {download1.downloadedLength} / {download1.downloadTotalLength}, 百分比: {(double)download1.downloadedLength / download1.downloadTotalLength * 100d}%");
             }).Forget();
-            var download2 = await CommonFeaturesManager.Download.AddDownload(url2, savePath);
-            download2.preDownloadedCompletedLength.ForEachAsync(x =>
+            await CommonFeaturesManager.Download.StartDownload(download1);
+            var download2 = await CommonFeaturesManager.Download.InitDownload(url2, savePath);
+            download2.downloadedLength.ForEachAsync(x =>
             {
-                CommonLog.Log($"下载文件2, 进度 {download2.preDownloadedCompletedLength} / {download2.downloadTotalLength}, 百分比: {(double)download2.preDownloadedCompletedLength / download2.downloadTotalLength * 100d}%");
+                CommonLog.Log($"下载文件2, 进度 {download2.downloadedLength} / {download2.downloadTotalLength}, 百分比: {(double)download2.downloadedLength / download2.downloadTotalLength * 100d}%");
             }).Forget();
+            await CommonFeaturesManager.Download.StartDownload(download2);
         }
     }
 }
