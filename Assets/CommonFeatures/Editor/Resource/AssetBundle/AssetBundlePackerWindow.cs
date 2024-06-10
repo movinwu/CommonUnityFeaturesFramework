@@ -1,6 +1,4 @@
 using CommonFeatures.Log;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -50,6 +48,11 @@ namespace CommonFeatures.Resource
         /// 是否自动将打包好的文件拷贝到streamingAssets下
         /// </summary>
         public bool CopyToStreamingAssets;
+
+        /// <summary>
+        /// 是否所有内容强制重新构建AB包
+        /// </summary>
+        public bool ForceRebuildAll;
 
         /// <summary>
         /// AB包版本号
@@ -420,13 +423,20 @@ namespace CommonFeatures.Resource
 
             EditorGUILayout.Space();
 
-            #region 是否自动拷贝及版本号
+            #region 是否自动拷贝\是否强制重新构建\版本号
             EditorGUILayout.BeginHorizontal();
 
             var isCopy = GUILayout.Toggle(m_Data.CopyToStreamingAssets, "打包完成后自动拷贝到StreamingAssets下");
             if (isCopy != m_Data.CopyToStreamingAssets)
             {
                 m_Data.CopyToStreamingAssets = isCopy;
+                CustomEditorDataFactory.WriteData(DataSaveName, m_Data);
+            }
+
+            var isForceRebuild = GUILayout.Toggle(m_Data.ForceRebuildAll, "是否重新构建所有资源");
+            if (isForceRebuild != m_Data.ForceRebuildAll)
+            {
+                m_Data.ForceRebuildAll = isForceRebuild;
                 CustomEditorDataFactory.WriteData(DataSaveName, m_Data);
             }
 
@@ -438,7 +448,7 @@ namespace CommonFeatures.Resource
             }
 
             EditorGUILayout.EndHorizontal();
-            #endregion 是否自动拷贝及版本号
+            #endregion 是否自动拷贝\是否强制重新构建\版本号
 
             EditorGUILayout.Space();
 
