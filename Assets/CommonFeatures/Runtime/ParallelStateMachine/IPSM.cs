@@ -10,11 +10,6 @@ namespace CommonFeatures.PSM
     internal interface IPSM
     {
         /// <summary>
-        /// Ã¿Ö¡ÂÖÑ¯
-        /// </summary>
-        void OnTick();
-
-        /// <summary>
         /// Ïú»Ù
         /// </summary>
         void OnDestroy();

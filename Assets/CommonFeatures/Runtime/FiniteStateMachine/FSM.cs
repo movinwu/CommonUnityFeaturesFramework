@@ -1,7 +1,9 @@
 using CommonFeatures.Log;
 using CommonFeatures.Utility;
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace CommonFeatures.FSM
@@ -70,7 +72,7 @@ namespace CommonFeatures.FSM
         /// <summary>
         /// 开始状态机
         /// </summary>
-        public void StartFSM<K>() where K : FSMState<T>
+        public async UniTask StartFSM<K>() where K : FSMState<T>
         {
             if (null != m_CurrentState)
             {
@@ -82,14 +84,15 @@ namespace CommonFeatures.FSM
             if (m_AllStates.ContainsKey(type))
             {
                 //初始化
-                foreach (var s in m_AllStates.Values)
+                var array = m_AllStates.Values.ToArray();
+                for (int i = 0; i < array.Length; i++)
                 {
-                    s.OnInit();
+                    await array[i].OnInit();
                 }
 
                 var state = m_AllStates[type];
                 this.m_CurrentState = state;
-                state.OnEnter();
+                await state.OnEnter();
             }
         }
 
@@ -97,7 +100,7 @@ namespace CommonFeatures.FSM
         /// 切换状态
         /// </summary>
         /// <typeparam name="K"></typeparam>
-        public void ChangeState<K>() where K : FSMState<T>
+        public async UniTask ChangeState<K>() where K : FSMState<T>
         {
             if (null == m_CurrentState)
             {
@@ -120,18 +123,10 @@ namespace CommonFeatures.FSM
 
             var newState = m_AllStates[type];
             m_IsChangeState = true;
-            m_CurrentState.OnLeave();
+            await m_CurrentState.OnLeave();
             m_IsChangeState = false;
             m_CurrentState = newState;
-            newState.OnEnter();
-        }
-
-        public void OnTick()
-        {
-            if (null != m_CurrentState)
-            {
-                m_CurrentState.OnTick();
-            }
+            await newState.OnEnter();
         }
 
         public void OnDestroy()

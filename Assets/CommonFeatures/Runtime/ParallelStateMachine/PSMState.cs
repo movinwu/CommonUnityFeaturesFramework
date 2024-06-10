@@ -1,4 +1,5 @@
 using CommonFeatures.Log;
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,157 +19,102 @@ namespace CommonFeatures.PSM
         protected T Owner { get => PSM.Owner; }
 
         /// <summary>
-        /// 状态运行前的所有状态
-        /// </summary>
-        public List<PSMState<T>> PrePSMState { get; private set; }
-
-        /// <summary>
-        /// 运行中的运行前状态
-        /// </summary>
-        public List<PSMState<T>> RunningPrePSMState { get; private set; }
-
-        /// <summary>
-        /// 状态运行后运行的所有状态
-        /// </summary>
-        public List<PSMState<T>> NextPSMState { get; private set; }
-
-        /// <summary>
         /// 状态机状态
         /// </summary>
-        public EPSMState State { get; set; } = EPSMState.NotInited;
-
-        /// <summary>
-        /// 是否完成运行
-        /// </summary>
-        public bool IsCompleted { get; set; }
+        public EPSMState State { get; set; } = EPSMState.PrepareToRun;
 
         /// <summary>
         /// 初始化
         /// </summary>
         /// <param name="psm"></param>
-        internal void Init(PSM<T> psm)
+        internal async UniTask Init(PSM<T> psm)
         {
-            if (null == this.PrePSMState)
-            {
-                this.PrePSMState = new List<PSMState<T>>();
-            }
-            else
-            {
-                this.PrePSMState.Clear();
-            }
-
-            if (null == this.RunningPrePSMState)
-            {
-                this.RunningPrePSMState = new List<PSMState<T>>();
-            }
-            else
-            {
-                this.RunningPrePSMState.Clear();
-            }
-
-            if (null == this.NextPSMState)
-            {
-                this.NextPSMState = new List<PSMState<T>>();
-            }
-            else
-            {
-                this.NextPSMState.Clear();
-            }
-
             this.PSM = psm;
 
-            State = EPSMState.NotRunning;
+            State = EPSMState.PrepareToRun;
+
+            await this.OnInit();
         }
 
         /// <summary>
-        /// 添加运行前状态
+        /// 进入状态
         /// </summary>
-        /// <param name="prePSM"></param>
-        public void AddPrePSM(PSMState<T> prePSM)
+        public async UniTask Enter()
         {
-            if (this.PrePSMState.Contains(prePSM))
+            //已经开始执行或执行完毕的状态机不重复执行
+            if (this.State != EPSMState.PrepareToRun)
             {
-                CommonLog.LogError($"重复添加运行前状态{prePSM}");
                 return;
             }
-            if (prePSM.NextPSMState.Contains(this))
-            {
-                CommonLog.LogError($"重复添加运行后状态{prePSM}");
-                return;
-            }
-            this.PrePSMState.Add(prePSM);
-            prePSM.NextPSMState.Add(this);
-        }
 
-        /// <summary>
-        /// 添加运行后状态
-        /// </summary>
-        /// <param name="nextPSM"></param>
-        public void AddNextPSM(PSMState<T> nextPSM)
-        {
-            if (this.PrePSMState.Contains(nextPSM))
+            //需要等待执行前状态全部执行完毕才能继续执行
+            var preStates = this.GetPreStates();
+            if (null != preStates)
             {
-                CommonLog.LogError($"重复添加运行后状态{nextPSM}");
-                return;
-            }
-            if (nextPSM.PrePSMState.Contains(this))
-            {
-                CommonLog.LogError($"重复添加运行前状态{nextPSM}");
-                return;
-            }
-            this.NextPSMState.Add(nextPSM);
-            nextPSM.PrePSMState.Add(this);
-        }
-
-        /// <summary>
-        /// 开始状态
-        /// </summary>
-        public void StartStateRunning(PSMState<T> preState)
-        {
-            //没有开始状态监听，开始状态监听
-            if (this.State == EPSMState.NotRunning)
-            {
-                this.RunningPrePSMState.Clear();
-                this.PrePSMState.ForEach(x => this.RunningPrePSMState.Add(x));
-                this.State = EPSMState.PrepareToRun;
-            }
-
-            //已经开始状态监听
-            if (this.State == EPSMState.PrepareToRun)
-            {
-                this.RunningPrePSMState.Remove(preState);
-
-                //可以开始运行了
-                if (this.RunningPrePSMState.Count == 0)
+                for (int i = 0; i < preStates.Count; i++)
                 {
-                    this.OnEnter();
-                    this.State = EPSMState.Running;
+                    if (preStates[i].State != EPSMState.Ran)
+                    {
+                        return;
+                    }
+                }
+            }
+
+            //正式开始当前状态执行
+            this.State = EPSMState.Running;
+            await this.OnEnter();
+        }
+
+        /// <summary>
+        /// 离开状态
+        /// </summary>
+        public async UniTask Leave()
+        {
+            //不在运行中的状态无法离开状态
+            if (this.State != EPSMState.Running)
+            {
+                return;
+            }
+
+            //正式离开状态
+            this.State = EPSMState.Ran;
+            await this.OnLeave();
+
+            //尝试启动后续状态
+            var nextStates = this.GetNextStates();
+            if(null != nextStates)
+            {
+                for (int i = 0; i < nextStates.Count; i++)
+                {
+                    await nextStates[i].Enter();
                 }
             }
         }
 
         /// <summary>
-        /// 结束状态运行
+        /// 指定当前状态机执行前状态
+        /// <para>当前状态执行的前提是所有执行前状态执行完毕</para>
         /// </summary>
-        public void StopStateRunning()
+        /// <returns></returns>
+        protected virtual List<PSMState<T>> GetPreStates()
         {
-            if (this.State == EPSMState.Running)
-            {
-                this.OnLeave();
-                this.State = EPSMState.NotRunning;
+            return new List<PSMState<T>>(0);
+        }
 
-                //通知后续状态，开始运行
-                for (int i = 0; i < NextPSMState.Count; i++)
-                {
-                    NextPSMState[i].StartStateRunning(this);
-                }
-            }
+        /// <summary>
+        /// 指定当前状态机执行后状态
+        /// <para>当前状态执行完毕后会启动后续状态执行(后续状态自行校验是否要执行)</para>
+        /// </summary>
+        /// <returns></returns>
+        protected virtual List<PSMState<T>> GetNextStates()
+        {
+            return new List<PSMState<T>>(0);
         }
 
         /// <summary>
         /// 初始化
         /// </summary>
-        public virtual void OnInit()
+        protected virtual async UniTask OnInit()
         {
 
         }
@@ -176,15 +122,7 @@ namespace CommonFeatures.PSM
         /// <summary>
         /// 当进入状态机
         /// </summary>
-        protected virtual void OnEnter()
-        {
-
-        }
-
-        /// <summary>
-        /// 每帧轮询函数
-        /// </summary>
-        public virtual void OnTick()
+        protected virtual async UniTask OnEnter()
         {
 
         }
@@ -192,7 +130,7 @@ namespace CommonFeatures.PSM
         /// <summary>
         /// 当离开状态机
         /// </summary>
-        protected virtual void OnLeave()
+        protected virtual async UniTask OnLeave()
         {
 
         }

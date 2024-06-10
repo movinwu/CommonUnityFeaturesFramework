@@ -1,5 +1,6 @@
 using CommonFeatures.FSM;
 using CommonFeatures.Log;
+using Cysharp.Threading.Tasks;
 
 namespace CommonFeatures.GML
 {
@@ -8,9 +9,9 @@ namespace CommonFeatures.GML
     /// </summary>
     public class FSMState_GML_StartGame : FSMState<CommonFeature_GML>
     {
-        public override void OnEnter()
+        public override async UniTask OnEnter()
         {
-            base.OnEnter();
+            await base.OnEnter();
 
             //初始化配置
             CommonLog.Log("开始游戏");

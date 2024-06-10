@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,7 +29,7 @@ namespace CommonFeatures.FSM
         /// <summary>
         /// 初始化
         /// </summary>
-        public virtual void OnInit()
+        public async virtual UniTask OnInit()
         {
 
         }
@@ -36,15 +37,7 @@ namespace CommonFeatures.FSM
         /// <summary>
         /// 当进入状态机
         /// </summary>
-        public virtual void OnEnter()
-        {
-
-        }
-
-        /// <summary>
-        /// 每帧轮询函数
-        /// </summary>
-        public virtual void OnTick()
+        public async virtual UniTask OnEnter()
         {
 
         }
@@ -52,7 +45,7 @@ namespace CommonFeatures.FSM
         /// <summary>
         /// 当离开状态机
         /// </summary>
-        public virtual void OnLeave()
+        public async virtual UniTask OnLeave()
         {
 
         }

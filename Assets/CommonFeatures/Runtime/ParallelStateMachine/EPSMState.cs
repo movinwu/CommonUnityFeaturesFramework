@@ -6,12 +6,19 @@ namespace CommonFeatures.PSM
 {
     public enum EPSMState : byte
     {
-        NotInited,
-
+        /// <summary>
+        /// 准备运行
+        /// </summary>
         PrepareToRun,
 
+        /// <summary>
+        /// 运行中
+        /// </summary>
         Running,
 
-        NotRunning,
+        /// <summary>
+        /// 结束运行
+        /// </summary>
+        Ran,
     }
 }

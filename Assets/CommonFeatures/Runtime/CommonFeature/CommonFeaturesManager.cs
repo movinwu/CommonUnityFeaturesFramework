@@ -131,6 +131,8 @@ namespace CommonFeatures
             Http.Release();
             Net.Release();
             FSM.Release();
+            PSM.Release();
+            GML.Release();
         }
     }
 }

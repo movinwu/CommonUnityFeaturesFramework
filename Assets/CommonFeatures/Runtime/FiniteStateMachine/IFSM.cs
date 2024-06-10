@@ -10,11 +10,6 @@ namespace CommonFeatures.FSM
     internal interface IFSM
     {
         /// <summary>
-        /// Ã¿Ö¡ÂÖÑ¯
-        /// </summary>
-        void OnTick();
-
-        /// <summary>
         /// Ïú»Ù
         /// </summary>
         void OnDestroy();

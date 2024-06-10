@@ -1,5 +1,6 @@
 using CommonFeatures.Log;
 using CommonFeatures.Utility;
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace CommonFeatures.PSM
 {
     /// <summary>
     /// 并行状态机
+    /// <para>不支持循环运行,每一轮运行完成后需要重置所有状态</para>
     /// </summary>
     public class PSM<T> : IPSM
     {
@@ -53,57 +55,51 @@ namespace CommonFeatures.PSM
                 else
                 {
                     m_AllStates.Add(type, states[i]);
-                    states[i].Init(this);
                 }
             }
         }
 
         /// <summary>
-        /// 开始状态机
+        /// 重置所有状态
+        /// <para>状态机不支持成环运行,经过一轮运行后必须重置所有状态,才能继续下一轮运行</para>
         /// </summary>
-        public void StartPSM(List<PSMState<T>> startStates)
+        public async UniTask ResetAllPSMState()
         {
-            if (null == m_AllStates || m_AllStates.Count == 0)
+            var array = this.m_AllStates.Values.ToArray();
+            for (int i = 0; i < array.Length; i++)
             {
-                CommonLog.LogError($"状态机没有初始化，不能开始运行");
-                return;
-            }
-            if (m_AllStates.Values.Where(x => x.State == EPSMState.Running).Count() > 0)
-            {
-                CommonLog.LogError($"状态机已经开始运行,不能重复开始运行状态机");
-                return;
-            }
-            if (null == startStates || startStates.Count == 0)
-            {
-                CommonLog.LogError($"状态机初始状态数量为0，不能开始运行");
-                return;
-            }
-
-            //初始化
-            foreach (var s in m_AllStates.Values)
-            {
-                s.State = EPSMState.NotRunning;
-                s.OnInit();
-            }
-
-            for (int i = 0; i < startStates.Count; i++)
-            {
-                var startState = startStates[i];
-                var startStateType = startState.GetType();
-                if (m_AllStates.ContainsKey(startStateType))
-                {
-                    startState.StartStateRunning(null);
-                }
+                await array[i].Init(this);
             }
         }
 
-        public void OnTick()
+        /// <summary>
+        /// 进入一个状态运行(启动状态机一轮运行时使用)
+        /// </summary>
+        /// <typeparam name="K"></typeparam>
+        public async UniTask EnterState<K>() where K : PSMState<T>
         {
-            var curStates = m_AllStates.Values.Where(x => x.State == EPSMState.Running);
-            foreach (var state in curStates)
+            var type = typeof(K);
+            if (m_AllStates.ContainsKey(type))
             {
-                state.OnTick();
+                await m_AllStates[type].Enter();
             }
+        }
+
+        /// <summary>
+        /// 获取一个状态
+        /// </summary>
+        /// <typeparam name="K"></typeparam>
+        /// <returns></returns>
+        public K GetState<K>() where K : PSMState<T>
+        {
+            var type = typeof(K);
+            if (m_AllStates.ContainsKey(type))
+            {
+                return m_AllStates[type] as K;
+            }
+
+            CommonLog.LogError($"获取状态失败,尝试获取不存在的状态: {type}");
+            return null;
         }
 
         public void OnDestroy()

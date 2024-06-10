@@ -1,4 +1,5 @@
 using CommonFeatures.FSM;
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,7 +17,7 @@ namespace CommonFeatures.GML
         /// </summary>
         private FSM<CommonFeature_GML> m_FSM;
 
-        public void StartGame()
+        public async UniTask StartGame()
         {
             //正式开始游戏
             var states = new FSMState<CommonFeature_GML>[]
@@ -24,7 +25,7 @@ namespace CommonFeatures.GML
                 new FSMState_GML_StartGame(),
             };
             m_FSM = CommonFeaturesManager.FSM.CreateFSM(states, this);
-            m_FSM.StartFSM<FSMState_GML_StartGame>();
+            await m_FSM.StartFSM<FSMState_GML_StartGame>();
         }
     }
 }
