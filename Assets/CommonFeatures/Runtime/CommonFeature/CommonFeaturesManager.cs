@@ -32,16 +32,6 @@ namespace CommonFeatures
         public static CommonFeature_DataTable DataTable;
 
         /// <summary>
-        /// œ¬‘ÿ
-        /// </summary>
-        public static CommonFeature_Download Download;
-
-        /// <summary>
-        /// Http∑√Œ 
-        /// </summary>
-        public static CommonFeature_Http Http;
-
-        /// <summary>
         /// Õ¯¬Á
         /// </summary>
         public static CommonFeature_Net Net;
@@ -81,16 +71,6 @@ namespace CommonFeatures
                     DataTable = child.GetComponent<CommonFeature_DataTable>();
                     DataTable.Init();
                 }
-                else if ("Download".Equals(child.name))
-                {
-                    Download = child.GetComponent<CommonFeature_Download>();
-                    Download.Init();
-                }
-                else if ("Http".Equals(child.name))
-                {
-                    Http = child.GetComponent<CommonFeature_Http>();
-                    Http.Init();
-                }
                 else if ("Net".Equals(child.name))
                 {
                     Net = child.GetComponent<CommonFeature_Net>();
@@ -127,8 +107,6 @@ namespace CommonFeatures
         private void OnDestroy()
         {
             DataTable.Release();
-            Download.Release();
-            Http.Release();
             Net.Release();
             FSM.Release();
             PSM.Release();

@@ -1,13 +1,16 @@
 {
-    "name": "CommonFeatures.Editor",
+    "name": "BundleMaster.LMTD",
     "rootNamespace": "",
-    "references": [
-        "GUID:211b711bbbf6e6749abb406fece8a395",
-        "GUID:1d6664a81583eb44ea166e8fb8cba80e",
-        "GUID:b98a4eaf01896f5418b13b9950aabd98"
-    ],
+    "references": [],
     "includePlatforms": [
-        "Editor"
+        "Android",
+        "Editor",
+        "iOS",
+        "LinuxStandalone64",
+        "macOSStandalone",
+        "Switch",
+        "WindowsStandalone32",
+        "WindowsStandalone64"
     ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
