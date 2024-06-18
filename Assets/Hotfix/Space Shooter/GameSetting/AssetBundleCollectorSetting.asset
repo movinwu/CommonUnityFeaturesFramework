@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: AssetBundleCollectorSetting
   m_EditorClassIdentifier: 
   ShowPackageView: 0
-  ShowEditorAlias: 0
-  UniqueBundleName: 0
+  ShowEditorAlias: 1
+  UniqueBundleName: 1
   Packages:
   - PackageName: DefaultPackage
     PackageDesc: 
     EnableAddressable: 1
     LocationToLower: 0
-    IncludeAssetGUID: 0
+    IncludeAssetGUID: 1
     AutoCollectShaders: 1
     IgnoreRuleName: NormalIgnoreRule
     Groups:
@@ -29,7 +29,7 @@ MonoBehaviour:
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/Samples/Space Shooter/GameRes/Effect
+      - CollectPath: Assets/Hotfix/Space Shooter/GameRes/Effect
         CollectorGUID: 80d76514758554baaa96a9efffe9f3ef
         CollectorType: 0
         AddressRuleName: AddressByFileName
@@ -37,7 +37,7 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-      - CollectPath: Assets/Samples/Space Shooter/GameRes/Entity
+      - CollectPath: Assets/Hotfix/Space Shooter/GameRes/Entity
         CollectorGUID: 4d7c84745db8e884f8020a8c5356e67c
         CollectorType: 0
         AddressRuleName: AddressByFileName
@@ -45,7 +45,7 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-      - CollectPath: Assets/Samples/Space Shooter/GameRes/Audio
+      - CollectPath: Assets/Hotfix/Space Shooter/GameRes/Audio
         CollectorGUID: 306075fbe00b24251b6c889984a7a7d5
         CollectorType: 0
         AddressRuleName: AddressByFileName
@@ -58,7 +58,7 @@ MonoBehaviour:
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/Samples/Space Shooter/GameArt/ShaderVariants
+      - CollectPath: Assets/Hotfix/Space Shooter/GameArt/ShaderVariants
         CollectorGUID: 00781758c26692e40a9634ddeac838be
         CollectorType: 0
         AddressRuleName: AddressByFileName
@@ -71,7 +71,7 @@ MonoBehaviour:
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/Samples/Space Shooter/GameRes/Scene
+      - CollectPath: Assets/Hotfix/Space Shooter/GameRes/Scene
         CollectorGUID: 6070eae1192f2994887f2983a177d503
         CollectorType: 0
         AddressRuleName: AddressByFileName
@@ -84,7 +84,7 @@ MonoBehaviour:
       AssetTags: 
       ActiveRuleName: EnableGroup
       Collectors:
-      - CollectPath: Assets/Samples/Space Shooter/GameRes/UIImage
+      - CollectPath: Assets/Hotfix/Space Shooter/GameRes/UIImage
         CollectorGUID: 30c57db62bb02a24590e7046d3a9e33a
         CollectorType: 0
         AddressRuleName: AddressByFileName
@@ -92,7 +92,7 @@ MonoBehaviour:
         FilterRuleName: CollectAll
         AssetTags: 
         UserData: 
-      - CollectPath: Assets/Samples/Space Shooter/GameRes/UIPanel
+      - CollectPath: Assets/Hotfix/Space Shooter/GameRes/UIPanel
         CollectorGUID: 12d33f33f3a55224c9c747d7bffa1c68
         CollectorType: 0
         AddressRuleName: AddressByFileName

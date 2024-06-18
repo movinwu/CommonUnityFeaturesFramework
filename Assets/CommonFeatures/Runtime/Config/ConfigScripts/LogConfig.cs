@@ -7,7 +7,7 @@ namespace CommonFeatures.Config
     /// <summary>
     /// »’÷æ≈‰÷√
     /// </summary>
-    [CreateAssetMenu]
+    [CreateAssetMenu(menuName = "ScriptableObject/Log", fileName = "LogConfig")]
     public class LogConfig : ScriptableObject
     {
         /// <summary>

@@ -8,7 +8,7 @@ namespace CommonFeatures.Config
     /// <summary>
     ///  ˝æ›±Ì≈‰÷√
     /// </summary>
-    [CreateAssetMenu]
+    [CreateAssetMenu(menuName = "ScriptableObject/DataTable", fileName = "DataTableConfig")]
     public class DataTableConfig : ScriptableObject
     {
         /// <summary>

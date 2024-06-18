@@ -17,17 +17,8 @@ namespace CommonFeatures.Resource
 
         public override void Init()
         {
-            if (null == m_DefaultPackage)
-            {
-                //初始化资源系统
-                YooAssets.Initialize();
-
-                // 创建默认的资源包
-                m_DefaultPackage = YooAssets.CreatePackage("DefaultPackage");
-
-                // 设置该资源包为默认的资源包，可以使用YooAssets相关加载接口加载该资源包内容。
-                YooAssets.SetDefaultPackage(m_DefaultPackage);
-            }
+            //初始化资源系统
+            YooAssets.Initialize();
         }
     }
 }
