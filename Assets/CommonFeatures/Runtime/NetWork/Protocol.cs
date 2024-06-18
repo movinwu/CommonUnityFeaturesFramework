@@ -44,7 +44,7 @@ namespace CommonFeatures.NetWork
 
         public void SendMessage(byte[] data)
         {
-            CommonFeaturesManager.Net.SendMsg(data);
+            CommonFeaturesManager.Network.SendMsg(data);
         }
 
         /// <summary>

@@ -5,6 +5,7 @@ using CommonFeatures.GML;
 using CommonFeatures.Log;
 using CommonFeatures.NetWork;
 using CommonFeatures.PSM;
+using CommonFeatures.Resource;
 using UnityEngine;
 
 namespace CommonFeatures
@@ -24,7 +25,7 @@ namespace CommonFeatures
         /// <summary>
         /// 配置
         /// </summary>
-        public static CommonConfig Config;
+        public static CommonFeature_Config Config;
 
         /// <summary>
         /// 数据表
@@ -34,7 +35,7 @@ namespace CommonFeatures
         /// <summary>
         /// 网络
         /// </summary>
-        public static CommonFeature_Net Net;
+        public static CommonFeature_Network Network;
 
         /// <summary>
         /// 有限状态机
@@ -45,6 +46,11 @@ namespace CommonFeatures
         /// 并行状态机
         /// </summary>
         public static CommonFeature_PSM PSM;
+
+        /// <summary>
+        /// 资源管理
+        /// </summary>
+        public static CommonFeature_Resource Resource;
 
         /// <summary>
         /// 游戏主循环
@@ -66,15 +72,20 @@ namespace CommonFeatures
             for (int i = 0; i < this.transform.childCount; i++)
             {
                 var child = this.transform.GetChild(i);
-                if ("DataTable".Equals(child.name))
+                if ("Config".Equals(child.name))
+                {
+                    Config = child.GetComponent<CommonFeature_Config>();
+                    Config.Init();
+                }
+                else if ("DataTable".Equals(child.name))
                 {
                     DataTable = child.GetComponent<CommonFeature_DataTable>();
                     DataTable.Init();
                 }
                 else if ("Net".Equals(child.name))
                 {
-                    Net = child.GetComponent<CommonFeature_Net>();
-                    Net.Init();
+                    Network = child.GetComponent<CommonFeature_Network>();
+                    Network.Init();
                 }
                 else if ("FSM".Equals(child.name))
                 {
@@ -85,6 +96,11 @@ namespace CommonFeatures
                 {
                     PSM = child.GetComponent<CommonFeature_PSM>();
                     PSM.Init();
+                }
+                else if ("Resource".Equals(child.name))
+                {
+                    Resource = child.GetComponent<CommonFeature_Resource>();
+                    Resource.Init();
                 }
                 else if ("GML".Equals(child.name))
                 {
@@ -107,10 +123,11 @@ namespace CommonFeatures
         private void OnDestroy()
         {
             DataTable.Release();
-            Net.Release();
+            Network.Release();
             FSM.Release();
             PSM.Release();
             GML.Release();
+            Resource.Release();
         }
     }
 }

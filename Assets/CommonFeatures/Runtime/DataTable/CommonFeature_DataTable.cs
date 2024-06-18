@@ -21,13 +21,14 @@ namespace CommonFeatures.DataTable
         /// </summary>
         public void ReadDataTable()
         {
-            var assemblyName = CommonConfig.GetStringConfig("DataTable", "assembly_name");
-            var dataReadType = (EDataReadType)CommonConfig.GetLongConfig("DataTable", "data_read_type");
+            var config = CommonFeaturesManager.Config.GetConfig<DataTableConfig>();
+            var assemblyName = config.AssemblyName;
+            var dataReadType = config.DataReadType;
 
             m_AllDataTable.Clear();
             if (dataReadType == EDataReadType.Binary)
             {
-                var binaryPath = CommonConfig.GetStringConfig("DataTable", "binary_path");
+                var binaryPath = config.BinaryPath;
                 var directory = new DirectoryInfo(binaryPath);
                 var files = directory.GetFiles();
                 for (int fileIndex = 0; fileIndex < files.Length; fileIndex++)
@@ -64,7 +65,7 @@ namespace CommonFeatures.DataTable
             else if (dataReadType == EDataReadType.Json)
 #pragma warning restore CS0162 // 检测到无法访问的代码
             {
-                var jsonPath = CommonConfig.GetStringConfig("DataTable", "json_path");
+                var jsonPath = config.JsonPath;
                 var directory = new DirectoryInfo(jsonPath);
                 var files = directory.GetFiles();
                 for (int fileIndex = 0; fileIndex < files.Length; fileIndex++)
@@ -125,16 +126,5 @@ namespace CommonFeatures.DataTable
 
             return new List<T>(0);
         }
-
-        /// <summary>
-        /// 数据表读取类型
-        /// </summary>
-        private enum EDataReadType : byte
-        {
-            Binary,
-
-            Json,
-        }
-
     }
 }

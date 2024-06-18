@@ -18,20 +18,21 @@ namespace CommonFeatures.Log
         private static void Init()
         {
             tags = ELogType.Null;
+            var config = CommonFeaturesManager.Config.GetConfig<LogConfig>();
             //ºÏ≤È≈‰÷√
-            if (CommonConfig.GetBooleanConfig("Log", "net"))
+            if (config.EnableNet)
             {
                 tags |= ELogType.Net;
             }
-            if (CommonConfig.GetBooleanConfig("Log", "config"))
+            if (config.EnableConfig)
             {
                 tags |= ELogType.Config;
             }
-            if (CommonConfig.GetBooleanConfig("Log", "trace"))
+            if (config.EnableTrace)
             {
                 tags |= ELogType.Trace;
             }
-            if (CommonConfig.GetBooleanConfig("Log", "resource"))
+            if (config.EnableResource)
             {
                 tags |= ELogType.Resource;
             }
