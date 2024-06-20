@@ -1,4 +1,5 @@
-﻿using UniFramework.Event;
+﻿using CommonFeatures;
+using CommonFeatures.Event;
 
 public class UserEventDefine
 {
@@ -10,7 +11,7 @@ public class UserEventDefine
         public static void SendEventMessage()
         {
             var msg = new UserTryInitialize();
-            UniEvent.SendMessage(msg);
+            CommonFeaturesManager.Event.SendMessage(msg);
         }
     }
 
@@ -22,7 +23,7 @@ public class UserEventDefine
         public static void SendEventMessage()
         {
             var msg = new UserBeginDownloadWebFiles();
-            UniEvent.SendMessage(msg);
+            CommonFeaturesManager.Event.SendMessage(msg);
         }
     }
 
@@ -34,7 +35,7 @@ public class UserEventDefine
         public static void SendEventMessage()
         {
             var msg = new UserTryUpdatePackageVersion();
-            UniEvent.SendMessage(msg);
+            CommonFeaturesManager.Event.SendMessage(msg);
         }
     }
 
@@ -46,7 +47,7 @@ public class UserEventDefine
         public static void SendEventMessage()
         {
             var msg = new UserTryUpdatePatchManifest();
-            UniEvent.SendMessage(msg);
+            CommonFeaturesManager.Event.SendMessage(msg);
         }
     }
 
@@ -58,7 +59,7 @@ public class UserEventDefine
         public static void SendEventMessage()
         {
             var msg = new UserTryDownloadWebFiles();
-            UniEvent.SendMessage(msg);
+            CommonFeaturesManager.Event.SendMessage(msg);
         }
     }
 }

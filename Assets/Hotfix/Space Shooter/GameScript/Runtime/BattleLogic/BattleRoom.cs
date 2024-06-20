@@ -2,10 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UniFramework.Event;
-using UniFramework.Utility;
+using CommonFeatures.Event;
+using CommonFeatures.Utility;
 using YooAsset;
 using Random = UnityEngine.Random;
+using CommonFeatures;
 
 [Serializable]
 public class RoomBoundary
@@ -28,7 +29,6 @@ public class BattleRoom
         GameOver,
     }
 
-    private readonly EventGroup _eventGroup = new EventGroup();
     private GameObject _roomRoot;
 
     // 关卡参数
@@ -60,11 +60,11 @@ public class BattleRoom
         _roomRoot = new GameObject("BattleRoom");
 
         // 监听游戏事件
-        _eventGroup.AddListener<BattleEventDefine.PlayerDead>(OnHandleEventMessage);
-        _eventGroup.AddListener<BattleEventDefine.EnemyDead>(OnHandleEventMessage);
-        _eventGroup.AddListener<BattleEventDefine.AsteroidExplosion>(OnHandleEventMessage);
-        _eventGroup.AddListener<BattleEventDefine.PlayerFireBullet>(OnHandleEventMessage);
-        _eventGroup.AddListener<BattleEventDefine.EnemyFireBullet>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.AddListener<BattleEventDefine.PlayerDead>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.AddListener<BattleEventDefine.EnemyDead>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.AddListener<BattleEventDefine.AsteroidExplosion>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.AddListener<BattleEventDefine.PlayerFireBullet>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.AddListener<BattleEventDefine.EnemyFireBullet>(OnHandleEventMessage);
 
         _steps = ESteps.Ready;
     }
@@ -74,8 +74,11 @@ public class BattleRoom
     /// </summary>
     public void DestroyRoom()
     {
-        if (_eventGroup != null)
-            _eventGroup.RemoveAllListener();
+        CommonFeaturesManager.Event.RemoveListener<BattleEventDefine.PlayerDead>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.RemoveListener<BattleEventDefine.EnemyDead>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.RemoveListener<BattleEventDefine.AsteroidExplosion>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.RemoveListener<BattleEventDefine.PlayerFireBullet>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.RemoveListener<BattleEventDefine.EnemyFireBullet>(OnHandleEventMessage);
 
         if (_roomRoot != null)
             GameObject.Destroy(_roomRoot);

@@ -1,5 +1,5 @@
 ﻿
-namespace UniFramework.Machine
+namespace CommonFeatures.Machine
 {
 	public interface IStateNode
 	{

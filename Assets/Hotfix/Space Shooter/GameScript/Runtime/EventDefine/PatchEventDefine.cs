@@ -1,4 +1,5 @@
-﻿using UniFramework.Event;
+﻿using CommonFeatures;
+using CommonFeatures.Event;
 
 public class PatchEventDefine
 {
@@ -10,7 +11,7 @@ public class PatchEventDefine
         public static void SendEventMessage()
         {
             var msg = new InitializeFailed();
-            UniEvent.SendMessage(msg);
+            CommonFeaturesManager.Event.SendMessage(msg);
         }
     }
 
@@ -25,7 +26,7 @@ public class PatchEventDefine
         {
             var msg = new PatchStatesChange();
             msg.Tips = tips;
-            UniEvent.SendMessage(msg);
+            CommonFeaturesManager.Event.SendMessage(msg);
         }
     }
 
@@ -42,7 +43,7 @@ public class PatchEventDefine
             var msg = new FoundUpdateFiles();
             msg.TotalCount = totalCount;
             msg.TotalSizeBytes = totalSizeBytes;
-            UniEvent.SendMessage(msg);
+            CommonFeaturesManager.Event.SendMessage(msg);
         }
     }
 
@@ -63,7 +64,7 @@ public class PatchEventDefine
             msg.CurrentDownloadCount = currentDownloadCount;
             msg.TotalDownloadSizeBytes = totalDownloadSizeBytes;
             msg.CurrentDownloadSizeBytes = currentDownloadSizeBytes;
-            UniEvent.SendMessage(msg);
+            CommonFeaturesManager.Event.SendMessage(msg);
         }
     }
 
@@ -75,7 +76,7 @@ public class PatchEventDefine
         public static void SendEventMessage()
         {
             var msg = new PackageVersionUpdateFailed();
-            UniEvent.SendMessage(msg);
+            CommonFeaturesManager.Event.SendMessage(msg);
         }
     }
 
@@ -87,7 +88,7 @@ public class PatchEventDefine
         public static void SendEventMessage()
         {
             var msg = new PatchManifestUpdateFailed();
-            UniEvent.SendMessage(msg);
+            CommonFeaturesManager.Event.SendMessage(msg);
         }
     }
 
@@ -104,7 +105,7 @@ public class PatchEventDefine
             var msg = new WebFileDownloadFailed();
             msg.FileName = fileName;
             msg.Error = error;
-            UniEvent.SendMessage(msg);
+            CommonFeaturesManager.Event.SendMessage(msg);
         }
     }
 }

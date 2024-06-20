@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UniFramework.Event;
+using CommonFeatures.Event;
 using YooAsset;
 
 public class Boot : MonoBehaviour
@@ -23,9 +23,6 @@ public class Boot : MonoBehaviour
     {
         // 游戏管理器
         GameManager.Instance.Behaviour = this;
-
-        // 初始化事件系统
-        UniEvent.Initalize();
 
         // 初始化资源系统
         YooAssets.Initialize();

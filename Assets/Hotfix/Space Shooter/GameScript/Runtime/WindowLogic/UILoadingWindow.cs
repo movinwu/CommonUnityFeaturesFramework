@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UniFramework.Utility;
+using CommonFeatures.Utility;
 
 public class UILoadingWindow : MonoBehaviour
 {

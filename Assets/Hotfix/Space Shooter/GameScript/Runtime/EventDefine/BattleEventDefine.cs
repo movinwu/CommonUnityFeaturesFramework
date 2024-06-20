@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UniFramework.Event;
+using CommonFeatures.Event;
+using CommonFeatures;
 
 public class BattleEventDefine
 {
@@ -16,7 +17,7 @@ public class BattleEventDefine
         {
             var msg = new ScoreChange();
             msg.CurrentScores = currentScores;
-            UniEvent.SendMessage(msg);
+            CommonFeaturesManager.Event.SendMessage(msg);
         }
     }
 
@@ -28,7 +29,7 @@ public class BattleEventDefine
         public static void SendEventMessage()
         {
             var msg = new GameOver();
-            UniEvent.SendMessage(msg);
+            CommonFeaturesManager.Event.SendMessage(msg);
         }
     }
 
@@ -45,7 +46,7 @@ public class BattleEventDefine
             var msg = new EnemyDead();
             msg.Position = position;
             msg.Rotation = rotation;
-            UniEvent.SendMessage(msg);
+            CommonFeaturesManager.Event.SendMessage(msg);
         }
     }
 
@@ -62,7 +63,7 @@ public class BattleEventDefine
             var msg = new PlayerDead();
             msg.Position = position;
             msg.Rotation = rotation;
-            UniEvent.SendMessage(msg);
+            CommonFeaturesManager.Event.SendMessage(msg);
         }
     }
 
@@ -79,7 +80,7 @@ public class BattleEventDefine
             var msg = new AsteroidExplosion();
             msg.Position = position;
             msg.Rotation = rotation;
-            UniEvent.SendMessage(msg);
+            CommonFeaturesManager.Event.SendMessage(msg);
         }
     }
 
@@ -96,7 +97,7 @@ public class BattleEventDefine
             var msg = new EnemyFireBullet();
             msg.Position = position;
             msg.Rotation = rotation;
-            UniEvent.SendMessage(msg);
+            CommonFeaturesManager.Event.SendMessage(msg);
         }
     }
 
@@ -113,7 +114,7 @@ public class BattleEventDefine
             var msg = new PlayerFireBullet();
             msg.Position = position;
             msg.Rotation = rotation;
-            UniEvent.SendMessage(msg);
+            CommonFeaturesManager.Event.SendMessage(msg);
         }
     }
 }

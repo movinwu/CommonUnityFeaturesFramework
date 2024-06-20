@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace UniFramework.Utility
+namespace CommonFeatures.Utility
 {
 	public static class StringFormat
 	{

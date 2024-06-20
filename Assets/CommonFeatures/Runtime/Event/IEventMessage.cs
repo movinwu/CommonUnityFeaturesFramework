@@ -1,5 +1,5 @@
 ﻿
-namespace UniFramework.Event
+namespace CommonFeatures.Event
 {
 	public interface IEventMessage
 	{

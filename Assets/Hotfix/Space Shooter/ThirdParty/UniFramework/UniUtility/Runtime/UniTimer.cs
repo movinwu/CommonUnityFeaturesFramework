@@ -1,5 +1,5 @@
 ﻿
-namespace UniFramework.Utility
+namespace CommonFeatures.Utility
 {
 	public sealed class UniTimer
 	{

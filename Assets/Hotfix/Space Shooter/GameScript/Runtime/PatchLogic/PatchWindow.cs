@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UniFramework.Event;
+using CommonFeatures.Event;
+using CommonFeatures;
 
 public class PatchWindow : MonoBehaviour
 {
@@ -53,7 +54,6 @@ public class PatchWindow : MonoBehaviour
     }
 
 
-    private readonly EventGroup _eventGroup = new EventGroup();
     private readonly List<MessageBox> _msgBoxList = new List<MessageBox>();
 
     // UGUI相关
@@ -70,17 +70,23 @@ public class PatchWindow : MonoBehaviour
         _messageBoxObj = transform.Find("UIWindow/MessgeBox").gameObject;
         _messageBoxObj.SetActive(false);
 
-        _eventGroup.AddListener<PatchEventDefine.InitializeFailed>(OnHandleEventMessage);
-        _eventGroup.AddListener<PatchEventDefine.PatchStatesChange>(OnHandleEventMessage);
-        _eventGroup.AddListener<PatchEventDefine.FoundUpdateFiles>(OnHandleEventMessage);
-        _eventGroup.AddListener<PatchEventDefine.DownloadProgressUpdate>(OnHandleEventMessage);
-        _eventGroup.AddListener<PatchEventDefine.PackageVersionUpdateFailed>(OnHandleEventMessage);
-        _eventGroup.AddListener<PatchEventDefine.PatchManifestUpdateFailed>(OnHandleEventMessage);
-        _eventGroup.AddListener<PatchEventDefine.WebFileDownloadFailed>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.AddListener<PatchEventDefine.InitializeFailed>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.AddListener<PatchEventDefine.PatchStatesChange>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.AddListener<PatchEventDefine.FoundUpdateFiles>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.AddListener<PatchEventDefine.DownloadProgressUpdate>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.AddListener<PatchEventDefine.PackageVersionUpdateFailed>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.AddListener<PatchEventDefine.PatchManifestUpdateFailed>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.AddListener<PatchEventDefine.WebFileDownloadFailed>(OnHandleEventMessage);
     }
     void OnDestroy()
     {
-        _eventGroup.RemoveAllListener();
+        CommonFeaturesManager.Event.RemoveListener<PatchEventDefine.InitializeFailed>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.RemoveListener<PatchEventDefine.PatchStatesChange>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.RemoveListener<PatchEventDefine.FoundUpdateFiles>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.RemoveListener<PatchEventDefine.DownloadProgressUpdate>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.RemoveListener<PatchEventDefine.PackageVersionUpdateFailed>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.RemoveListener<PatchEventDefine.PatchManifestUpdateFailed>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.RemoveListener<PatchEventDefine.WebFileDownloadFailed>(OnHandleEventMessage);
     }
 
     /// <summary>

@@ -1,4 +1,5 @@
-﻿using UniFramework.Event;
+﻿using CommonFeatures;
+using CommonFeatures.Event;
 
 public class SceneEventDefine
 {
@@ -7,7 +8,7 @@ public class SceneEventDefine
         public static void SendEventMessage()
         {
             var msg = new ChangeToHomeScene();
-            UniEvent.SendMessage(msg);
+            CommonFeaturesManager.Event.SendMessage(msg);
         }
     }
 
@@ -16,7 +17,7 @@ public class SceneEventDefine
         public static void SendEventMessage()
         {
             var msg = new ChangeToBattleScene();
-            UniEvent.SendMessage(msg);
+            CommonFeaturesManager.Event.SendMessage(msg);
         }
     }
 }

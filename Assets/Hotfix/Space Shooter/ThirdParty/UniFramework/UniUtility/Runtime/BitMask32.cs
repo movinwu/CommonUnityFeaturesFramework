@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UniFramework.Utility
+namespace CommonFeatures.Utility
 {
     internal struct BitMask32
     {

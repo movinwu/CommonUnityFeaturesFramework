@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UniFramework.Machine;
+using CommonFeatures.Machine;
 
 /// <summary>
 /// 下载完毕

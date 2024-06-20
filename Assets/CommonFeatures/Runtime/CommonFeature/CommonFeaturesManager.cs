@@ -1,5 +1,6 @@
 using CommonFeatures.Config;
 using CommonFeatures.DataTable;
+using CommonFeatures.Event;
 using CommonFeatures.FSM;
 using CommonFeatures.GML;
 using CommonFeatures.Log;
@@ -21,6 +22,11 @@ namespace CommonFeatures
         /// 所属的物体名称
         /// </summary>
         private static string BelongGameObjectName = string.Empty;
+
+        /// <summary>
+        /// 事件通知
+        /// </summary>
+        public static CommonFeature_Event Event;
 
         /// <summary>
         /// 配置
@@ -107,6 +113,11 @@ namespace CommonFeatures
                     GML = child.GetComponent<CommonFeature_GML>();
                     GML.Init();
                 }
+                else if ("Event".Equals(child.name))
+                {
+                    Event = child.GetComponent<CommonFeature_Event>();
+                    Event.Init();
+                }
             }
 
             //正式开始游戏
@@ -128,6 +139,7 @@ namespace CommonFeatures
             PSM.Release();
             GML.Release();
             Resource.Release();
+            Event.Release();
         }
     }
 }

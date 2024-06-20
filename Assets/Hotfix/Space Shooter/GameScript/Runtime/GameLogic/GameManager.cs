@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UniFramework.Event;
+using CommonFeatures.Event;
 using YooAsset;
+using CommonFeatures;
 
 public class GameManager
 {
@@ -17,8 +18,6 @@ public class GameManager
         }
     }
 
-    private readonly EventGroup _eventGroup = new EventGroup();
-
     /// <summary>
     /// 协程启动器
     /// </summary>
@@ -28,8 +27,8 @@ public class GameManager
     private GameManager()
     {
         // 注册监听事件
-        _eventGroup.AddListener<SceneEventDefine.ChangeToHomeScene>(OnHandleEventMessage);
-        _eventGroup.AddListener<SceneEventDefine.ChangeToBattleScene>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.AddListener<SceneEventDefine.ChangeToHomeScene>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.AddListener<SceneEventDefine.ChangeToBattleScene>(OnHandleEventMessage);
     }
 
     /// <summary>

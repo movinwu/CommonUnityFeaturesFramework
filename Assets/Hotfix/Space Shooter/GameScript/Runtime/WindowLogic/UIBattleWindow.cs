@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UniFramework.Event;
+using CommonFeatures.Event;
+using CommonFeatures;
 
 public class UIBattleWindow : MonoBehaviour
 {
-    private readonly EventGroup _eventGroup = new EventGroup();
     private GameObject _overView;
     private Text _scoreLabel;
 
@@ -22,12 +22,13 @@ public class UIBattleWindow : MonoBehaviour
         var homeBtn = this.transform.Find("OverView/Home").GetComponent<Button>();
         homeBtn.onClick.AddListener(OnClickHomeBtn);
 
-        _eventGroup.AddListener<BattleEventDefine.ScoreChange>(OnHandleEventMessage);
-        _eventGroup.AddListener<BattleEventDefine.GameOver>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.AddListener<BattleEventDefine.ScoreChange>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.AddListener<BattleEventDefine.GameOver>(OnHandleEventMessage);
     }
     private void OnDestroy()
     {
-        _eventGroup.RemoveAllListener();
+        CommonFeaturesManager.Event.RemoveListener<BattleEventDefine.ScoreChange>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.RemoveListener<BattleEventDefine.GameOver>(OnHandleEventMessage);
     }
 
     private void OnClickRestartBtn()

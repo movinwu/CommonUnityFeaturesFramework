@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace UniFramework.Machine
+namespace CommonFeatures.Machine
 {
 	public class StateMachine
 	{

@@ -2,9 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UniFramework.Machine;
-using UniFramework.Event;
+using CommonFeatures.Machine;
+using CommonFeatures.Event;
 using YooAsset;
+using CommonFeatures;
 
 public class PatchOperation : GameAsyncOperation
 {
@@ -15,18 +16,17 @@ public class PatchOperation : GameAsyncOperation
         Done,
     }
 
-    private readonly EventGroup _eventGroup = new EventGroup();
     private readonly StateMachine _machine;
     private ESteps _steps = ESteps.None;
 
     public PatchOperation(string packageName, string buildPipeline, EPlayMode playMode)
     {
         // 注册监听事件
-        _eventGroup.AddListener<UserEventDefine.UserTryInitialize>(OnHandleEventMessage);
-        _eventGroup.AddListener<UserEventDefine.UserBeginDownloadWebFiles>(OnHandleEventMessage);
-        _eventGroup.AddListener<UserEventDefine.UserTryUpdatePackageVersion>(OnHandleEventMessage);
-        _eventGroup.AddListener<UserEventDefine.UserTryUpdatePatchManifest>(OnHandleEventMessage);
-        _eventGroup.AddListener<UserEventDefine.UserTryDownloadWebFiles>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.AddListener<UserEventDefine.UserTryInitialize>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.AddListener<UserEventDefine.UserBeginDownloadWebFiles>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.AddListener<UserEventDefine.UserTryUpdatePackageVersion>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.AddListener<UserEventDefine.UserTryUpdatePatchManifest>(OnHandleEventMessage);
+        CommonFeaturesManager.Event.AddListener<UserEventDefine.UserTryDownloadWebFiles>(OnHandleEventMessage);
 
         // 创建状态机
         _machine = new StateMachine(this);
@@ -58,7 +58,11 @@ public class PatchOperation : GameAsyncOperation
             _machine.Update();
             if(_machine.CurrentNode == typeof(FsmUpdaterDone).FullName)
             {
-                _eventGroup.RemoveAllListener();
+                CommonFeaturesManager.Event.RemoveListener<UserEventDefine.UserTryInitialize>(OnHandleEventMessage);
+                CommonFeaturesManager.Event.RemoveListener<UserEventDefine.UserBeginDownloadWebFiles>(OnHandleEventMessage);
+                CommonFeaturesManager.Event.RemoveListener<UserEventDefine.UserTryUpdatePackageVersion>(OnHandleEventMessage);
+                CommonFeaturesManager.Event.RemoveListener<UserEventDefine.UserTryUpdatePatchManifest>(OnHandleEventMessage);
+                CommonFeaturesManager.Event.RemoveListener<UserEventDefine.UserTryDownloadWebFiles>(OnHandleEventMessage);
                 Status = EOperationStatus.Succeed;
                 _steps = ESteps.Done;
             }

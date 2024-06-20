@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace UniFramework.Event
+namespace CommonFeatures.Event
 {
-	public static class UniEvent
+    public class CommonFeature_Event : CommonFeature
 	{
 		private class PostWrapper
 		{
@@ -21,50 +20,26 @@ namespace UniFramework.Event
 			}
 		}
 
-		private static bool _isInitialize = false;
-		private static GameObject _driver = null;
-		private static readonly Dictionary<int, LinkedList<Action<IEventMessage>>> _listeners = new Dictionary<int, LinkedList<Action<IEventMessage>>>(1000);
-		private static readonly List<PostWrapper> _postingList = new List<PostWrapper>(1000);
+		private GameObject _driver = null;
+		private readonly Dictionary<int, LinkedList<Action<IEventMessage>>> _listeners = new Dictionary<int, LinkedList<Action<IEventMessage>>>(1000);
+		private readonly List<PostWrapper> _postingList = new List<PostWrapper>(1000);
 
-		/// <summary>
-		/// 初始化事件系统
-		/// </summary>
-		public static void Initalize()
-		{
-			if (_isInitialize)
-				throw new Exception($"{nameof(UniEvent)} is initialized !");
-
-			if (_isInitialize == false)
-			{
-				// 创建驱动器
-				_isInitialize = true;
-				_driver = new UnityEngine.GameObject($"[{nameof(UniEvent)}]");
-				_driver.AddComponent<UniEventDriver>();
-				UnityEngine.Object.DontDestroyOnLoad(_driver);
-				UniLogger.Log($"{nameof(UniEvent)} initalize !");
-			}
+        public override void Init()
+        {
+			base.Init();
 		}
 
-		/// <summary>
-		/// 销毁事件系统
-		/// </summary>
-		public static void Destroy()
-		{
-			if (_isInitialize)
-			{
-				ClearAll();
+        public override void Release()
+        {
+            base.Release();
 
-				_isInitialize = false;
-				if (_driver != null)
-					GameObject.Destroy(_driver);
-				UniLogger.Log($"{nameof(UniEvent)} destroy all !");
-			}
-		}
+			ClearAll();
+        }
 
-		/// <summary>
-		/// 更新事件系统
-		/// </summary>
-		internal static void Update()
+        /// <summary>
+        /// 更新事件系统
+        /// </summary>
+        private void Update()
 		{
 			for (int i = _postingList.Count - 1; i >= 0; i--)
 			{
@@ -80,7 +55,7 @@ namespace UniFramework.Event
 		/// <summary>
 		/// 清空所有监听
 		/// </summary>
-		public static void ClearAll()
+		public void ClearAll()
 		{
 			foreach (int eventId in _listeners.Keys)
 			{
@@ -93,7 +68,7 @@ namespace UniFramework.Event
 		/// <summary>
 		/// 添加监听
 		/// </summary>
-		public static void AddListener<TEvent>(System.Action<IEventMessage> listener) where TEvent : IEventMessage
+		public void AddListener<TEvent>(System.Action<IEventMessage> listener) where TEvent : IEventMessage
 		{
 			System.Type eventType = typeof(TEvent);
 			int eventId = eventType.GetHashCode();
@@ -103,7 +78,7 @@ namespace UniFramework.Event
 		/// <summary>
 		/// 添加监听
 		/// </summary>
-		public static void AddListener(System.Type eventType, System.Action<IEventMessage> listener)
+		public void AddListener(System.Type eventType, System.Action<IEventMessage> listener)
 		{
 			int eventId = eventType.GetHashCode();
 			AddListener(eventId, listener);
@@ -112,7 +87,7 @@ namespace UniFramework.Event
 		/// <summary>
 		/// 添加监听
 		/// </summary>
-		public static void AddListener(int eventId, System.Action<IEventMessage> listener)
+		public void AddListener(int eventId, System.Action<IEventMessage> listener)
 		{
 			if (_listeners.ContainsKey(eventId) == false)
 				_listeners.Add(eventId, new LinkedList<Action<IEventMessage>>());
@@ -124,7 +99,7 @@ namespace UniFramework.Event
 		/// <summary>
 		/// 移除监听
 		/// </summary>
-		public static void RemoveListener<TEvent>(System.Action<IEventMessage> listener) where TEvent : IEventMessage
+		public void RemoveListener<TEvent>(System.Action<IEventMessage> listener) where TEvent : IEventMessage
 		{
 			System.Type eventType = typeof(TEvent);
 			int eventId = eventType.GetHashCode();
@@ -134,7 +109,7 @@ namespace UniFramework.Event
 		/// <summary>
 		/// 移除监听
 		/// </summary>
-		public static void RemoveListener(System.Type eventType, System.Action<IEventMessage> listener)
+		public void RemoveListener(System.Type eventType, System.Action<IEventMessage> listener)
 		{
 			int eventId = eventType.GetHashCode();
 			RemoveListener(eventId, listener);
@@ -143,7 +118,7 @@ namespace UniFramework.Event
 		/// <summary>
 		/// 移除监听
 		/// </summary>
-		public static void RemoveListener(int eventId, System.Action<IEventMessage> listener)
+		public void RemoveListener(int eventId, System.Action<IEventMessage> listener)
 		{
 			if (_listeners.ContainsKey(eventId))
 			{
@@ -156,7 +131,7 @@ namespace UniFramework.Event
 		/// <summary>
 		/// 实时广播事件
 		/// </summary>
-		public static void SendMessage(IEventMessage message)
+		public void SendMessage(IEventMessage message)
 		{
 			int eventId = message.GetType().GetHashCode();
 			SendMessage(eventId, message);
@@ -165,7 +140,7 @@ namespace UniFramework.Event
 		/// <summary>
 		/// 实时广播事件
 		/// </summary>
-		public static void SendMessage(int eventId, IEventMessage message)
+		public void SendMessage(int eventId, IEventMessage message)
 		{
 			if (_listeners.ContainsKey(eventId) == false)
 				return;
@@ -185,7 +160,7 @@ namespace UniFramework.Event
 		/// <summary>
 		/// 延迟广播事件
 		/// </summary>
-		public static void PostMessage(IEventMessage message)
+		public void PostMessage(IEventMessage message)
 		{
 			int eventId = message.GetType().GetHashCode();
 			PostMessage(eventId, message);
@@ -194,7 +169,7 @@ namespace UniFramework.Event
 		/// <summary>
 		/// 延迟广播事件
 		/// </summary>
-		public static void PostMessage(int eventId, IEventMessage message)
+		public void PostMessage(int eventId, IEventMessage message)
 		{
 			var wrapper = new PostWrapper();
 			wrapper.PostFrame = UnityEngine.Time.frameCount;
