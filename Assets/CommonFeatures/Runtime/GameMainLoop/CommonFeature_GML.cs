@@ -1,4 +1,5 @@
 using CommonFeatures.FSM;
+using CommonFeatures.Resource;
 using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,10 +23,25 @@ namespace CommonFeatures.GML
             //正式开始游戏
             var states = new FSMState<CommonFeature_GML>[]
             {
+                new FSMState_GML_InitializePackage(),
                 new FSMState_GML_StartGame(),
+                new FSMState_GML_CreatePackageDownloader(),
+                new FSMState_GML_DownloadPackageFiles(),
+                new FSMState_GML_UpdatePackageManifest(),
+                new FSMState_GML_UpdatePackageVersion(),
             };
             m_FSM = CommonFeaturesManager.FSM.CreateFSM(states, this);
-            await m_FSM.StartFSM<FSMState_GML_StartGame>();
+
+            //初始化数据
+            var blackboard = new GameMainLoopBlackboard();
+            var config = CommonFeaturesManager.Config.GetConfig<ResourceConfig>();
+            blackboard.DefaultBuildPipeline = config.DefaultBuildPipeline;
+            blackboard.PackageName = config.PackageName;
+            blackboard.PlayMode = config.PlayMode;
+            m_FSM.BlackBoard = blackboard;
+            
+            //开始初始化包
+            await m_FSM.StartFSM<FSMState_GML_InitializePackage>();
         }
     }
 }

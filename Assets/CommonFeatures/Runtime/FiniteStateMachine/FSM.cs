@@ -39,6 +39,11 @@ namespace CommonFeatures.FSM
         private bool m_IsChangeState = false;
 
         /// <summary>
+        /// 黑板数据
+        /// </summary>
+        public FSMBlackboard BlackBoard { private get; set; }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="states">包含的有限状态机</param>
@@ -92,7 +97,7 @@ namespace CommonFeatures.FSM
 
                 var state = m_AllStates[type];
                 this.m_CurrentState = state;
-                await state.OnEnter();
+                state.OnEnter().Forget();
             }
         }
 
@@ -100,7 +105,7 @@ namespace CommonFeatures.FSM
         /// 切换状态
         /// </summary>
         /// <typeparam name="K"></typeparam>
-        public async UniTask ChangeState<K>() where K : FSMState<T>
+        public void ChangeState<K>() where K : FSMState<T>
         {
             if (null == m_CurrentState)
             {
@@ -123,10 +128,24 @@ namespace CommonFeatures.FSM
 
             var newState = m_AllStates[type];
             m_IsChangeState = true;
-            await m_CurrentState.OnLeave();
+            m_CurrentState.OnLeave().Forget();
             m_IsChangeState = false;
             m_CurrentState = newState;
-            await newState.OnEnter();
+            newState.OnEnter().Forget();
+        }
+
+        /// <summary>
+        /// 获取黑板数据
+        /// </summary>
+        /// <typeparam name="K"></typeparam>
+        /// <returns></returns>
+        public K GetBlackboard<K>() where K : FSMBlackboard
+        {
+            if (this.BlackBoard is K bb)
+            {
+                return bb;
+            }
+            return null;
         }
 
         public void OnDestroy()

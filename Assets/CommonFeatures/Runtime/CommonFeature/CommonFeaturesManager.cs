@@ -7,6 +7,7 @@ using CommonFeatures.Log;
 using CommonFeatures.NetWork;
 using CommonFeatures.PSM;
 using CommonFeatures.Resource;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace CommonFeatures
@@ -127,7 +128,7 @@ namespace CommonFeatures
             }
             else
             {
-                GML.StartGame();
+                GML.StartGame().Forget();
             }
         }
 

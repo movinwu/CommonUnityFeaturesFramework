@@ -1,15 +1,15 @@
+using CommonFeatures.FSM;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using YooAsset;
 
-namespace CommonFeatures.Resource
+namespace CommonFeatures.GML
 {
     /// <summary>
-    /// 资源配置
+    /// 游戏主循环黑板数据
     /// </summary>
-    [CreateAssetMenu(menuName = "ScriptableObject/Resource", fileName = "ResourceConfig")]
-    public class ResourceConfig : ScriptableObject
+    internal class GameMainLoopBlackboard : FSMBlackboard
     {
         /// <summary>
         /// 游戏运行模式
@@ -25,5 +25,20 @@ namespace CommonFeatures.Resource
         /// 包名
         /// </summary>
         public string PackageName = "DefaultPackage";
+
+        /// <summary>
+        /// 资源包裹
+        /// </summary>
+        public ResourcePackage Package;
+
+        /// <summary>
+        /// 包版本
+        /// </summary>
+        public string PackageVersion;
+
+        /// <summary>
+        /// 资源下载操作
+        /// </summary>
+        public ResourceDownloaderOperation Downloader;
     }
 }
