@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,19 +12,26 @@ namespace CommonFeatures.UI
     {
         public override EUILayer Layer => EUILayer.Base;
 
-        public override void HideUI(UILayerContainerModel model)
+        /// <summary>
+        /// 热更新等进度条界面
+        /// </summary>
+        [SerializeField]
+        private UIPanel_Progress m_PanelProgress;
+
+        protected override void OnInit()
         {
-            throw new System.NotImplementedException();
+            m_PanelProgress.Init().Forget();
+            m_PanelProgress.Show().Forget();
         }
 
         public override void ShowUI(UILayerContainerModel model)
         {
-            throw new System.NotImplementedException();
+            
         }
 
-        protected override void OnInit()
+        public override void HideUI(UILayerContainerModel model)
         {
-            //TODO 初始化登录\热更加载等界面
+            
         }
     }
 }

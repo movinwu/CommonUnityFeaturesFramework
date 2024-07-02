@@ -5,9 +5,9 @@ using UnityEngine;
 namespace CommonFeatures.UI
 {
     /// <summary>
-    /// UI层级,层级数字对应Canvas下渲染顺序Sorting In Order的值
+    /// UI层级,枚举数字对应Canvas下渲染顺序Sorting In Order的值
     /// </summary>
-    public enum EUILayer : sbyte
+    public enum EUILayer : short
     {
         /// <summary>
         /// 基础层,用于放置进入游戏登录界面\热更新界面等固定界面(非热更)
