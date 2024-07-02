@@ -7,6 +7,7 @@ using CommonFeatures.Log;
 using CommonFeatures.NetWork;
 using CommonFeatures.PSM;
 using CommonFeatures.Resource;
+using CommonFeatures.UI;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -58,6 +59,11 @@ namespace CommonFeatures
         /// 资源管理
         /// </summary>
         public static CommonFeature_Resource Resource;
+
+        /// <summary>
+        /// UI
+        /// </summary>
+        public static CommonFeature_UI UI;
 
         /// <summary>
         /// 游戏主循环
@@ -118,6 +124,11 @@ namespace CommonFeatures
                 {
                     Event = child.GetComponent<CommonFeature_Event>();
                     Event.Init();
+                }
+                else if ("UI".Equals(child.name))
+                {
+                    UI = child.GetComponent<CommonFeature_UI>();
+                    UI.Init();
                 }
             }
 
