@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,7 +22,7 @@ namespace CommonFeatures.UI
             throw new System.NotImplementedException();
         }
 
-        protected override void OnInit()
+        protected override async UniTask OnInit()
         {
             
         }

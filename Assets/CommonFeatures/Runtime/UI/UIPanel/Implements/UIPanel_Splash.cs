@@ -5,9 +5,9 @@ using UnityEngine;
 namespace CommonFeatures.UI
 {
     /// <summary>
-    /// 进度条界面,基础层,显示热更下载等逻辑进度
+    /// 过渡界面，显示公司logo或者动画等
     /// </summary>
-    public class UIPanel_Progress : UIPanelBase
+    public class UIPanel_Splash : UIPanelBase
     {
         
     }

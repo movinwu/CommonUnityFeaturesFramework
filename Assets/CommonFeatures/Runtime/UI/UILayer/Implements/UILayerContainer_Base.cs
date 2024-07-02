@@ -18,10 +18,9 @@ namespace CommonFeatures.UI
         [SerializeField]
         private UIPanel_Progress m_PanelProgress;
 
-        protected override void OnInit()
+        protected override async UniTask OnInit()
         {
-            m_PanelProgress.Init().Forget();
-            m_PanelProgress.Show().Forget();
+            await m_PanelProgress.Init();
         }
 
         public override void ShowUI(UILayerContainerModel model)

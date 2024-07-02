@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,17 +21,17 @@ namespace CommonFeatures.UI
         /// </summary>
         protected Canvas m_Canvas;
 
-        public void Init()
+        public async UniTask Init()
         {
             m_Canvas = this.GetComponent<Canvas>();
             //初始化画布层级
             m_Canvas.overrideSorting = true;
             m_Canvas.sortingOrder = (int)Layer;
 
-            OnInit();
+            await OnInit();
         }
 
-        protected abstract void OnInit();
+        protected virtual async UniTask OnInit() { }
 
         /// <summary>
         /// 显示UI函数

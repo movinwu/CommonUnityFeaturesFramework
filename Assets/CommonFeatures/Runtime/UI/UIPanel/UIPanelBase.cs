@@ -90,9 +90,12 @@ namespace CommonFeatures.UI
                     var curRadio = curScreenSize.height / curScreenSize.width;//当前尺寸高度和宽度比值
                     size.y = size.y * curRadio / radio;//尺寸
 
-                    var pos = curScreenSize.center;//位置
-                    pos = pos * canvasScaler.referenceResolution.x / curScreenSize.width;
-                    pos = pos - size / 2;
+                    var scaler = canvasScaler.referenceResolution.x / curScreenSize.width;
+                    var up = (Screen.height - curScreenSize.yMax) * scaler;//上方间距
+                    var down = curScreenSize.yMin * scaler;//下方间距
+                    var left = curScreenSize.xMin * scaler;//左侧间距
+                    var right = (Screen.width - curScreenSize.xMax) * scaler;//右侧间距
+                    var pos = new Vector2(left - right, down - up);//位置
 
                     //屏幕尺寸修改
                     var rectTrans = this.GetComponent<RectTransform>();
