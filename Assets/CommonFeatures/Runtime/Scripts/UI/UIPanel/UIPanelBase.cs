@@ -24,7 +24,10 @@ namespace CommonFeatures.UI
             await OnInit();
         }
 
-        protected virtual async UniTask OnInit() { }
+        protected virtual UniTask OnInit() 
+        { 
+            return UniTask.CompletedTask;
+        }
 
         public async UniTask Show()
         {
@@ -34,7 +37,10 @@ namespace CommonFeatures.UI
             await OnShow();
         }
 
-        protected virtual async UniTask OnShow() { }
+        protected virtual UniTask OnShow()
+        {
+            return UniTask.CompletedTask;
+        }
 
         public void Hide()
         {

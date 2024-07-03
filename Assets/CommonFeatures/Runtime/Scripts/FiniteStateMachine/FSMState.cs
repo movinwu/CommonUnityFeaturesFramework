@@ -29,25 +29,25 @@ namespace CommonFeatures.FSM
         /// <summary>
         /// 初始化
         /// </summary>
-        public async virtual UniTask OnInit()
+        public virtual UniTask OnInit()
         {
-
+            return UniTask.CompletedTask;
         }
 
         /// <summary>
         /// 当进入状态机
         /// </summary>
-        public async virtual UniTask OnEnter()
+        public virtual UniTask OnEnter()
         {
-
+            return UniTask.CompletedTask;
         }
 
         /// <summary>
         /// 当离开状态机
         /// </summary>
-        public async virtual UniTask OnLeave()
+        public virtual UniTask OnLeave()
         {
-
+            return UniTask.CompletedTask;
         }
 
         /// <summary>

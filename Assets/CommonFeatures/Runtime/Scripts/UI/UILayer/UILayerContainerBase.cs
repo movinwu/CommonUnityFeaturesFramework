@@ -31,7 +31,10 @@ namespace CommonFeatures.UI
             await OnInit();
         }
 
-        protected virtual async UniTask OnInit() { }
+        protected virtual UniTask OnInit()
+        {
+            return UniTask.CompletedTask;
+        }
 
         /// <summary>
         /// ÏÔÊ¾UIº¯Êý

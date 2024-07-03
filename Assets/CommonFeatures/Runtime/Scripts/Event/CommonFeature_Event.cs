@@ -20,7 +20,6 @@ namespace CommonFeatures.Event
 			}
 		}
 
-		private GameObject _driver = null;
 		private readonly Dictionary<int, LinkedList<Action<IEventMessage>>> _listeners = new Dictionary<int, LinkedList<Action<IEventMessage>>>(1000);
 		private readonly List<PostWrapper> _postingList = new List<PostWrapper>(1000);
 

@@ -114,25 +114,25 @@ namespace CommonFeatures.PSM
         /// <summary>
         /// 初始化
         /// </summary>
-        protected virtual async UniTask OnInit()
+        protected virtual UniTask OnInit()
         {
-
+            return UniTask.CompletedTask;
         }
 
         /// <summary>
         /// 当进入状态机
         /// </summary>
-        protected virtual async UniTask OnEnter()
+        protected virtual UniTask OnEnter()
         {
-
+            return UniTask.CompletedTask;
         }
 
         /// <summary>
         /// 当离开状态机
         /// </summary>
-        protected virtual async UniTask OnLeave()
+        protected virtual UniTask OnLeave()
         {
-
+            return UniTask.CompletedTask;
         }
 
         /// <summary>

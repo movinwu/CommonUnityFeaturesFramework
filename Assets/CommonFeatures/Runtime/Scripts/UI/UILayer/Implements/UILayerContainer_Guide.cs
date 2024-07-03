@@ -22,9 +22,9 @@ namespace CommonFeatures.UI
             throw new System.NotImplementedException();
         }
 
-        protected override async UniTask OnInit()
+        protected override UniTask OnInit()
         {
-            
+            return UniTask.CompletedTask;
         }
     }
 }
