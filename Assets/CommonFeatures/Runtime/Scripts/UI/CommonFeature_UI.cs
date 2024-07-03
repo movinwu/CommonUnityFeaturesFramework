@@ -1,5 +1,6 @@
 using CommonFeatures;
 using CommonFeatures.Log;
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -57,7 +58,7 @@ namespace CommonFeatures.UI
 
             foreach (var layerContainer in m_LayerContainerDic.Values)
             {
-                layerContainer.Init();
+                layerContainer.Init().Forget();
             }
         }
 
