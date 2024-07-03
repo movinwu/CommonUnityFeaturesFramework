@@ -3,6 +3,7 @@ using CommonFeatures.DataTable;
 using CommonFeatures.Event;
 using CommonFeatures.FSM;
 using CommonFeatures.GML;
+using CommonFeatures.Localization;
 using CommonFeatures.Log;
 using CommonFeatures.NetWork;
 using CommonFeatures.PSM;
@@ -70,7 +71,17 @@ namespace CommonFeatures
         /// </summary>
         public static CommonFeature_GML GML;
 
+        /// <summary>
+        /// ±¾µØ»¯
+        /// </summary>
+        public static CommonFeature_Localization Localization;
+
         private void Awake()
+        {
+            AsyncAwake().Forget();
+        }
+
+        private async UniTask AsyncAwake()
         {
             if (string.IsNullOrEmpty(BelongGameObjectName))
             {
@@ -88,47 +99,52 @@ namespace CommonFeatures
                 if ("Config".Equals(child.name))
                 {
                     Config = child.GetComponent<CommonFeature_Config>();
-                    Config.Init();
+                    await Config.Init();
                 }
                 else if ("DataTable".Equals(child.name))
                 {
                     DataTable = child.GetComponent<CommonFeature_DataTable>();
-                    DataTable.Init();
+                    await DataTable.Init();
                 }
                 else if ("Net".Equals(child.name))
                 {
                     Network = child.GetComponent<CommonFeature_Network>();
-                    Network.Init();
+                    await Network.Init();
                 }
                 else if ("FSM".Equals(child.name))
                 {
                     FSM = child.GetComponent<CommonFeature_FSM>();
-                    FSM.Init();
+                    await FSM.Init();
                 }
                 else if ("PSM".Equals(child.name))
                 {
                     PSM = child.GetComponent<CommonFeature_PSM>();
-                    PSM.Init();
+                    await PSM.Init();
                 }
                 else if ("Resource".Equals(child.name))
                 {
                     Resource = child.GetComponent<CommonFeature_Resource>();
-                    Resource.Init();
+                    await Resource.Init();
                 }
                 else if ("GML".Equals(child.name))
                 {
                     GML = child.GetComponent<CommonFeature_GML>();
-                    GML.Init();
+                    await GML.Init();
                 }
                 else if ("Event".Equals(child.name))
                 {
                     Event = child.GetComponent<CommonFeature_Event>();
-                    Event.Init();
+                    await Event.Init();
                 }
                 else if ("UI".Equals(child.name))
                 {
                     UI = child.GetComponent<CommonFeature_UI>();
-                    UI.Init();
+                    await UI.Init();
+                }
+                else if ("Localization".Equals(child.name))
+                {
+                    Localization = child.GetComponent<CommonFeature_Localization>();
+                    await Localization.Init();
                 }
             }
 

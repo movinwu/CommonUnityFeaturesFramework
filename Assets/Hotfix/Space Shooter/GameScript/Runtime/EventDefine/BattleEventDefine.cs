@@ -19,6 +19,11 @@ public class BattleEventDefine
             msg.CurrentScores = currentScores;
             CommonFeaturesManager.Event.SendMessage(msg);
         }
+
+        public void Reset()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     /// <summary>
@@ -30,6 +35,11 @@ public class BattleEventDefine
         {
             var msg = new GameOver();
             CommonFeaturesManager.Event.SendMessage(msg);
+        }
+
+        public void Reset()
+        {
+            throw new System.NotImplementedException();
         }
     }
 
@@ -48,6 +58,11 @@ public class BattleEventDefine
             msg.Rotation = rotation;
             CommonFeaturesManager.Event.SendMessage(msg);
         }
+
+        public void Reset()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     /// <summary>
@@ -64,6 +79,11 @@ public class BattleEventDefine
             msg.Position = position;
             msg.Rotation = rotation;
             CommonFeaturesManager.Event.SendMessage(msg);
+        }
+
+        public void Reset()
+        {
+            throw new System.NotImplementedException();
         }
     }
 
@@ -82,6 +102,11 @@ public class BattleEventDefine
             msg.Rotation = rotation;
             CommonFeaturesManager.Event.SendMessage(msg);
         }
+
+        public void Reset()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     /// <summary>
@@ -99,6 +124,11 @@ public class BattleEventDefine
             msg.Rotation = rotation;
             CommonFeaturesManager.Event.SendMessage(msg);
         }
+
+        public void Reset()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     /// <summary>
@@ -115,6 +145,11 @@ public class BattleEventDefine
             msg.Position = position;
             msg.Rotation = rotation;
             CommonFeaturesManager.Event.SendMessage(msg);
+        }
+
+        public void Reset()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

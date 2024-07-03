@@ -10,6 +10,11 @@ public class SceneEventDefine
             var msg = new ChangeToHomeScene();
             CommonFeaturesManager.Event.SendMessage(msg);
         }
+
+        public void Reset()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     public class ChangeToBattleScene : IEventMessage
@@ -18,6 +23,11 @@ public class SceneEventDefine
         {
             var msg = new ChangeToBattleScene();
             CommonFeaturesManager.Event.SendMessage(msg);
+        }
+
+        public void Reset()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

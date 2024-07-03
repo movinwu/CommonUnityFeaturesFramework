@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,9 +15,9 @@ namespace CommonFeatures
         /// 初始化功能
         /// <para>替换生命周期函数Awake</para>
         /// </summary>
-        public virtual void Init()
+        public virtual UniTask Init()
         {
-
+            return UniTask.CompletedTask;
         }
 
         /// <summary>

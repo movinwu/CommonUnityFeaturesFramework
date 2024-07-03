@@ -13,6 +13,11 @@ public class UserEventDefine
             var msg = new UserTryInitialize();
             CommonFeaturesManager.Event.SendMessage(msg);
         }
+
+        public void Reset()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     /// <summary>
@@ -24,6 +29,11 @@ public class UserEventDefine
         {
             var msg = new UserBeginDownloadWebFiles();
             CommonFeaturesManager.Event.SendMessage(msg);
+        }
+
+        public void Reset()
+        {
+            throw new System.NotImplementedException();
         }
     }
 
@@ -37,6 +47,11 @@ public class UserEventDefine
             var msg = new UserTryUpdatePackageVersion();
             CommonFeaturesManager.Event.SendMessage(msg);
         }
+
+        public void Reset()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     /// <summary>
@@ -49,6 +64,11 @@ public class UserEventDefine
             var msg = new UserTryUpdatePatchManifest();
             CommonFeaturesManager.Event.SendMessage(msg);
         }
+
+        public void Reset()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     /// <summary>
@@ -60,6 +80,11 @@ public class UserEventDefine
         {
             var msg = new UserTryDownloadWebFiles();
             CommonFeaturesManager.Event.SendMessage(msg);
+        }
+
+        public void Reset()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

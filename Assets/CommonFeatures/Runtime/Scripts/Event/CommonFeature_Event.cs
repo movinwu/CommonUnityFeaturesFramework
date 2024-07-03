@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CommonFeatures.Pool;
+using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,26 +8,26 @@ namespace CommonFeatures.Event
 {
     public class CommonFeature_Event : CommonFeature
 	{
-		private class PostWrapper
+		private class PostWrapper : IReference
 		{
 			public int PostFrame;
 			public int EventID;
 			public IEventMessage Message;
 
-			public void OnRelease()
-			{
+            public void Reset()
+            {
 				PostFrame = 0;
 				EventID = 0;
 				Message = null;
 			}
-		}
+        }
 
 		private readonly Dictionary<int, LinkedList<Action<IEventMessage>>> _listeners = new Dictionary<int, LinkedList<Action<IEventMessage>>>(1000);
 		private readonly List<PostWrapper> _postingList = new List<PostWrapper>(1000);
 
-        public override void Init()
+        public override UniTask Init()
         {
-			base.Init();
+			return base.Init();
 		}
 
         public override void Release()
@@ -47,6 +49,9 @@ namespace CommonFeatures.Event
 				{
 					SendMessage(wrapper.EventID, wrapper.Message);
 					_postingList.RemoveAt(i);
+
+					ReferencePool.Back(wrapper.Message);
+					ReferencePool.Back(wrapper);
 				}
 			}
 		}
@@ -154,6 +159,9 @@ namespace CommonFeatures.Event
 					currentNode = currentNode.Previous;
 				}
 			}
+
+			//广播完成后放回事件
+			ReferencePool.Back(message);
 		}
 
 		/// <summary>
@@ -170,7 +178,7 @@ namespace CommonFeatures.Event
 		/// </summary>
 		public void PostMessage(int eventId, IEventMessage message)
 		{
-			var wrapper = new PostWrapper();
+			var wrapper = ReferencePool.Acquire<PostWrapper>();
 			wrapper.PostFrame = UnityEngine.Time.frameCount;
 			wrapper.EventID = eventId;
 			wrapper.Message = message;

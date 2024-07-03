@@ -24,10 +24,8 @@ namespace CommonFeatures.UI
         /// </summary>
         private UILayerContainerModel m_Model;
 
-        public override void Init()
+        public override async UniTask Init()
         {
-            base.Init();
-
             m_Model = new UILayerContainerModel();
 
             m_LayerContainerDic.Clear();
@@ -58,7 +56,7 @@ namespace CommonFeatures.UI
 
             foreach (var layerContainer in m_LayerContainerDic.Values)
             {
-                layerContainer.Init().Forget();
+                await layerContainer.Init();
             }
         }
 

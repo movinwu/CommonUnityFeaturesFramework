@@ -1,7 +1,9 @@
 ﻿
+using CommonFeatures.Pool;
+
 namespace CommonFeatures.Event
 {
-	public interface IEventMessage
+	public interface IEventMessage : IReference
 	{
 	}
 }

@@ -1,4 +1,5 @@
 using CommonFeatures.Log;
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace CommonFeatures.Config
         [SerializeField]
         private List<ScriptableObject> m_AllConfigList;
 
-        public override void Init()
+        public override UniTask Init()
         {
             m_AllConfigAsset.Clear();
             if (null != m_AllConfigList)
@@ -37,6 +38,7 @@ namespace CommonFeatures.Config
                     }
                 });
             }
+            return base.Init();
         }
 
         public override void Release()
@@ -70,7 +72,7 @@ namespace CommonFeatures.Config
 
 #if UNITY_EDITOR
 
-        private const string CONFIG_ASSET_PATH = "Assets/CommonFeatures/Runtime/Config/ConfigObjects/";
+        private const string CONFIG_ASSET_PATH = "Assets/CommonFeatures/Runtime/Res/Config/";
 
         /// <summary>
         /// º”‘ÿ≈‰÷√Œƒº˛

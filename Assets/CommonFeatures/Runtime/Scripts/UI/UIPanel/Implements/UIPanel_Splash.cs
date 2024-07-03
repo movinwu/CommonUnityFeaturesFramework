@@ -1,3 +1,4 @@
+using CommonFeatures.Config;
 using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,11 +14,11 @@ namespace CommonFeatures.UI
     {
         [SerializeField] private TMP_Text m_Text;
 
-        protected override async UniTask OnInit()
+        protected override UniTask OnInit()
         {
-            await base.OnInit();
-            
-            
+            m_Text.text = $"{CommonFeaturesManager.Localization.GetMainLocalization("splash_welcome")}\n{string.Format(CommonFeaturesManager.Localization.GetMainLocalization("splash_version_header"), CommonFeaturesManager.Config.GetConfig<ApplicationConfig>().FullVersion)}";
+
+            return base.OnInit();
         }
     }
 }

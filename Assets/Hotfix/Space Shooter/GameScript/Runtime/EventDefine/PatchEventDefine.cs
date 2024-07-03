@@ -13,6 +13,11 @@ public class PatchEventDefine
             var msg = new InitializeFailed();
             CommonFeaturesManager.Event.SendMessage(msg);
         }
+
+        public void Reset()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     /// <summary>
@@ -27,6 +32,11 @@ public class PatchEventDefine
             var msg = new PatchStatesChange();
             msg.Tips = tips;
             CommonFeaturesManager.Event.SendMessage(msg);
+        }
+
+        public void Reset()
+        {
+            throw new System.NotImplementedException();
         }
     }
 
@@ -44,6 +54,11 @@ public class PatchEventDefine
             msg.TotalCount = totalCount;
             msg.TotalSizeBytes = totalSizeBytes;
             CommonFeaturesManager.Event.SendMessage(msg);
+        }
+
+        public void Reset()
+        {
+            throw new System.NotImplementedException();
         }
     }
 
@@ -66,6 +81,11 @@ public class PatchEventDefine
             msg.CurrentDownloadSizeBytes = currentDownloadSizeBytes;
             CommonFeaturesManager.Event.SendMessage(msg);
         }
+
+        public void Reset()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     /// <summary>
@@ -78,6 +98,11 @@ public class PatchEventDefine
             var msg = new PackageVersionUpdateFailed();
             CommonFeaturesManager.Event.SendMessage(msg);
         }
+
+        public void Reset()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     /// <summary>
@@ -89,6 +114,11 @@ public class PatchEventDefine
         {
             var msg = new PatchManifestUpdateFailed();
             CommonFeaturesManager.Event.SendMessage(msg);
+        }
+
+        public void Reset()
+        {
+            throw new System.NotImplementedException();
         }
     }
 
@@ -106,6 +136,11 @@ public class PatchEventDefine
             msg.FileName = fileName;
             msg.Error = error;
             CommonFeaturesManager.Event.SendMessage(msg);
+        }
+
+        public void Reset()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

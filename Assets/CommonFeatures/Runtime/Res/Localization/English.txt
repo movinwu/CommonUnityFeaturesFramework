@@ -1,0 +1,3 @@
+[config]
+splash_welcome=Welcome
+splash_version_header=Version:{0}

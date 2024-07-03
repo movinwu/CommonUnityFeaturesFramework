@@ -33,7 +33,7 @@ namespace CommonFeatures.Resource
         private const string ALL_FLAG = "all";
         private const string OBJECT_FLAG = "object";
 
-        public override void Init()
+        public override UniTask Init()
         {
             m_AllResourcePackagePacker = new List<ResourcePackage>();
             m_AllResourceHandle = new Dictionary<ResourceHandleBasePacker, HashSet<IResourceUser>>();
@@ -41,6 +41,8 @@ namespace CommonFeatures.Resource
 
             //初始化资源系统
             YooAssets.Initialize();
+
+            return base.Init();
         }
 
         /// <summary>

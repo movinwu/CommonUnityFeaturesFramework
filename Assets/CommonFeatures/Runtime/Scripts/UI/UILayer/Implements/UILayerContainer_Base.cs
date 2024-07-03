@@ -18,11 +18,15 @@ namespace CommonFeatures.UI
         [SerializeField]
         private UIPanel_Progress m_PanelProgress;
 
+        /// <summary>
+        /// ¹ý¶É½çÃæ
+        /// </summary>
         [SerializeField]
         private UIPanel_Splash m_PanelSplash;
 
         protected override async UniTask OnInit()
         {
+            await m_PanelSplash.Init();
             await m_PanelProgress.Init();
         }
 
