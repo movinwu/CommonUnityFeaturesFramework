@@ -1,3 +1,5 @@
+using CommonFeatures.Localization;
+using CommonFeatures.Utility;
 using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
@@ -29,6 +31,13 @@ namespace CommonFeatures.UI
             PanelFit().Forget();
             this.gameObject.SetActive(true);
 
+            //遍历找到所有的自动化多语言组件
+            var autoLocalizations = this.transform.FindComponents<AutoLocalization>();
+            for (int i = 0; i < autoLocalizations.Count; i++)
+            {
+                autoLocalizations[i].OnShow();
+            }
+
             await OnShow();
         }
 
@@ -40,6 +49,13 @@ namespace CommonFeatures.UI
         public void Hide()
         {
             this.gameObject.SetActive(false);
+
+            //遍历找到所有的自动化多语言组件
+            var autoLocalizations = this.transform.FindComponents<AutoLocalization>();
+            for (int i = 0; i < autoLocalizations.Count; i++)
+            {
+                autoLocalizations[i].OnHide();
+            }
 
             OnHide();
         }

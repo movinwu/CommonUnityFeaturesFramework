@@ -16,7 +16,7 @@ namespace CommonFeatures.Utility
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static string StandardBackslash(string str)
+        public static string StandardBackslash(this string str)
         {
             if (str.Contains('\\'))
             {

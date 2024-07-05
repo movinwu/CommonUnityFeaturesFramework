@@ -33,13 +33,13 @@ namespace CommonFeatures.Localization
         /// </summary>
         private bool m_IsDirty;
 
-        private void OnEnable()
+        public void OnShow()
         {
             this.m_IsDirty = true;
             CommonFeaturesManager.Event.AddListener<LocalizationEvent>(OnLocalizationChange);
         }
 
-        private void OnDisable()
+        public void OnHide()
         {
             this.m_IsDirty = false;
             CommonFeaturesManager.Event.RemoveListener<LocalizationEvent>(OnLocalizationChange);
