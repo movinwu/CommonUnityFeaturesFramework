@@ -1,5 +1,6 @@
 using CommonFeatures.Log;
 using CommonFeatures.Pool;
+using CommonFeatures.Utility;
 using Cysharp.Threading.Tasks;
 using INIParser;
 using System;
@@ -74,7 +75,8 @@ namespace CommonFeatures.Localization
                             for (int k = 0; k < data.Sections[j].Properties.Count; k++)
                             {
                                 var property = data.Sections[j].Properties[k];
-                                localizationData.Add(property.Key, property.Value);
+                                //反斜杠会被识别为字符,为其添加上一个反斜杠,配置时应配置双反斜杠,方便替换
+                                localizationData.Add(StringUtility.StandardBackslash(property.Key), StringUtility.StandardBackslash(property.Value));
                             }
                         }
 

@@ -11,7 +11,10 @@ namespace CommonFeatures.UI
     public class UILayerContainerModel
     {
         #region 基础层
-
+        /// <summary>
+        /// 基础层显示UI类型
+        /// </summary>
+        public EBaseLayerUIType BaseLayerUIType { get; set; }
         #endregion
 
         #region 浮动层

@@ -1,3 +1,4 @@
+using CommonFeatures.Utility;
 using LitJson;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace CommonFeatures.DataTable
     {
         public override void SetData(string data)
         {
-            this.m_Data = data;
+            this.m_Data = StringUtility.StandardBackslash(data);
         }
 
         public override void WriteByte(BinaryWriter binaryWriter)

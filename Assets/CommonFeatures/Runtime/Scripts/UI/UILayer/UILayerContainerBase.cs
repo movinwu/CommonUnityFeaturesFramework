@@ -40,12 +40,18 @@ namespace CommonFeatures.UI
         /// 显示UI函数
         /// </summary>
         /// <param name="model"></param>
-        public abstract void ShowUI(UILayerContainerModel model);
+        public virtual UniTask ShowUI(UILayerContainerModel model)
+        {
+            return UniTask.CompletedTask;
+        }
 
         /// <summary>
         /// 关闭UI函数
         /// </summary>
         /// <param name="model"></param>
-        public abstract void HideUI(UILayerContainerModel model);
+        public virtual void HideUI(UILayerContainerModel model)
+        {
+
+        }
     }
 }

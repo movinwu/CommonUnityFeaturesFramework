@@ -39,6 +39,9 @@ namespace CommonFeatures.GML
             blackboard.PackageName = config.PackageName;
             blackboard.PlayMode = config.PlayMode;
             m_FSM.BlackBoard = blackboard;
+
+            //显示加载界面
+            await CommonFeaturesManager.UI.ShowBaseUI(UI.EBaseLayerUIType.Splash);
             
             //开始初始化包
             await m_FSM.StartFSM<FSMState_GML_InitializePackage>();

@@ -1,3 +1,2 @@
 [config]
-splash_welcome=欢迎使用
-splash_version_header=版本号:{0}
+splash_welcome=欢迎使用\r\n版本号:{0}

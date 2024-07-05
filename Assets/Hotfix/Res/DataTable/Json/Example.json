@@ -6,7 +6,7 @@
         "short_example" : 10000,
         "int_example"   : 1000000,
         "long_example"  : 10000000000,
-        "string_example" : "\u793A\u4F8B\u5B57\u7B26\u4E321",
+        "string_example" : "test\r\nttt",
         "bool_example"   : true,
         "float_example"  : 3.14100003242493,
         "double_example" : 3.14159265,

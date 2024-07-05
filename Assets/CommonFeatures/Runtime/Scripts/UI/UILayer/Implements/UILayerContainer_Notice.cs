@@ -11,20 +11,5 @@ namespace CommonFeatures.UI
     public class UILayerContainer_Notice : UILayerContainerBase
     {
         public override EUILayer Layer => EUILayer.Notice;
-
-        public override void HideUI(UILayerContainerModel model)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void ShowUI(UILayerContainerModel model)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        protected override UniTask OnInit()
-        {
-            return UniTask.CompletedTask;
-        }
     }
 }

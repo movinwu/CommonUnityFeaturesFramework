@@ -12,14 +12,9 @@ namespace CommonFeatures.UI
     /// </summary>
     public class UIPanelBase : MonoBehaviour
     {
-        /// <summary>
-        /// 是否正在显示
-        /// </summary>
-        private bool m_Showing;
-
         public async UniTask Init()
         {
-            m_Showing = false;
+            this.gameObject.SetActive(false);
 
             await OnInit();
         }
@@ -31,8 +26,8 @@ namespace CommonFeatures.UI
 
         public async UniTask Show()
         {
-            m_Showing = true;
             PanelFit().Forget();
+            this.gameObject.SetActive(true);
 
             await OnShow();
         }
@@ -44,7 +39,7 @@ namespace CommonFeatures.UI
 
         public void Hide()
         {
-            m_Showing = false;
+            this.gameObject.SetActive(false);
 
             OnHide();
         }
@@ -53,8 +48,6 @@ namespace CommonFeatures.UI
 
         public void Release()
         {
-            m_Showing = false;
-
             OnRelease();
         }
 
@@ -66,7 +59,7 @@ namespace CommonFeatures.UI
         private async UniTask PanelFit()
         {
             var preScreenSize = Rect.zero;//缓存的上一帧屏幕尺寸
-            while (m_Showing)
+            while (this.gameObject.activeInHierarchy)
             {
                 //当屏幕适配所需参数发生变化时
                 var curScreenSize = Screen.safeArea;//适配safeArea

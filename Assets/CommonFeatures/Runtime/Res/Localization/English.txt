@@ -1,3 +1,2 @@
 [config]
-splash_welcome=Welcome
-splash_version_header=Version:{0}
+splash_welcome=Welcome\r\nVersion:{0}

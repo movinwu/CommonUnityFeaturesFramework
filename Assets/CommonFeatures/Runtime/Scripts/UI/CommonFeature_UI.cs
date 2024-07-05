@@ -73,5 +73,23 @@ namespace CommonFeatures.UI
             }
             return null;
         }
+
+        /// <summary>
+        /// 显示基础UI
+        /// </summary>
+        /// <param name="uiType"></param>
+        public async UniTask ShowBaseUI(EBaseLayerUIType uiType)
+        {
+            m_Model.BaseLayerUIType = uiType;
+            await GetLayerContainer(EUILayer.Base).ShowUI(m_Model);
+        }
+
+        /// <summary>
+        /// 隐藏当前的基础UI
+        /// </summary>
+        public void HideBaseUI()
+        {
+            GetLayerContainer(EUILayer.Base).HideUI(m_Model);
+        }
     }
 }

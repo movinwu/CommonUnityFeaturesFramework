@@ -312,6 +312,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1001842012377604097, guid: 013ccfecebc398b4db13c722254f0868, type: 3}
+      propertyPath: m_isRichText
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1879442203657672772, guid: 013ccfecebc398b4db13c722254f0868, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -359,6 +363,10 @@ PrefabInstance:
     - target: {fileID: 1879442203657672774, guid: 013ccfecebc398b4db13c722254f0868, type: 3}
       propertyPath: m_Name
       value: CommonFeatures
+      objectReference: {fileID: 0}
+    - target: {fileID: 2112987922953107818, guid: 013ccfecebc398b4db13c722254f0868, type: 3}
+      propertyPath: _CurLanguage
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4255743754859647707, guid: 013ccfecebc398b4db13c722254f0868, type: 3}
       propertyPath: m_AnchorMax.x

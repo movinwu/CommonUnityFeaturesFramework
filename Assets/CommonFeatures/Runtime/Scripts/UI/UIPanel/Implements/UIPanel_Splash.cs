@@ -1,4 +1,5 @@
 using CommonFeatures.Config;
+using CommonFeatures.Localization;
 using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,13 +13,13 @@ namespace CommonFeatures.UI
     /// </summary>
     public class UIPanel_Splash : UIPanelBase
     {
-        [SerializeField] private TMP_Text m_Text;
+        [SerializeField] private AutoLocalization m_Text;
 
-        protected override UniTask OnInit()
+        protected override UniTask OnShow()
         {
-            m_Text.text = $"{CommonFeaturesManager.Localization.GetMainLocalization("splash_welcome")}\n{string.Format(CommonFeaturesManager.Localization.GetMainLocalization("splash_version_header"), CommonFeaturesManager.Config.GetConfig<ApplicationConfig>().FullVersion)}";
+            m_Text.AddLocalizationFormat(CommonFeaturesManager.Config.GetConfig<ApplicationConfig>().FullVersion);
 
-            return base.OnInit();
+            return base.OnShow();
         }
     }
 }
