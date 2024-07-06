@@ -11,5 +11,10 @@ namespace CommonFeatures.UI
     public class UILayerContainer_Loading : UILayerContainerBase
     {
         public override EUILayer Layer => EUILayer.Loading;
+
+        public override UniTask LayerContainerScreenFit()
+        {
+            return UniTask.CompletedTask;
+        }
     }
 }

@@ -78,6 +78,14 @@ namespace CommonFeatures.UI
             }
             m_CurShowUIType = EBaseLayerUIType.None;
         }
+
+        public override async UniTask LayerContainerScreenFit()
+        {
+            if (m_AllPanelDic.ContainsKey(m_CurShowUIType))
+            {
+                await m_AllPanelDic[m_CurShowUIType].PanelScreenFit();
+            }
+        }
     }
 
     /// <summary>

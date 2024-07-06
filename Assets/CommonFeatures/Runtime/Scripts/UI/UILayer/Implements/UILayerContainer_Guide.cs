@@ -11,5 +11,10 @@ namespace CommonFeatures.UI
     public class UILayerContainer_Guide : UILayerContainerBase
     {
         public override EUILayer Layer => EUILayer.Guide;
+
+        public override UniTask LayerContainerScreenFit()
+        {
+            return UniTask.CompletedTask;
+        }
     }
 }

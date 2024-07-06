@@ -11,5 +11,10 @@ namespace CommonFeatures.UI
     public class UILayerContainer_Mask : UILayerContainerBase
     {
         public override EUILayer Layer => EUILayer.Mask;
+
+        public override UniTask LayerContainerScreenFit()
+        {
+            return UniTask.CompletedTask;
+        }
     }
 }

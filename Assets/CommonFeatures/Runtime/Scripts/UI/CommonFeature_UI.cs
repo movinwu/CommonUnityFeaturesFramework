@@ -58,6 +58,8 @@ namespace CommonFeatures.UI
             {
                 await layerContainer.Init();
             }
+
+            ListenScreenSizeChange().Forget();
         }
 
         /// <summary>
@@ -90,6 +92,29 @@ namespace CommonFeatures.UI
         public void HideBaseUI()
         {
             GetLayerContainer(EUILayer.Base).HideUI(m_Model);
+        }
+
+        /// <summary>
+        /// 监听屏幕变化
+        /// </summary>
+        /// <returns></returns>
+        private async UniTask ListenScreenSizeChange()
+        {
+            var preScreenRect = Rect.zero;
+            while (true)
+            {
+                var curScreenRect = Screen.safeArea;
+                if (preScreenRect != curScreenRect)
+                {
+                    //遍历所有界面容器
+                    foreach (var container in m_LayerContainerDic.Values)
+                    {
+                        await container.LayerContainerScreenFit();
+                    }
+                }
+
+                await UniTask.Yield();
+            }
         }
     }
 }

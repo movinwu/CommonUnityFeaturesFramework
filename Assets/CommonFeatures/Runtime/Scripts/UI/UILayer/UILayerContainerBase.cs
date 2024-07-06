@@ -53,5 +53,11 @@ namespace CommonFeatures.UI
         {
 
         }
+
+        /// <summary>
+        /// ÆÁÄ»ÊÊÅä
+        /// </summary>
+        /// <returns></returns>
+        public abstract UniTask LayerContainerScreenFit();
     }
 }

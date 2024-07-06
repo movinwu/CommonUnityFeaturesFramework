@@ -11,5 +11,10 @@ namespace CommonFeatures.UI
     public class UILayerContainer_Float : UILayerContainerBase
     {
         public override EUILayer Layer => EUILayer.Float;
+
+        public override UniTask LayerContainerScreenFit()
+        {
+            return UniTask.CompletedTask;
+        }
     }
 }

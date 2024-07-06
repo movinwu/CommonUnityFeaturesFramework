@@ -11,5 +11,10 @@ namespace CommonFeatures.UI
     public class UILayerContainer_Tip : UILayerContainerBase
     {
         public override EUILayer Layer => EUILayer.Tip;
+
+        public override UniTask LayerContainerScreenFit()
+        {
+            return UniTask.CompletedTask;
+        }
     }
 }

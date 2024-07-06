@@ -11,5 +11,10 @@ namespace CommonFeatures.UI
     public class UILayerContainer_Debug : UILayerContainerBase
     {
         public override EUILayer Layer => EUILayer.Debug;
+
+        public override UniTask LayerContainerScreenFit()
+        {
+            return UniTask.CompletedTask;
+        }
     }
 }

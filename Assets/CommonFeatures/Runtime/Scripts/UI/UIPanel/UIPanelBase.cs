@@ -28,7 +28,7 @@ namespace CommonFeatures.UI
 
         public async UniTask Show()
         {
-            PanelFit().Forget();
+            PanelScreenFit().Forget();
             this.gameObject.SetActive(true);
 
             //遍历找到所有的自动化多语言组件
@@ -72,58 +72,46 @@ namespace CommonFeatures.UI
         /// <summary>
         /// 界面适配
         /// </summary>
-        private async UniTask PanelFit()
+        public UniTask PanelScreenFit()
         {
-            var preScreenSize = Rect.zero;//缓存的上一帧屏幕尺寸
-            while (this.gameObject.activeInHierarchy)
+            var curScreenSize = Screen.safeArea;//适配safeArea//预设尺寸
+            var canvasScaler = this.transform.parent.parent.GetComponent<CanvasScaler>();
+
+            //采用Scale With Screen Size方案
+            if (canvasScaler.uiScaleMode != CanvasScaler.ScaleMode.ScaleWithScreenSize)
             {
-                //当屏幕适配所需参数发生变化时
-                var curScreenSize = Screen.safeArea;//适配safeArea
-                if (!preScreenSize.Equals(curScreenSize))
-                {
-                    preScreenSize = curScreenSize;
-
-                    //预设尺寸
-                    var canvasScaler = this.transform.parent.parent.GetComponent<CanvasScaler>();
-
-                    //采用Scale With Screen Size方案
-                    if (canvasScaler.uiScaleMode != CanvasScaler.ScaleMode.ScaleWithScreenSize)
-                    {
-                        canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-                        //默认1080 * 1920,实际情况下应该预先设置为界面制作实际尺寸
-                        canvasScaler.referenceResolution = new Vector2(1080f, 1920f);
-                    }
-
-                    //固定适配权重
-                    if (canvasScaler.matchWidthOrHeight != 0)
-                    {
-                        canvasScaler.matchWidthOrHeight = 0;
-                    }
-
-                    var size = canvasScaler.referenceResolution;
-                    var radio = size.y / size.x;//预设尺寸高度和宽度比值
-                    var curRadio = curScreenSize.height / curScreenSize.width;//当前尺寸高度和宽度比值
-                    size.y = size.y * curRadio / radio;//尺寸
-
-                    var scaler = canvasScaler.referenceResolution.x / curScreenSize.width;
-                    var up = (Screen.height - curScreenSize.yMax) * scaler;//上方间距
-                    var down = curScreenSize.yMin * scaler;//下方间距
-                    var left = curScreenSize.xMin * scaler;//左侧间距
-                    var right = (Screen.width - curScreenSize.xMax) * scaler;//右侧间距
-                    var pos = new Vector2(left - right, down - up);//位置
-
-                    //屏幕尺寸修改
-                    var rectTrans = this.GetComponent<RectTransform>();
-                    rectTrans.anchorMin = Vector2.one * 0.5f;
-                    rectTrans.anchorMax = Vector2.one * 0.5f;
-                    rectTrans.pivot = Vector2.one * 0.5f;
-                    rectTrans.sizeDelta = size;
-                    rectTrans.anchoredPosition = pos;
-                }
-
-                //等待下一帧运行
-                await UniTask.NextFrame(PlayerLoopTiming.PreLateUpdate);
+                canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+                //默认1080 * 1920,实际情况下应该预先设置为界面制作实际尺寸
+                canvasScaler.referenceResolution = new Vector2(1080f, 1920f);
             }
+
+            //固定适配权重
+            if (canvasScaler.matchWidthOrHeight != 0)
+            {
+                canvasScaler.matchWidthOrHeight = 0;
+            }
+
+            var size = canvasScaler.referenceResolution;
+            var radio = size.y / size.x;//预设尺寸高度和宽度比值
+            var curRadio = curScreenSize.height / curScreenSize.width;//当前尺寸高度和宽度比值
+            size.y = size.y * curRadio / radio;//尺寸
+
+            var scaler = canvasScaler.referenceResolution.x / curScreenSize.width;
+            var up = (Screen.height - curScreenSize.yMax) * scaler;//上方间距
+            var down = curScreenSize.yMin * scaler;//下方间距
+            var left = curScreenSize.xMin * scaler;//左侧间距
+            var right = (Screen.width - curScreenSize.xMax) * scaler;//右侧间距
+            var pos = new Vector2(left - right, down - up);//位置
+
+            //屏幕尺寸修改
+            var rectTrans = this.GetComponent<RectTransform>();
+            rectTrans.anchorMin = Vector2.one * 0.5f;
+            rectTrans.anchorMax = Vector2.one * 0.5f;
+            rectTrans.pivot = Vector2.one * 0.5f;
+            rectTrans.sizeDelta = size;
+            rectTrans.anchoredPosition = pos;
+
+            return UniTask.CompletedTask;
         }
     }
 }
