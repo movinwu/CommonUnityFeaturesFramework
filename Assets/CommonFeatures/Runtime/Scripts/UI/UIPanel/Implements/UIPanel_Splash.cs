@@ -15,11 +15,14 @@ namespace CommonFeatures.UI
     {
         [SerializeField] private AutoLocalization m_Text;
 
-        protected override UniTask OnShow()
+        protected override async UniTask OnShow()
         {
             m_Text.AddLocalizationFormat(CommonFeaturesManager.Config.GetConfig<ApplicationConfig>().FullVersion);
 
-            return base.OnShow();
+            //splashΩÁ√ÊÕ£¡Ù2s
+            await UniTask.Delay(2000);
+
+            await base.OnShow();
         }
     }
 }

@@ -28,7 +28,7 @@ namespace CommonFeatures.UI
 
         public async UniTask Show()
         {
-            PanelScreenFit().Forget();
+            PanelScreenFit(CommonFeaturesManager.UI.GetCanvasReferenceResolution()).Forget();
             this.gameObject.SetActive(true);
 
             //遍历找到所有的自动化多语言组件
@@ -72,31 +72,17 @@ namespace CommonFeatures.UI
         /// <summary>
         /// 界面适配
         /// </summary>
-        public UniTask PanelScreenFit()
+        /// <param name="referenceResolution">预设尺寸</param>
+        public UniTask PanelScreenFit(Vector2 referenceResolution)
         {
             var curScreenSize = Screen.safeArea;//适配safeArea//预设尺寸
-            var canvasScaler = this.transform.parent.parent.GetComponent<CanvasScaler>();
 
-            //采用Scale With Screen Size方案
-            if (canvasScaler.uiScaleMode != CanvasScaler.ScaleMode.ScaleWithScreenSize)
-            {
-                canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-                //默认1080 * 1920,实际情况下应该预先设置为界面制作实际尺寸
-                canvasScaler.referenceResolution = new Vector2(1080f, 1920f);
-            }
-
-            //固定适配权重
-            if (canvasScaler.matchWidthOrHeight != 0)
-            {
-                canvasScaler.matchWidthOrHeight = 0;
-            }
-
-            var size = canvasScaler.referenceResolution;
+            var size = referenceResolution;
             var radio = size.y / size.x;//预设尺寸高度和宽度比值
             var curRadio = curScreenSize.height / curScreenSize.width;//当前尺寸高度和宽度比值
             size.y = size.y * curRadio / radio;//尺寸
 
-            var scaler = canvasScaler.referenceResolution.x / curScreenSize.width;
+            var scaler = referenceResolution.x / curScreenSize.width;
             var up = (Screen.height - curScreenSize.yMax) * scaler;//上方间距
             var down = curScreenSize.yMin * scaler;//下方间距
             var left = curScreenSize.xMin * scaler;//左侧间距

@@ -36,15 +36,18 @@ namespace CommonFeatures.UI
 
         protected override async UniTask OnInit()
         {
-            await m_PanelSplash.Init();
-            await m_PanelProgress.Init();
+            var panelSplash = GameObject.Instantiate(m_PanelSplash.gameObject, this.transform).GetComponent<UIPanel_Splash>();
+            var panelProgress = GameObject.Instantiate(m_PanelProgress.gameObject, this.transform).GetComponent<UIPanel_Progress>();
+
+            await panelSplash.Init();
+            await panelProgress.Init();
 
             m_CurShowUIType = EBaseLayerUIType.None;
 
             //添加类型和界面对应情况
             m_AllPanelDic.Clear();
-            m_AllPanelDic.Add(EBaseLayerUIType.Splash, m_PanelSplash);
-            m_AllPanelDic.Add(EBaseLayerUIType.Progress, m_PanelProgress);
+            m_AllPanelDic.Add(EBaseLayerUIType.Splash, panelSplash);
+            m_AllPanelDic.Add(EBaseLayerUIType.Progress, panelProgress);
             //隐藏所有界面
             foreach (var panel in m_AllPanelDic.Values)
             {
@@ -79,11 +82,11 @@ namespace CommonFeatures.UI
             m_CurShowUIType = EBaseLayerUIType.None;
         }
 
-        public override async UniTask LayerContainerScreenFit()
+        public override async UniTask LayerContainerScreenFit(Vector2 referenceResolution)
         {
             if (m_AllPanelDic.ContainsKey(m_CurShowUIType))
             {
-                await m_AllPanelDic[m_CurShowUIType].PanelScreenFit();
+                await m_AllPanelDic[m_CurShowUIType].PanelScreenFit(referenceResolution);
             }
         }
     }

@@ -514,6 +514,10 @@ MonoBehaviour:
     m_GlyphIndex: 3
     m_Scale: 1
   - m_ElementType: 1
+    m_Unicode: 13
+    m_GlyphIndex: 3
+    m_Scale: 1
+  - m_ElementType: 1
     m_Unicode: 32
     m_GlyphIndex: 4
     m_Scale: 1
@@ -632,10 +636,6 @@ MonoBehaviour:
   - m_ElementType: 1
     m_Unicode: 36827
     m_GlyphIndex: 17937
-    m_Scale: 1
-  - m_ElementType: 1
-    m_Unicode: 13
-    m_GlyphIndex: 3
     m_Scale: 1
   m_AtlasTextures:
   - {fileID: 7454226073229677439}
@@ -1064,7 +1064,7 @@ Texture2D:
   m_MipsStripped: 0
   m_TextureFormat: 1
   m_MipCount: 1
-  m_IsReadable: 0
+  m_IsReadable: 1
   m_IsPreProcessed: 0
   m_IgnoreMasterTextureLimit: 0
   m_StreamingMipmaps: 0

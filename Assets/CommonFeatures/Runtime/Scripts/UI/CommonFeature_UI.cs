@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace CommonFeatures.UI
 {
@@ -13,6 +14,10 @@ namespace CommonFeatures.UI
     public class CommonFeature_UI : CommonFeature
     {
         [SerializeField] private UILayerContainerBase[] m_LayerContainers;
+
+        [SerializeField] private CanvasScaler m_CanvasScaler;
+
+        [SerializeField] private Vector2 m_CanvasReferenceResolution;
 
         /// <summary>
         /// 所有层级容器
@@ -106,15 +111,46 @@ namespace CommonFeatures.UI
                 var curScreenRect = Screen.safeArea;
                 if (preScreenRect != curScreenRect)
                 {
+                    preScreenRect = curScreenRect;
+
+                    var referenceResolution = GetCanvasReferenceResolution();
+
                     //遍历所有界面容器
                     foreach (var container in m_LayerContainerDic.Values)
                     {
-                        await container.LayerContainerScreenFit();
+                        await container.LayerContainerScreenFit(referenceResolution);
                     }
                 }
 
                 await UniTask.Yield();
             }
+        }
+
+        /// <summary>
+        /// 获取屏幕定义分辨率
+        /// </summary>
+        /// <returns></returns>
+        public Vector2 GetCanvasReferenceResolution()
+        {
+            //采用Scale With Screen Size方案
+            if (m_CanvasScaler.uiScaleMode != CanvasScaler.ScaleMode.ScaleWithScreenSize)
+            {
+                m_CanvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            }
+
+            //设置屏幕分辨率
+            if (!m_CanvasScaler.referenceResolution.Equals(m_CanvasReferenceResolution))
+            {
+                m_CanvasScaler.referenceResolution = m_CanvasReferenceResolution;
+            }
+
+            //固定适配权重
+            if (m_CanvasScaler.matchWidthOrHeight != 0)
+            {
+                m_CanvasScaler.matchWidthOrHeight = 0;
+            }
+
+            return m_CanvasScaler.referenceResolution;
         }
     }
 }

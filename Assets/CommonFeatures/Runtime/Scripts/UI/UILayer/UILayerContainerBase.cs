@@ -57,7 +57,8 @@ namespace CommonFeatures.UI
         /// <summary>
         /// ∆¡ƒª  ≈‰
         /// </summary>
+        /// <param name="referenceResolution">‘§…Ë≥ﬂ¥Á</param>
         /// <returns></returns>
-        public abstract UniTask LayerContainerScreenFit();
+        public abstract UniTask LayerContainerScreenFit(Vector2 referenceResolution);
     }
 }

@@ -12,7 +12,7 @@ namespace CommonFeatures.UI
     {
         public override EUILayer Layer => EUILayer.Notice;
 
-        public override UniTask LayerContainerScreenFit()
+        public override UniTask LayerContainerScreenFit(Vector2 referenceResolution)
         {
             return UniTask.CompletedTask;
         }
