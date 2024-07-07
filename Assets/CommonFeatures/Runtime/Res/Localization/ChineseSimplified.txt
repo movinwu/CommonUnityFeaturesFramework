@@ -1,2 +1,3 @@
 [config]
 splash_welcome=欢迎使用\r\n版本号:{0}
+initialize_package_progress=初始化中,当前进度:{0}%

@@ -1,2 +1,3 @@
 [config]
 splash_welcome=Welcome\r\nVersion:{0}
+initialize_package_progress=initializing, current progress:{0}%

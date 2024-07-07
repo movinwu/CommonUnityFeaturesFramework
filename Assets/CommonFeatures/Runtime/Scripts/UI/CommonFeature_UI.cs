@@ -92,6 +92,17 @@ namespace CommonFeatures.UI
         }
 
         /// <summary>
+        /// 获取基础UI
+        /// </summary>
+        /// <param name="uiType"></param>
+        /// <returns></returns>
+        public UIPanelBase GetBaseUI(EBaseLayerUIType uiType)
+        {
+            m_Model.BaseLayerUIType = uiType;
+            return GetLayerContainer(EUILayer.Base).GetUI(m_Model);
+        }
+
+        /// <summary>
         /// 隐藏当前的基础UI
         /// </summary>
         public void HideBaseUI()

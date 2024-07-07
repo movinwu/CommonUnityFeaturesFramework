@@ -34,7 +34,7 @@ namespace CommonFeatures.DataTable
                 for (int fileIndex = 0; fileIndex < files.Length; fileIndex++)
                 {
                     var file = files[fileIndex];
-                    if (file.Name.EndsWith(".byte"))
+                    if (file.Name.EndsWith(".bytes"))
                     {
                         try
                         {

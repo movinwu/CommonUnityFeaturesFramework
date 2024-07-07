@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71b02dfa7aa9d4545b3417a18477fbee, type: 3}
+  m_Name: BuildinFileManifest
+  m_EditorClassIdentifier: 
+  BuildinFiles:
+  - PackageName: DefaultPackage
+    FileName: 561157bca8f8add432c0b2bcf8fd39fd.bundle
+    FileCRC32: f1681029
+  - PackageName: DefaultPackage
+    FileName: BuildReport_DefaultPackage_2024-07-07-1338.json
+    FileCRC32: abed7b19
+  - PackageName: DefaultPackage
+    FileName: OutputCache
+    FileCRC32: 95aa330c
+  - PackageName: DefaultPackage
+    FileName: OutputCache.manifest
+    FileCRC32: 8ea44d61

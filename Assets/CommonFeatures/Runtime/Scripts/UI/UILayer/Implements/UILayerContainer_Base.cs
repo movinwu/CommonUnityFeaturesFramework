@@ -73,6 +73,22 @@ namespace CommonFeatures.UI
             }
         }
 
+        public override UIPanelBase GetUI(UILayerContainerModel model)
+        {
+            if (m_CurShowUIType == model.BaseLayerUIType)
+            {
+                if (m_CurShowUIType == EBaseLayerUIType.Progress)
+                {
+                    return m_PanelProgress;
+                }
+                if (m_CurShowUIType == EBaseLayerUIType.Splash)
+                {
+                    return m_PanelSplash;
+                }
+            }
+            return null;
+        }
+
         public override void HideUI(UILayerContainerModel model)
         {
             if (m_AllPanelDic.ContainsKey(m_CurShowUIType))

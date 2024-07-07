@@ -374,7 +374,7 @@ namespace HotfixScripts
                                     List<IExcelType> typeList = new List<IExcelType>(col - 2);//数据处理类
                                     var name = sheet.Name.Substring(2);
                                     //序列化byte数据
-                                    var byteName = name + ".byte";
+                                    var byteName = name + ".bytes";
                                     var byteFullPath = Path.Combine(pathData.bytePath, byteName);
                                     if (File.Exists(byteFullPath))
                                     {

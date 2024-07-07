@@ -46,6 +46,15 @@ namespace CommonFeatures.UI
         }
 
         /// <summary>
+        /// 获取UI数据
+        /// </summary>
+        /// <param name="model"></param>
+        public virtual UIPanelBase GetUI(UILayerContainerModel model)
+        {
+            return null;
+        }
+
+        /// <summary>
         /// 关闭UI函数
         /// </summary>
         /// <param name="model"></param>

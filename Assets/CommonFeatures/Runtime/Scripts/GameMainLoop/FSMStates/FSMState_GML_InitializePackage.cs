@@ -1,7 +1,10 @@
+using CommonFeatures.Config;
 using CommonFeatures.FSM;
 using CommonFeatures.Log;
 using CommonFeatures.Resource;
+using CommonFeatures.UI;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 using YooAsset;
 
 namespace CommonFeatures.GML
@@ -70,6 +73,22 @@ namespace CommonFeatures.GML
                 initializationOperation = package.InitializeAsync(createParameters);
             }
 
+            if (CommonFeaturesManager.UI.GetBaseUI(UI.EBaseLayerUIType.Progress) is UIPanel_Progress progress)
+            {
+                progress.ShowProgress(
+                    getTxt: () =>
+                    {
+                        return string.Format(
+                            CommonFeaturesManager.Localization.GetMainLocalization("initialize_package_progress"),
+                            (initializationOperation.Progress * 100f).ToString("F2")
+                            );
+                    },
+                    getProgress: () =>
+                    {
+                        return initializationOperation.Progress;
+                    });
+            }
+
             await UniTask.WaitUntil(() => initializationOperation.IsDone);
 
             // 如果初始化失败弹出提示界面
@@ -92,7 +111,7 @@ namespace CommonFeatures.GML
         {
             //string hostServerIP = "http://10.0.2.2"; //安卓模拟器地址
             string hostServerIP = "http://127.0.0.1";
-            string appVersion = "v1.0";
+            string appVersion = CommonFeaturesManager.Config.GetConfig<ApplicationConfig>().ApplicationVersion;
 
 #if UNITY_EDITOR
             if (UnityEditor.EditorUserBuildSettings.activeBuildTarget == UnityEditor.BuildTarget.Android)
