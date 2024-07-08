@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46df25b49258d3b4686031d1433257d5, type: 3}
   m_Name: ResourceConfig
   m_EditorClassIdentifier: 
-  PlayMode: 1
+  PlayMode: 0
   DefaultBuildPipeline: 0
   PackageName: DefaultPackage

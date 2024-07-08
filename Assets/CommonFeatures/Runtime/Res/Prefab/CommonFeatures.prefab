@@ -120,6 +120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e54add1ffb9c68d40a9d0e641e6ad4e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_MaskPanel: {fileID: 8484904124378946144, guid: da282fa17103674458bf0f12933e6bea, type: 3}
 --- !u!1 &1879442201687307144
 GameObject:
   m_ObjectHideFlags: 0

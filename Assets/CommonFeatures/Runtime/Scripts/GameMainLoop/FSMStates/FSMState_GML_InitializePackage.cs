@@ -76,13 +76,7 @@ namespace CommonFeatures.GML
             if (CommonFeaturesManager.UI.GetBaseUI(UI.EBaseLayerUIType.Progress) is UIPanel_Progress progress)
             {
                 progress.ShowProgress(
-                    getTxt: () =>
-                    {
-                        return string.Format(
-                            CommonFeaturesManager.Localization.GetMainLocalization("initialize_package_progress"),
-                            (initializationOperation.Progress * 100f).ToString("F2")
-                            );
-                    },
+                    localizationKey: "initialize_package_progress",
                     getProgress: () =>
                     {
                         return initializationOperation.Progress;

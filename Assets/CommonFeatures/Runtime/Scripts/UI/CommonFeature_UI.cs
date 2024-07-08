@@ -111,6 +111,23 @@ namespace CommonFeatures.UI
         }
 
         /// <summary>
+        /// ÏÔÊ¾ÕÚÕÖ
+        /// </summary>
+        /// <returns></returns>
+        public async UniTask ShowMask()
+        {
+            await GetLayerContainer(EUILayer.Mask).ShowUI(m_Model);
+        }
+
+        /// <summary>
+        /// Òş²ØÕÚÕÖ
+        /// </summary>
+        public void HideMask()
+        {
+            GetLayerContainer(EUILayer.Mask).HideUI(m_Model);
+        }
+
+        /// <summary>
         /// ¼àÌıÆÁÄ»±ä»¯
         /// </summary>
         /// <returns></returns>
@@ -162,6 +179,18 @@ namespace CommonFeatures.UI
             }
 
             return m_CanvasScaler.referenceResolution;
+        }
+
+        public override void Release()
+        {
+            base.Release();
+
+            foreach (var container in m_LayerContainerDic.Values)
+            {
+                container.Release();
+            }
+
+            m_LayerContainerDic.Clear();
         }
     }
 }

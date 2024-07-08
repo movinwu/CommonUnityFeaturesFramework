@@ -1,3 +1,4 @@
+using CommonFeatures.Localization;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
 using System.Collections;
@@ -26,10 +27,17 @@ namespace CommonFeatures.UI
             return base.OnInit();
         }
 
+        protected override void OnRelease()
+        {
+            HideProgress();
+
+            base.OnRelease();
+        }
+
         /// <summary>
         /// 显示进度条
         /// </summary>
-        public void ShowProgress(System.Func<string> getTxt, System.Func<float> getProgress)
+        public void ShowProgress(string localizationKey, System.Func<float> getProgress)
         {
             if (null != m_Token)
             {
@@ -38,11 +46,17 @@ namespace CommonFeatures.UI
                 m_Token = null;
             }
 
+            m_Slider.transform.parent.gameObject.SetActive(true);
+            m_Text.gameObject.SetActive(true);
+
+            m_Text.GetComponent<AutoLocalization>().SetLocalization(localizationKey, "0.00");
+
             m_Token = new CancellationTokenSource();
             UniTaskAsyncEnumerable.EveryUpdate().ForEachAsync(x =>
             {
-                m_Slider.fillAmount = Mathf.Clamp01(getProgress?.Invoke() ?? 0);
-                m_Text.text = getTxt?.Invoke() ?? string.Empty;
+                var progress = Mathf.Clamp01(getProgress?.Invoke() ?? 0);
+                m_Slider.fillAmount = progress;
+                m_Text.GetComponent<AutoLocalization>().AddLocalizationFormat((Mathf.RoundToInt(progress * 10000) / 100f).ToString());
             }, m_Token.Token);
         }
 
@@ -57,6 +71,9 @@ namespace CommonFeatures.UI
                 m_Token.Dispose();
                 m_Token = null;
             }
+
+            m_Slider.transform.parent.gameObject.SetActive(false);
+            m_Text.gameObject.SetActive(false);
         }
     }
 }

@@ -39,9 +39,6 @@ namespace CommonFeatures.UI
             var panelSplash = GameObject.Instantiate(m_PanelSplash.gameObject, this.transform).GetComponent<UIPanel_Splash>();
             var panelProgress = GameObject.Instantiate(m_PanelProgress.gameObject, this.transform).GetComponent<UIPanel_Progress>();
 
-            await panelSplash.Init();
-            await panelProgress.Init();
-
             m_CurShowUIType = EBaseLayerUIType.None;
 
             //添加类型和界面对应情况
@@ -51,6 +48,7 @@ namespace CommonFeatures.UI
             //隐藏所有界面
             foreach (var panel in m_AllPanelDic.Values)
             {
+                await panel.Init();
                 panel.gameObject.SetActive(false);
             }
         }
@@ -77,14 +75,7 @@ namespace CommonFeatures.UI
         {
             if (m_CurShowUIType == model.BaseLayerUIType)
             {
-                if (m_CurShowUIType == EBaseLayerUIType.Progress)
-                {
-                    return m_PanelProgress;
-                }
-                if (m_CurShowUIType == EBaseLayerUIType.Splash)
-                {
-                    return m_PanelSplash;
-                }
+                return m_AllPanelDic[m_CurShowUIType];
             }
             return null;
         }
@@ -104,6 +95,20 @@ namespace CommonFeatures.UI
             {
                 await m_AllPanelDic[m_CurShowUIType].PanelScreenFit(referenceResolution);
             }
+        }
+
+        protected override void OnRelease()
+        {
+            base.OnRelease();
+
+            HideUI(null);
+
+            foreach (var panel in m_AllPanelDic.Values)
+            {
+                panel.Release();
+            }
+
+            m_AllPanelDic.Clear();
         }
     }
 

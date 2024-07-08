@@ -36,6 +36,16 @@ namespace CommonFeatures.UI
             return UniTask.CompletedTask;
         }
 
+        public void Release()
+        {
+            OnRelease();
+        }
+
+        protected virtual void OnRelease()
+        {
+
+        }
+
         /// <summary>
         /// ÏÔÊ¾UIº¯Êý
         /// </summary>

@@ -168,6 +168,7 @@ namespace CommonFeatures
             GML.Release();
             Resource.Release();
             Event.Release();
+            UI.Release();
         }
     }
 }

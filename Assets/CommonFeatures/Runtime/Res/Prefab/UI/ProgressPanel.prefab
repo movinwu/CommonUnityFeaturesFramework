@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 94638128584779756}
   - component: {fileID: 5117878149721693004}
   - component: {fileID: 6654048051147496080}
-  - component: {fileID: 4702157248216352658}
+  - component: {fileID: 8163546720646631842}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -146,7 +146,7 @@ MonoBehaviour:
   m_text: "\u521D\u59CB\u5316\u4E2D,\u5F53\u524D\u8FDB\u5EA6:100.00%"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 937efd8dc394a5042b40ce14cb5a3842, type: 2}
-  m_sharedMaterial: {fileID: 0}
+  m_sharedMaterial: {fileID: 344847713124977366, guid: 937efd8dc394a5042b40ce14cb5a3842, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -212,7 +212,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &4702157248216352658
+--- !u!114 &8163546720646631842
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -221,9 +221,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 547380003739750512}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6366ee97f6b541449155028b9487355a, type: 3}
+  m_Script: {fileID: 11500000, guid: 7a0acacd384f0fb4aa2a24989b8572b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_IsHotfixLocalization: 1
+  m_MainLocalizationKey: 
+  m_HotfixLocalizationKey: 0
 --- !u!1 &4734755997490067590
 GameObject:
   m_ObjectHideFlags: 0

@@ -45,7 +45,7 @@ namespace CommonFeatures.GML
 
             //显示进度条界面
             await CommonFeaturesManager.UI.ShowBaseUI(UI.EBaseLayerUIType.Progress);
-            
+
             //开始初始化包
             await m_FSM.StartFSM<FSMState_GML_InitializePackage>();
         }
