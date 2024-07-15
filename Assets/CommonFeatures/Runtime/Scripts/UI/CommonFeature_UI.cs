@@ -1,8 +1,10 @@
 using CommonFeatures;
 using CommonFeatures.Log;
 using Cysharp.Threading.Tasks;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,19 +22,17 @@ namespace CommonFeatures.UI
         [SerializeField] private Vector2 m_CanvasReferenceResolution;
 
         /// <summary>
-        /// 所有层级容器
+        /// 所有层级容器和类型对应关系
         /// </summary>
-        private Dictionary<EUILayer, UILayerContainerBase> m_LayerContainerDic = new Dictionary<EUILayer, UILayerContainerBase>();
+        private Dictionary<Type, UILayerContainerBase> m_LayerContainerDic = new Dictionary<Type, UILayerContainerBase>();
 
         /// <summary>
-        /// 所有层级容器数据
+        /// 之前的屏幕缓存
         /// </summary>
-        private UILayerContainerModel m_Model;
+        private Rect m_PreScreenRect;
 
         public override async UniTask Init()
         {
-            m_Model = new UILayerContainerModel();
-
             m_LayerContainerDic.Clear();
 
             if (null != m_LayerContainers && m_LayerContainers.Length > 0)
@@ -40,21 +40,14 @@ namespace CommonFeatures.UI
                 for (int i = 0; i < m_LayerContainers.Length; i++)
                 {
                     var layerContainer = m_LayerContainers[i];
-                    if (null != layerContainer)
+                    var type = layerContainer.GetType();
+                    if (m_LayerContainerDic.ContainsKey(type))
                     {
-                        var containerBase = layerContainer.GetComponent<UILayerContainerBase>();
-                        if (null != containerBase)
-                        {
-                            var layer = containerBase.Layer;
-                            if (m_LayerContainerDic.ContainsKey(layer))
-                            {
-                                CommonLog.LogError($"层级重复,在{m_LayerContainerDic[layer].gameObject.name}和{containerBase.gameObject.name}两个物体上同时挂载了层级{layer}");
-                            }
-                            else
-                            {
-                                m_LayerContainerDic.Add(layer, containerBase);
-                            }
-                        }
+                        CommonLog.LogError($"类型重复,在{m_LayerContainerDic[type].gameObject.name}和{layerContainer.gameObject.name}两个层级容器类型相同");
+                    }
+                    else
+                    {
+                        m_LayerContainerDic.Add(type, layerContainer);
                     }
                 }
             }
@@ -64,93 +57,41 @@ namespace CommonFeatures.UI
                 await layerContainer.Init();
             }
 
-            ListenScreenSizeChange().Forget();
+            m_PreScreenRect = Rect.zero;
         }
 
         /// <summary>
-        /// 获取容器
+        /// 获取UI容器
         /// </summary>
-        /// <param name="layer"></param>
+        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        private UILayerContainerBase GetLayerContainer(EUILayer layer)
+        public T GetLayerContainer<T>() where T : UILayerContainerBase
         {
-            if (m_LayerContainerDic.ContainsKey(layer))
+            var layerType = typeof(T);
+            if (m_LayerContainerDic.ContainsKey(layerType))
             {
-                return m_LayerContainerDic[layer];
+                return m_LayerContainerDic[layerType] as T;
             }
             return null;
         }
 
-        /// <summary>
-        /// 显示基础UI
-        /// </summary>
-        /// <param name="uiType"></param>
-        public async UniTask ShowBaseUI(EBaseLayerUIType uiType)
+        public override void OnUpdate()
         {
-            m_Model.BaseLayerUIType = uiType;
-            await GetLayerContainer(EUILayer.Base).ShowUI(m_Model);
-        }
+            base.OnUpdate();
 
-        /// <summary>
-        /// 获取基础UI
-        /// </summary>
-        /// <param name="uiType"></param>
-        /// <returns></returns>
-        public UIPanelBase GetBaseUI(EBaseLayerUIType uiType)
-        {
-            m_Model.BaseLayerUIType = uiType;
-            return GetLayerContainer(EUILayer.Base).GetUI(m_Model);
-        }
-
-        /// <summary>
-        /// 隐藏当前的基础UI
-        /// </summary>
-        public void HideBaseUI()
-        {
-            GetLayerContainer(EUILayer.Base).HideUI(m_Model);
-        }
-
-        /// <summary>
-        /// 显示遮罩
-        /// </summary>
-        /// <returns></returns>
-        public async UniTask ShowMask()
-        {
-            await GetLayerContainer(EUILayer.Mask).ShowUI(m_Model);
-        }
-
-        /// <summary>
-        /// 隐藏遮罩
-        /// </summary>
-        public void HideMask()
-        {
-            GetLayerContainer(EUILayer.Mask).HideUI(m_Model);
-        }
-
-        /// <summary>
-        /// 监听屏幕变化
-        /// </summary>
-        /// <returns></returns>
-        private async UniTask ListenScreenSizeChange()
-        {
-            var preScreenRect = Rect.zero;
-            while (true)
+            //监听屏幕变化
+            var curScreenRect = Screen.safeArea;
+            if (m_PreScreenRect != curScreenRect)
             {
-                var curScreenRect = Screen.safeArea;
-                if (preScreenRect != curScreenRect)
+                m_PreScreenRect = curScreenRect;
+
+                var referenceResolution = GetCanvasReferenceResolution();
+
+                //遍历所有界面容器
+                foreach (var container in m_LayerContainerDic.Values)
                 {
-                    preScreenRect = curScreenRect;
-
-                    var referenceResolution = GetCanvasReferenceResolution();
-
-                    //遍历所有界面容器
-                    foreach (var container in m_LayerContainerDic.Values)
-                    {
-                        await container.LayerContainerScreenFit(referenceResolution);
-                    }
+                    container.LayerContainerScreenFit(referenceResolution);
                 }
-
-                await UniTask.Yield();
             }
         }
 

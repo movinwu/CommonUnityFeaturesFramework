@@ -44,7 +44,7 @@ namespace CommonFeatures.NetWork
 
         public void SendMessage(byte[] data)
         {
-            CommonFeaturesManager.Network.SendMsg(data);
+            CFM.Network.SendMsg(data);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace CommonFeatures.NetWork
             }
             finally
             {
-                ReferencePool.Back(this);
+                CFM.ReferencePool.Back(this);
             }
         }
 

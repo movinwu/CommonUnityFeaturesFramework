@@ -73,9 +73,10 @@ namespace CommonFeatures.GML
                 initializationOperation = package.InitializeAsync(createParameters);
             }
 
-            if (CommonFeaturesManager.UI.GetBaseUI(UI.EBaseLayerUIType.Progress) is UIPanel_Progress progress)
+            var progressPanel = CFM.UI.GetLayerContainer<UILayerContainer_Base>().GetUI<UIPanel_Progress>();
+            if (null != progressPanel)
             {
-                progress.ShowProgress(
+                progressPanel.ShowProgress(
                     localizationKey: "initialize_package_progress",
                     getProgress: () =>
                     {
@@ -105,7 +106,7 @@ namespace CommonFeatures.GML
         {
             //string hostServerIP = "http://10.0.2.2"; //°²×¿Ä£ÄâÆ÷µØÖ·
             string hostServerIP = "http://127.0.0.1";
-            string appVersion = CommonFeaturesManager.Config.GetConfig<ApplicationConfig>().ApplicationVersion;
+            string appVersion = CFM.Config.GetConfig<ApplicationConfig>().ApplicationVersion;
 
 #if UNITY_EDITOR
             if (UnityEditor.EditorUserBuildSettings.activeBuildTarget == UnityEditor.BuildTarget.Android)

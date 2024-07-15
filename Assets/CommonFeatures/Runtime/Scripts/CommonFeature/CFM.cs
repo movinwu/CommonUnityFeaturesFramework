@@ -6,6 +6,7 @@ using CommonFeatures.GML;
 using CommonFeatures.Localization;
 using CommonFeatures.Log;
 using CommonFeatures.NetWork;
+using CommonFeatures.Pool;
 using CommonFeatures.PSM;
 using CommonFeatures.Resource;
 using CommonFeatures.UI;
@@ -16,10 +17,10 @@ namespace CommonFeatures
 {
     /// <summary>
     /// CommonFeaturesManager
-    /// 通用功能管理器,所有功能入口
+    /// <para>通用功能管理器,所有功能入口</para>
     /// <para>全局只能有一个功能入口,不要重复挂载</para>
     /// </summary>
-    public class CommonFeaturesManager : MonoBehaviour
+    public class CFM : MonoBehaviour
     {
         /// <summary>
         /// 所属的物体名称
@@ -76,6 +77,16 @@ namespace CommonFeatures
         /// </summary>
         public static CommonFeature_Localization Localization;
 
+        /// <summary>
+        /// 引用池
+        /// </summary>
+        public static CommonFeature_ReferencePool ReferencePool;
+
+        /// <summary>
+        /// 物体缓存池
+        /// </summary>
+        public static CommonFeature_GameObjectPool GameObjectPool;
+
         private void Awake()
         {
             AsyncAwake().Forget();
@@ -106,7 +117,7 @@ namespace CommonFeatures
                     DataTable = child.GetComponent<CommonFeature_DataTable>();
                     await DataTable.Init();
                 }
-                else if ("Net".Equals(child.name))
+                else if ("Network".Equals(child.name))
                 {
                     Network = child.GetComponent<CommonFeature_Network>();
                     await Network.Init();
@@ -146,6 +157,16 @@ namespace CommonFeatures
                     Localization = child.GetComponent<CommonFeature_Localization>();
                     await Localization.Init();
                 }
+                else if ("ReferencePool".Equals(child.name))
+                {
+                    ReferencePool = child.GetComponent<CommonFeature_ReferencePool>();
+                    await ReferencePool.Init();
+                }
+                else if ("GameObjectPool".Equals(child.name))
+                {
+                    GameObjectPool = child.GetComponent<CommonFeature_GameObjectPool>();
+                    await GameObjectPool.Init();
+                }
             }
 
             //正式开始游戏
@@ -159,16 +180,36 @@ namespace CommonFeatures
             }
         }
 
+        private void Update()
+        {
+            ReferencePool.OnUpdate();
+            GameObjectPool.OnUpdate();
+            Event.OnUpdate();
+            Config.OnUpdate();
+            DataTable.OnUpdate();
+            Network.OnUpdate();
+            FSM.OnUpdate();
+            PSM.OnUpdate();
+            Localization.OnUpdate();
+            Resource.OnUpdate();
+            UI.OnUpdate();
+            GML.OnUpdate();
+        }
+
         private void OnDestroy()
         {
+            ReferencePool.Release();
+            GameObjectPool.Release();
+            Event.Release();
+            Config.Release();
             DataTable.Release();
             Network.Release();
             FSM.Release();
             PSM.Release();
-            GML.Release();
+            Localization.Release();
             Resource.Release();
-            Event.Release();
             UI.Release();
+            GML.Release();
         }
     }
 }

@@ -53,10 +53,15 @@ namespace CommonFeatures.UI
             }
         }
 
-        public override async UniTask ShowUI(UILayerContainerModel model)
+        /// <summary>
+        /// 显示ui
+        /// </summary>
+        /// <param name="uiType"></param>
+        /// <returns></returns>
+        public async UniTask ShowUI(EBaseLayerUIType uiType)
         {
             //基础层所有界面显示默认互斥,同一时间只能显示一个界面
-            if (m_CurShowUIType == model.BaseLayerUIType)
+            if (m_CurShowUIType == uiType)
             {
                 return;
             }
@@ -64,23 +69,45 @@ namespace CommonFeatures.UI
             {
                 m_AllPanelDic[m_CurShowUIType].Hide();
             }
-            m_CurShowUIType = model.BaseLayerUIType;
+            m_CurShowUIType = uiType;
             if (m_AllPanelDic.ContainsKey(m_CurShowUIType))
             {
                 await m_AllPanelDic[m_CurShowUIType].Show();
             }
         }
 
-        public override UIPanelBase GetUI(UILayerContainerModel model)
+        /// <summary>
+        /// 获取ui
+        /// </summary>
+        /// <param name="uiType"></param>
+        /// <returns></returns>
+        public UIPanelBase GetUI(EBaseLayerUIType uiType)
         {
-            if (m_CurShowUIType == model.BaseLayerUIType)
+            if (m_CurShowUIType == uiType)
             {
                 return m_AllPanelDic[m_CurShowUIType];
             }
             return null;
         }
 
-        public override void HideUI(UILayerContainerModel model)
+        /// <summary>
+        /// 获取ui
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public T GetUI<T>() where T : UIPanelBase
+        {
+            if (m_AllPanelDic.TryGetValue(m_CurShowUIType, out var panel) && panel is T t)
+            {
+                return t;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 隐藏ui
+        /// </summary>
+        public void HideUI()
         {
             if (m_AllPanelDic.ContainsKey(m_CurShowUIType))
             {
@@ -89,11 +116,11 @@ namespace CommonFeatures.UI
             m_CurShowUIType = EBaseLayerUIType.None;
         }
 
-        public override async UniTask LayerContainerScreenFit(Vector2 referenceResolution)
+        public override void LayerContainerScreenFit(Vector2 referenceResolution)
         {
             if (m_AllPanelDic.ContainsKey(m_CurShowUIType))
             {
-                await m_AllPanelDic[m_CurShowUIType].PanelScreenFit(referenceResolution);
+                m_AllPanelDic[m_CurShowUIType].PanelScreenFit(referenceResolution);
             }
         }
 
@@ -101,7 +128,7 @@ namespace CommonFeatures.UI
         {
             base.OnRelease();
 
-            HideUI(null);
+            HideUI();
 
             foreach (var panel in m_AllPanelDic.Values)
             {

@@ -18,7 +18,7 @@ namespace CommonFeatures.Log
         private static void Init()
         {
             tags = ELogType.Null;
-            var config = CommonFeaturesManager.Config.GetConfig<LogConfig>();
+            var config = CFM.Config.GetConfig<LogConfig>();
             //ºÏ≤È≈‰÷√
             if (config.EnableNet)
             {

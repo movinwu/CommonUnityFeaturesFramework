@@ -17,7 +17,7 @@ namespace CommonFeatures.UI
 
         protected override async UniTask OnShow()
         {
-            m_Text.AddLocalizationFormat(CommonFeaturesManager.Config.GetConfig<ApplicationConfig>().FullVersion);
+            m_Text.AddLocalizationFormat(CFM.Config.GetConfig<ApplicationConfig>().FullVersion);
 
             //splashΩÁ√ÊÕ£¡Ù2s
             await UniTask.Delay(2000);

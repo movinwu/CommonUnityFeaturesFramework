@@ -6,9 +6,9 @@
 // 生成时间：2023/11/19 22:03:14
 //------------------------------------------------------------
 
+using CommonFeatures;
 using CommonFeatures.Log;
 using CommonFeatures.NetWork;
-using CommonFeatures.Pool;
 
 namespace HotfixScripts
 {
@@ -22,7 +22,7 @@ namespace HotfixScripts
             System.Threading.Tasks.Task.Run(() =>
             {
                 System.Threading.Thread.Sleep(2000);
-                var heart = ReferencePool.Acquire<PB_HeartProtocol>();//每次读取或者写入消息都必须从缓存池中取用新的item
+                var heart = CFM.ReferencePool.Acquire<PB_HeartProtocol>();//每次读取或者写入消息都必须从缓存池中取用新的item
                 var data = new PB_Heart();
                 data.Id = id;
                 heart.SendMessage(data);

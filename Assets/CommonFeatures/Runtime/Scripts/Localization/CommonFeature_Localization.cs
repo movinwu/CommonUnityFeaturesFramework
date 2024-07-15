@@ -46,8 +46,8 @@ namespace CommonFeatures.Localization
                 _CurLanguage = value;
 
                 //发出预定义好的语言改变事件
-                var e = ReferencePool.Acquire<LocalizationEvent>();
-                CommonFeaturesManager.Event.SendMessage(e);
+                var e = CFM.ReferencePool.Acquire<LocalizationEvent>();
+                CFM.Event.SendMessage(e);
             }
         }
 

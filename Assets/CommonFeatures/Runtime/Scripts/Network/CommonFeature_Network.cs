@@ -87,7 +87,7 @@ namespace CommonFeatures.NetWork
 
                 var protocol = ProtocolManager.Instance.GenerateProtocol(msgId);
                 protocol.ReceiveMessage(arg.RawData);
-                ReferencePool.Back((IReference)protocol);
+                CFM.ReferencePool.Back((IReference)protocol);
             }
             else if (arg.IsText)
             {

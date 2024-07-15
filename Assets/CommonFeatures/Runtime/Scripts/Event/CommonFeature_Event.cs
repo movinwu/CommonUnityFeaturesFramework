@@ -50,8 +50,8 @@ namespace CommonFeatures.Event
 					SendMessage(wrapper.EventID, wrapper.Message);
 					_postingList.RemoveAt(i);
 
-					ReferencePool.Back(wrapper.Message);
-					ReferencePool.Back(wrapper);
+					CFM.ReferencePool.Back(wrapper.Message);
+					CFM.ReferencePool.Back(wrapper);
 				}
 			}
 		}
@@ -161,7 +161,7 @@ namespace CommonFeatures.Event
 			}
 
 			//广播完成后放回事件
-			ReferencePool.Back(message);
+			CFM.ReferencePool.Back(message);
 		}
 
 		/// <summary>
@@ -178,7 +178,7 @@ namespace CommonFeatures.Event
 		/// </summary>
 		public void PostMessage(int eventId, IEventMessage message)
 		{
-			var wrapper = ReferencePool.Acquire<PostWrapper>();
+			var wrapper = CFM.ReferencePool.Acquire<PostWrapper>();
 			wrapper.PostFrame = UnityEngine.Time.frameCount;
 			wrapper.EventID = eventId;
 			wrapper.Message = message;

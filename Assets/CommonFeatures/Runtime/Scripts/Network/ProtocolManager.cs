@@ -47,7 +47,7 @@ namespace CommonFeatures.NetWork
         {
             if (m_ProtocolTypeDic.TryGetValue(msgId, out var type))
             {
-                return (IProtocol)ReferencePool.Acquire(type);
+                return (IProtocol)CFM.ReferencePool.Acquire(type);
             }
             else
             {

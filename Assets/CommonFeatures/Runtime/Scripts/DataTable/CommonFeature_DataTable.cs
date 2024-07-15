@@ -21,7 +21,7 @@ namespace CommonFeatures.DataTable
         /// </summary>
         public void ReadDataTable()
         {
-            var config = CommonFeaturesManager.Config.GetConfig<DataTableConfig>();
+            var config = CFM.Config.GetConfig<DataTableConfig>();
             var assemblyName = config.AssemblyName;
             var dataReadType = config.DataReadType;
 

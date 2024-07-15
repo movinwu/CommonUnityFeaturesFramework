@@ -1,5 +1,6 @@
 using CommonFeatures.FSM;
 using CommonFeatures.Resource;
+using CommonFeatures.UI;
 using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
@@ -30,21 +31,21 @@ namespace CommonFeatures.GML
                 new FSMState_GML_UpdatePackageManifest(),
                 new FSMState_GML_UpdatePackageVersion(),
             };
-            m_FSM = CommonFeaturesManager.FSM.CreateFSM(states, this);
+            m_FSM = CFM.FSM.CreateFSM(states, this);
 
             //初始化数据
             var blackboard = new GameMainLoopBlackboard();
-            var config = CommonFeaturesManager.Config.GetConfig<ResourceConfig>();
+            var config = CFM.Config.GetConfig<ResourceConfig>();
             blackboard.DefaultBuildPipeline = config.DefaultBuildPipeline;
             blackboard.PackageName = config.PackageName;
             blackboard.PlayMode = config.PlayMode;
             m_FSM.BlackBoard = blackboard;
 
             //显示过渡界面
-            await CommonFeaturesManager.UI.ShowBaseUI(UI.EBaseLayerUIType.Splash);
+            await CFM.UI.GetLayerContainer<UILayerContainer_Base>().ShowUI(UI.EBaseLayerUIType.Splash);
 
             //显示进度条界面
-            await CommonFeaturesManager.UI.ShowBaseUI(UI.EBaseLayerUIType.Progress);
+            await CFM.UI.GetLayerContainer<UILayerContainer_Base>().ShowUI(UI.EBaseLayerUIType.Progress);
 
             //开始初始化包
             await m_FSM.StartFSM<FSMState_GML_InitializePackage>();

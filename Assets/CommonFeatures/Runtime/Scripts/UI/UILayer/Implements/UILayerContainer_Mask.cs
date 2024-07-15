@@ -24,19 +24,9 @@ namespace CommonFeatures.UI
             await base.OnInit();
         }
 
-        public override UniTask LayerContainerScreenFit(Vector2 referenceResolution)
+        public override void LayerContainerScreenFit(Vector2 referenceResolution)
         {
-            return m_MaskPanel.PanelScreenFit(referenceResolution);
-        }
-
-        public override UniTask ShowUI(UILayerContainerModel model)
-        {
-            return m_MaskPanel.Show();
-        }
-
-        public override void HideUI(UILayerContainerModel model)
-        {
-            m_MaskPanel.Hide();
+            throw new System.NotImplementedException();
         }
     }
 }

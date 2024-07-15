@@ -21,6 +21,14 @@ namespace CommonFeatures
         }
 
         /// <summary>
+        /// 每帧更新
+        /// </summary>
+        public virtual void OnUpdate()
+        {
+
+        }
+
+        /// <summary>
         /// 释放函数
         /// <para>替换生命周期函数OnDestroy</para>
         /// </summary>

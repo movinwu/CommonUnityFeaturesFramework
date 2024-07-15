@@ -19,26 +19,26 @@ namespace HotfixScripts
     /// <summary>
     /// 数据表基类
     /// </summary>
-    public class DT_Example : IDataTable
+    public class DT_UI : IDataTable
     {
         /// <summary>
         /// 所有数据
         /// </summary>
-        private Dictionary<int, DR_Example> m_AllDataDic;
+        private Dictionary<int, DR_UI> m_AllDataDic;
 
         /// <summary>
         /// 所有数据
         /// </summary>
-        private DR_Example[] m_AllDataArray;
+        private DR_UI[] m_AllDataArray;
 
         public void FromBinary(BinaryReader reader)
         {
-            m_AllDataDic = new Dictionary<int, DR_Example>();
+            m_AllDataDic = new Dictionary<int, DR_UI>();
             int count = reader.ReadInt32();
-            m_AllDataArray = new DR_Example[count];
+            m_AllDataArray = new DR_UI[count];
             for (int i = 0; i < count; i++)
             {
-                var dataRow = new DR_Example();
+                var dataRow = new DR_UI();
                 dataRow.FromBinary(reader);
                 m_AllDataDic.Add(dataRow.ID, dataRow);
                 m_AllDataArray[i] = dataRow;
@@ -47,8 +47,8 @@ namespace HotfixScripts
 
         public void FromJson(string json)
         {
-            m_AllDataArray = JsonMapper.ToObject<DR_Example[]>(json);
-            m_AllDataDic = new Dictionary<int, DR_Example>();
+            m_AllDataArray = JsonMapper.ToObject<DR_UI[]>(json);
+            m_AllDataDic = new Dictionary<int, DR_UI>();
             for (int i = 0; i < m_AllDataArray.Length; i++)
             {
                 m_AllDataDic.Add(m_AllDataArray[i].ID, m_AllDataArray[i]);

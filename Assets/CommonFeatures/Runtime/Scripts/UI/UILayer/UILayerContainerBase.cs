@@ -47,37 +47,10 @@ namespace CommonFeatures.UI
         }
 
         /// <summary>
-        /// 显示UI函数
-        /// </summary>
-        /// <param name="model"></param>
-        public virtual UniTask ShowUI(UILayerContainerModel model)
-        {
-            return UniTask.CompletedTask;
-        }
-
-        /// <summary>
-        /// 获取UI数据
-        /// </summary>
-        /// <param name="model"></param>
-        public virtual UIPanelBase GetUI(UILayerContainerModel model)
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// 关闭UI函数
-        /// </summary>
-        /// <param name="model"></param>
-        public virtual void HideUI(UILayerContainerModel model)
-        {
-
-        }
-
-        /// <summary>
         /// 屏幕适配
         /// </summary>
         /// <param name="referenceResolution">预设尺寸</param>
         /// <returns></returns>
-        public abstract UniTask LayerContainerScreenFit(Vector2 referenceResolution);
+        public abstract void LayerContainerScreenFit(Vector2 referenceResolution);
     }
 }

@@ -28,7 +28,7 @@ namespace CommonFeatures.UI
 
         public async UniTask Show()
         {
-            PanelScreenFit(CommonFeaturesManager.UI.GetCanvasReferenceResolution()).Forget();
+            PanelScreenFit(CFM.UI.GetCanvasReferenceResolution());
             this.gameObject.SetActive(true);
 
             //遍历找到所有的自动化多语言组件
@@ -73,7 +73,7 @@ namespace CommonFeatures.UI
         /// 界面适配
         /// </summary>
         /// <param name="referenceResolution">预设尺寸</param>
-        public UniTask PanelScreenFit(Vector2 referenceResolution)
+        public void PanelScreenFit(Vector2 referenceResolution)
         {
             var curScreenSize = Screen.safeArea;//适配safeArea//预设尺寸
 
@@ -96,8 +96,6 @@ namespace CommonFeatures.UI
             rectTrans.pivot = Vector2.one * 0.5f;
             rectTrans.sizeDelta = size;
             rectTrans.anchoredPosition = pos;
-
-            return UniTask.CompletedTask;
         }
     }
 }

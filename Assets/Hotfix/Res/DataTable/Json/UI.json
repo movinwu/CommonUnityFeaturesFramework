@@ -1,0 +1,15 @@
+﻿
+[
+    {
+        "id" : 1,
+        "panel_prefab" : "",
+        "pause_last_panel" : false,
+        "is_guide"         : true
+    },
+    {
+        "id" : 2,
+        "panel_prefab" : "",
+        "pause_last_panel" : true,
+        "is_guide"         : false
+    }
+]

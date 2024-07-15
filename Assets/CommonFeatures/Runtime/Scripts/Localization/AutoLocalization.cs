@@ -36,13 +36,13 @@ namespace CommonFeatures.Localization
         public void OnShow()
         {
             this.m_IsDirty = true;
-            CommonFeaturesManager.Event.AddListener<LocalizationEvent>(OnLocalizationChange);
+            CFM.Event.AddListener<LocalizationEvent>(OnLocalizationChange);
         }
 
         public void OnHide()
         {
             this.m_IsDirty = false;
-            CommonFeaturesManager.Event.RemoveListener<LocalizationEvent>(OnLocalizationChange);
+            CFM.Event.RemoveListener<LocalizationEvent>(OnLocalizationChange);
         }
 
         private void LateUpdate()
@@ -52,7 +52,7 @@ namespace CommonFeatures.Localization
                 this.m_IsDirty = false;
                 if (this.m_IsHotfixLocalization)
                 {
-                    var str = CommonFeaturesManager.Localization.GetHotfixLocalizationConfig(m_HotfixLocalizationKey);
+                    var str = CFM.Localization.GetHotfixLocalizationConfig(m_HotfixLocalizationKey);
                     if (m_LocalizationFormat.Count == 0)
                     {
                         RefreshLocalization(str);
@@ -64,7 +64,7 @@ namespace CommonFeatures.Localization
                 }
                 else
                 {
-                    var str = CommonFeaturesManager.Localization.GetMainLocalization(m_MainLocalizationKey);
+                    var str = CFM.Localization.GetMainLocalization(m_MainLocalizationKey);
                     if (m_LocalizationFormat.Count == 0)
                     {
                         RefreshLocalization(str);
