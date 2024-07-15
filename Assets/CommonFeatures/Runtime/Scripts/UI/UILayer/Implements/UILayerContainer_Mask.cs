@@ -26,7 +26,13 @@ namespace CommonFeatures.UI
 
         public override void LayerContainerScreenFit(Vector2 referenceResolution)
         {
-            throw new System.NotImplementedException();
+            m_MaskPanel.PanelScreenFit(referenceResolution);
+        }
+
+        public UniTask ShowMask()
+        {
+            m_MaskPanel.gameObject.SetActive(true);
+            return m_MaskPanel.Show();
         }
     }
 }

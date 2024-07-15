@@ -145,8 +145,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u521D\u59CB\u5316\u4E2D,\u5F53\u524D\u8FDB\u5EA6:100.00%"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 937efd8dc394a5042b40ce14cb5a3842, type: 2}
-  m_sharedMaterial: {fileID: 344847713124977366, guid: 937efd8dc394a5042b40ce14cb5a3842, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 71c2043f73673b64ea84c13809f4b16e, type: 2}
+  m_sharedMaterial: {fileID: -1869758785358130944, guid: 71c2043f73673b64ea84c13809f4b16e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

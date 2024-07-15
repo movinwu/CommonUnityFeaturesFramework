@@ -10,11 +10,33 @@ namespace CommonFeatures.UI
     /// </summary>
     public class UILayerContainer_Tip : UILayerContainerBase
     {
+        [SerializeField] private UIPanel_Tip m_TipPanelOrigin;
+
         public override EUILayer Layer => EUILayer.Tip;
+
+        private UIPanel_Tip m_TipPanel;
+
+        protected override async UniTask OnInit()
+        {
+            m_TipPanel = GameObject.Instantiate(m_TipPanelOrigin, this.transform);
+            await m_TipPanel.Init();
+            m_TipPanel.gameObject.SetActive(true);
+
+            await base.OnInit();
+        }
 
         public override void LayerContainerScreenFit(Vector2 referenceResolution)
         {
-            throw new System.NotImplementedException();
+            m_TipPanel.PanelScreenFit(referenceResolution);
+        }
+
+        /// <summary>
+        /// œ‘ æÃ· æ
+        /// </summary>
+        /// <param name="tip"></param>
+        public void ShowTip(string tip)
+        {
+            m_TipPanel.ShowTip(tip);
         }
     }
 }

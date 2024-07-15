@@ -14,7 +14,7 @@ namespace CommonFeatures.UI
 
         public override void LayerContainerScreenFit(Vector2 referenceResolution)
         {
-            throw new System.NotImplementedException();
+            
         }
     }
 }

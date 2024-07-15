@@ -10,11 +10,33 @@ namespace CommonFeatures.UI
     /// </summary>
     public class UILayerContainer_Notice : UILayerContainerBase
     {
+        [SerializeField] private UIPanel_Notice m_NoticePanelOrigin;
+
         public override EUILayer Layer => EUILayer.Notice;
+
+        private UIPanel_Notice m_NoticePanel;
+
+        protected override async UniTask OnInit()
+        {
+            m_NoticePanel = GameObject.Instantiate(m_NoticePanelOrigin, this.transform);
+            await m_NoticePanel.Init();
+            m_NoticePanel.gameObject.SetActive(true);
+
+            await base.OnInit();
+        }
 
         public override void LayerContainerScreenFit(Vector2 referenceResolution)
         {
-            throw new System.NotImplementedException();
+            m_NoticePanel.PanelScreenFit(referenceResolution);
+        }
+
+        /// <summary>
+        /// œ‘ æÃ· æ
+        /// </summary>
+        /// <param name="notice"></param>
+        public void ShowNotice(string notice)
+        {
+            m_NoticePanel.ShowNotice(notice);
         }
     }
 }
