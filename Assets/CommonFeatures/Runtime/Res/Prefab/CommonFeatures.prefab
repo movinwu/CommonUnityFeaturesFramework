@@ -60,6 +60,7 @@ GameObject:
   - component: {fileID: 7239974756292930883}
   - component: {fileID: 5275456413409025702}
   - component: {fileID: 6147738000214778487}
+  - component: {fileID: 5302627481610646097}
   m_Layer: 5
   m_Name: MaskLayerContainer
   m_TagString: Untagged
@@ -121,6 +122,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_MaskPanelOrigin: {fileID: 8484904124378946144, guid: da282fa17103674458bf0f12933e6bea, type: 3}
+--- !u!114 &5302627481610646097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 466287327208026111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &1879442201687307144
 GameObject:
   m_ObjectHideFlags: 0
@@ -276,6 +294,7 @@ GameObject:
   - component: {fileID: 7668530466960701647}
   - component: {fileID: 2079619978282931872}
   - component: {fileID: 8964098993662911992}
+  - component: {fileID: 7085534255479040720}
   m_Layer: 5
   m_Name: BaseLayerContainer
   m_TagString: Untagged
@@ -338,6 +357,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PanelProgress: {fileID: 3184170717999671273, guid: 18a381ec3d36b1649b36add9bdc0135f, type: 3}
   m_PanelSplash: {fileID: 6851615816105486513, guid: dc830449a9a12974098f675a35d48d63, type: 3}
+--- !u!114 &7085534255479040720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2215453692326111250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &2446227758520872644
 GameObject:
   m_ObjectHideFlags: 0
@@ -349,6 +385,7 @@ GameObject:
   - component: {fileID: 1496955750527648530}
   - component: {fileID: 6778500933669697447}
   - component: {fileID: 7016658667231286910}
+  - component: {fileID: 5121657347217338425}
   m_Layer: 5
   m_Name: NoticeLayerContainer
   m_TagString: Untagged
@@ -410,6 +447,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_NoticePanelOrigin: {fileID: 3084543262469069969, guid: cb6e9aa527fa20047a4bc6d64a47ef8a, type: 3}
+--- !u!114 &5121657347217338425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2446227758520872644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &2621328902281262099
 GameObject:
   m_ObjectHideFlags: 0
@@ -469,6 +523,7 @@ GameObject:
   - component: {fileID: 8049685148882357643}
   - component: {fileID: 7379195635076079670}
   - component: {fileID: 7789219003750093896}
+  - component: {fileID: 702290449548585544}
   m_Layer: 5
   m_Name: LoadingLayerContainer
   m_TagString: Untagged
@@ -529,6 +584,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0644a64218c3cff4d8ccafb06fa3d2cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &702290449548585544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3207907718224236457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &3983522734166193540
 GameObject:
   m_ObjectHideFlags: 0
@@ -780,6 +852,7 @@ GameObject:
   - component: {fileID: 5757705030314259829}
   - component: {fileID: 2581775306534987717}
   - component: {fileID: 4273884926522906992}
+  - component: {fileID: 7464939162273058501}
   m_Layer: 5
   m_Name: TipLayerContainer
   m_TagString: Untagged
@@ -841,6 +914,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TipPanelOrigin: {fileID: 1802934021619491853, guid: 5c2fb632d099f20439145b4202e48bd4, type: 3}
+--- !u!114 &7464939162273058501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4307332472780762436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &4981789261190538395
 GameObject:
   m_ObjectHideFlags: 0
@@ -909,6 +999,7 @@ GameObject:
   - component: {fileID: 8309336170711824036}
   - component: {fileID: 2607300725082736402}
   - component: {fileID: 6045120816336191756}
+  - component: {fileID: 6315291262917184530}
   m_Layer: 5
   m_Name: GuideLayerContainer
   m_TagString: Untagged
@@ -969,6 +1060,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 128da71b15756304d81c6625f008cc6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6315291262917184530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5031338250117240363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &5128482222008442817
 GameObject:
   m_ObjectHideFlags: 0
@@ -1024,6 +1132,7 @@ GameObject:
   - component: {fileID: 1894617465642980766}
   - component: {fileID: 3289984625781679644}
   - component: {fileID: 3467351581505884959}
+  - component: {fileID: 993149631954693084}
   m_Layer: 5
   m_Name: FloatLayerContainer
   m_TagString: Untagged
@@ -1084,6 +1193,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecda33871cf2e3041bea40153d8ce319, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &993149631954693084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5271590516995759654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &5490019037905297692
 GameObject:
   m_ObjectHideFlags: 0
@@ -1262,6 +1388,7 @@ GameObject:
   - component: {fileID: 5336118434432912233}
   - component: {fileID: 8730504896794135169}
   - component: {fileID: 8621328352101958283}
+  - component: {fileID: 5453246224097775067}
   m_Layer: 5
   m_Name: DebugLayerContainer
   m_TagString: Untagged
@@ -1322,6 +1449,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fac71cb0e55c384791ae93344ee06b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_DebugPanelOrigin: {fileID: -6246868530874255285, guid: 6471e102a57dfd940895727d5f51574a, type: 3}
+  m_ContinueClickTime: 0.5
+  m_ContinueClickCount: 3
+--- !u!114 &5453246224097775067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8900860742380111179}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &8964686828900070536
 GameObject:
   m_ObjectHideFlags: 0

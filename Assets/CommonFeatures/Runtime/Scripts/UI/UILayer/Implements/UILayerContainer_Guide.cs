@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace CommonFeatures.UI
 {
@@ -29,6 +30,15 @@ namespace CommonFeatures.UI
             {
                 m_AllGuidePanel[i].PanelScreenFit(referenceResolution);
             }
+        }
+
+        public override async UniTask OnUpdate()
+        {
+            for (int i = 0; i < m_AllGuidePanel.Count; i++)
+            {
+                await m_AllGuidePanel[i].OnUpdate();
+            }
+            await base.OnUpdate();
         }
 
         /// <summary>
@@ -96,6 +106,12 @@ namespace CommonFeatures.UI
                 canvas.enabled = true;
                 canvas.overrideSorting = true;
                 canvas.sortingOrder = (int)guideLayer;
+                var raycaster = obj.GetComponent<GraphicRaycaster>();
+                if (null == raycaster)
+                {
+                    raycaster = obj.AddComponent<GraphicRaycaster>();
+                }
+                raycaster.enabled = true;
             }
         }
 
@@ -138,6 +154,12 @@ namespace CommonFeatures.UI
                 {
                     canvasList[i].enabled = false;
                     canvasList.RemoveAt(i);
+                    var raycaster = obj.GetComponent<GraphicRaycaster>();
+                    if (null == raycaster)
+                    {
+                        raycaster = obj.AddComponent<GraphicRaycaster>();
+                    }
+                    raycaster.enabled = false;
                     return;
                 }
             }
@@ -160,6 +182,13 @@ namespace CommonFeatures.UI
             for (int i = 0; i < canvasList.Count; i++)
             {
                 canvasList[i].enabled = false;
+                var obj = canvasList[i].gameObject;
+                var raycaster = obj.GetComponent<GraphicRaycaster>();
+                if (null == raycaster)
+                {
+                    raycaster = obj.AddComponent<GraphicRaycaster>();
+                }
+                raycaster.enabled = false;
             }
             canvasList.Clear();
             m_AllGuideObjectBelongs.Remove(panel);

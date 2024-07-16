@@ -24,6 +24,12 @@ namespace CommonFeatures.UI
             await base.OnInit();
         }
 
+        public override async UniTask OnUpdate()
+        {
+            await m_MaskPanel.OnUpdate();
+            await base.OnUpdate();
+        }
+
         public override void LayerContainerScreenFit(Vector2 referenceResolution)
         {
             m_MaskPanel.PanelScreenFit(referenceResolution);

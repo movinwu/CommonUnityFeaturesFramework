@@ -46,6 +46,11 @@ namespace CommonFeatures.UI
             return UniTask.CompletedTask;
         }
 
+        public virtual UniTask OnUpdate()
+        {
+            return UniTask.CompletedTask;
+        }
+
         public void Hide()
         {
             this.gameObject.SetActive(false);

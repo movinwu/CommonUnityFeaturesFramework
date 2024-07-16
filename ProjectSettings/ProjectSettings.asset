@@ -824,7 +824,7 @@ PlayerSettings:
     PS4: DOTWEEN
     PS5: DOTWEEN
     Stadia: DOTWEEN
-    Standalone: DOTWEEN
+    Standalone: DOTWEEN;UNITASK_DOTWEEN_SUPPORT
     WebGL: DOTWEEN
     Windows Store Apps: DOTWEEN
     XboxOne: DOTWEEN

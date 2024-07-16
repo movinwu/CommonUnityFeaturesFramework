@@ -93,6 +93,12 @@ namespace CommonFeatures.UI
                     container.LayerContainerScreenFit(referenceResolution);
                 }
             }
+
+            //ÈÝÆ÷¸üÐÂ
+            foreach (var container in m_LayerContainerDic.Values)
+            {
+                container.OnUpdate();
+            }
         }
 
         /// <summary>

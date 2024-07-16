@@ -76,6 +76,15 @@ namespace CommonFeatures.UI
             }
         }
 
+        public override async UniTask OnUpdate()
+        {
+            if (m_AllPanelDic.ContainsKey(m_CurShowUIType))
+            {
+                await m_AllPanelDic[m_CurShowUIType].OnUpdate();
+            }
+            await base.OnUpdate();
+        }
+
         /// <summary>
         /// ªÒ»°ui
         /// </summary>
