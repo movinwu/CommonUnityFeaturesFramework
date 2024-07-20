@@ -49,7 +49,7 @@ namespace CommonFeatures.UI
                 var input = m_InputField.text;
                 if (string.IsNullOrEmpty(input))
                 {
-                    AddHistory(CFM.Localization.GetMainLocalization("debug_input_empty"));
+                    AddHistory(CFM.Localization.GetLocalizationStr("debug_input_empty"));
                     return;
                 }
                 var strs = input.Split(' ');
@@ -62,7 +62,7 @@ namespace CommonFeatures.UI
                         return;
                     }
                 }
-                AddHistory(CFM.Localization.GetMainLocalization("debug_input_error"));
+                AddHistory(CFM.Localization.GetLocalizationStr("debug_input_error"));
             });
             m_ClearBtn.onClick.RemoveAllListeners();
             m_ClearBtn.onClick.AddListener(ClearHistory);

@@ -1,3 +1,4 @@
+using CommonFeatures.Config;
 using CommonFeatures.Log;
 using CommonFeatures.Pool;
 using CommonFeatures.Utility;
@@ -14,26 +15,14 @@ namespace CommonFeatures.Localization
     /// </summary>
     public class CommonFeature_Localization : CommonFeature
     {
-        /// <summary>
-        /// 主包中的本地化配置
-        /// </summary>
-        [Header("主包中本地化配置")]
-        [SerializeField, Tooltip("多语言文本和多语言资源名称都可以在这里配置,文档文件名称和语言枚举名称保持一致")] 
-        private TextAsset[] m_MainLocalization;
-
         [Header("当前语言")]
         [SerializeField]
         private ELanguage _CurLanguage = ELanguage.Null;
 
         /// <summary>
-        /// 主包所有多语言配置
+        /// 所有多语言配置
         /// </summary>
-        private Dictionary<ELanguage, Dictionary<string, string>> m_MainLocalizationData = new Dictionary<ELanguage, Dictionary<string, string>>((int)ELanguage.Max);
-
-        /// <summary>
-        /// 热更所有多语言配置
-        /// </summary>
-        private Dictionary<ELanguage, Dictionary<int, string>> m_HotfixLocalizationData = new Dictionary<ELanguage, Dictionary<int, string>>((int)ELanguage.Max);
+        private Dictionary<ELanguage, Dictionary<string, string>> m_LocalizationData = new Dictionary<ELanguage, Dictionary<string, string>>((int)ELanguage.Max);
 
         public ELanguage CurLanguage
         {
@@ -54,36 +43,7 @@ namespace CommonFeatures.Localization
         public override UniTask Init()
         {
             //读取主包本地化配置
-            m_MainLocalizationData.Clear();
-
-            if (null != m_MainLocalization)
-            {
-                for (int i = 0; i < m_MainLocalization.Length; i++)
-                {
-#if UNITY_WEBGL
-                    if (Enum.TryParse(typeof(ELanguage), m_MainLocalization[i].name, out var result) && result is ELanguage type)
-#else
-                    if (Enum.TryParse<ELanguage>(m_MainLocalization[i].name, out var type))
-#endif
-                    {
-                        //主包多语言使用ini配置
-                        var parser = new IniDataParser();
-                        var data = parser.Parse(m_MainLocalization[i].text);
-                        var localizationData = new Dictionary<string, string>();
-                        for (int j = 0; j < data.Sections.Count; j++)
-                        {
-                            for (int k = 0; k < data.Sections[j].Properties.Count; k++)
-                            {
-                                var property = data.Sections[j].Properties[k];
-                                //反斜杠会被识别为字符,为其添加上一个反斜杠,配置时应配置双反斜杠,方便替换
-                                localizationData.Add(StringUtility.StandardBackslash(property.Key), StringUtility.StandardBackslash(property.Value));
-                            }
-                        }
-
-                        m_MainLocalizationData.Add(type, localizationData);
-                    }
-                }
-            }
+            m_LocalizationData.Clear();
 
             //如果没有设置初始化多语言,采用用户当前多语言
             if (_CurLanguage == ELanguage.Null
@@ -100,43 +60,75 @@ namespace CommonFeatures.Localization
                 }
             }
 
+            //需要保证配置Config模块加载完毕再读取多语言
+            var localizationConfig = CFM.Config.GetConfig<LocalizationConfig>();
+            var assets = localizationConfig.MainHotfixAssets;
+            if (null != localizationConfig.MainHotfixAssets)
+            {
+                for (int i = 0; i < assets.Length; i++)
+                {
+                    ReadLocalization(assets[i].text, localizationConfig.SplitChar);
+                }
+            }
+
             return base.Init();
         }
 
         /// <summary>
-        /// 添加热更新多语言配置
+        /// 读取多语言配置
         /// </summary>
-        /// <param name="language"></param>
-        /// <param name="localizationConfig"></param>
-        /// <param name="clearOld">是否清除旧配置</param>
-        public void AddHotfixLocalizationConfig(ELanguage language, Dictionary<int, string> localizationConfig, bool clearOld = true)
+        /// <param name="txt"></param>
+        /// <param name="splitChar"></param>
+        public void ReadLocalization(string txt, char splitChar)
         {
-            if (clearOld)
+            if (string.IsNullOrEmpty(txt))
             {
-                if (m_HotfixLocalizationData.ContainsKey(language))
-                {
-                    m_HotfixLocalizationData.Remove(language);
-                }
+                return;
             }
-
-            if (m_HotfixLocalizationData.ContainsKey(language))
+            var contents = txt.Split("\r\n");
+            if (contents.Length <= 1)
             {
-                var curConfig = m_HotfixLocalizationData[language];
-                foreach (var config in localizationConfig)
+                CommonLog.LogError("读取多语言配置出错, 行数至少一行");
+                return;
+            }
+            //第一行为语言类型数字
+            if (int.TryParse(contents[0], out var enumValue))
+            {
+                var languageType = (ELanguage)enumValue;
+                if (languageType <= ELanguage.Null || languageType >= ELanguage.Max)
                 {
-                    if (curConfig.ContainsKey(config.Key))
+                    CommonLog.LogError($"读取多语言配置出错, 语言类型 {languageType} 不正确");
+                    return;
+                }
+
+                if (!m_LocalizationData.ContainsKey(languageType))
+                {
+                    m_LocalizationData.Add(languageType, new Dictionary<string, string>());
+                }
+
+                for (int i = 1; i < contents.Length; i++)
+                {
+                    var keyValuePair = contents[i].Split(splitChar);
+                    if (keyValuePair.Length != 2)
                     {
-                        curConfig[config.Key] = config.Value;
+                        CommonLog.LogError($"读取多语言配置出错, 行数: {i + 1}, 语言: {languageType}");
+                        continue;
+                    }
+                    var dic = m_LocalizationData[languageType];
+                    if (dic.ContainsKey(keyValuePair[0]))
+                    {
+                        CommonLog.LogError($"多语言键重复, 语言: {languageType}, 键: {keyValuePair[0]}, 重复值1: {dic[keyValuePair[0]]}, 重复值2: {keyValuePair[1]}");
+                        continue;
                     }
                     else
                     {
-                        curConfig.Add(config.Key, config.Value);
+                        m_LocalizationData[languageType].Add(keyValuePair[0], keyValuePair[1]);
                     }
                 }
             }
             else
             {
-                m_HotfixLocalizationData.Add(language, localizationConfig);
+                CommonLog.LogError($"读取多语言配置出错, 语言类型 {contents[0]} 不正确");
             }
         }
 
@@ -145,16 +137,16 @@ namespace CommonFeatures.Localization
         /// </summary>
         /// <param name="languageKey"></param>
         /// <param name="language"></param>
-        public string GetMainLocalization(string languageKey, ELanguage language = ELanguage.Null)
+        public string GetLocalizationStr(string languageKey, ELanguage language = ELanguage.Null)
         {
             if (language == ELanguage.Null)
             {
                 language = CurLanguage;
             }
 
-            if (m_MainLocalizationData.ContainsKey(language))
+            if (m_LocalizationData.ContainsKey(language))
             {
-                var config = m_MainLocalizationData[language];
+                var config = m_LocalizationData[language];
                 if (config.ContainsKey(languageKey))
                 {
                     return config[languageKey];
@@ -167,39 +159,6 @@ namespace CommonFeatures.Localization
             else
             {
                 CommonLog.ConfigError($"主包语言{language}的本地化配置不存在");
-            }
-
-            return string.Empty;
-        }
-
-        /// <summary>
-        /// 获取热更多语言配置
-        /// </summary>
-        /// <param name="languageKey"></param>
-        /// <param name="language"></param>
-        /// <returns></returns>
-        public string GetHotfixLocalizationConfig(int languageKey, ELanguage language = ELanguage.Null)
-        {
-            if (language == ELanguage.Null)
-            {
-                language = CurLanguage;
-            }
-
-            if (m_HotfixLocalizationData.ContainsKey(language))
-            {
-                var config = m_HotfixLocalizationData[language];
-                if (config.ContainsKey(languageKey))
-                {
-                    return config[languageKey];
-                }
-                else
-                {
-                    CommonLog.ConfigError($"热更语言{language}的本地化配置中不存在key: {languageKey}");
-                }
-            }
-            else
-            {
-                CommonLog.ConfigError($"热更语言{language}的本地化配置不存在");
             }
 
             return string.Empty;

@@ -13,14 +13,8 @@ namespace CommonFeatures.Localization
     /// </summary>
     public class AutoLocalization : MonoBehaviour
     {
-        [Header("是否热更多语言")]
-        [SerializeField] private bool m_IsHotfixLocalization = true;
-
-        [Header("主包key,\"是否热更多语言\"不勾选时生效")]
-        [SerializeField] private string m_MainLocalizationKey;
-
-        [Header("热更key,\"是否热更多语言\"勾选时生效")]
-        [SerializeField] private int m_HotfixLocalizationKey;
+        [Header("多语言key")]
+        [SerializeField] private string m_LocalizationKey;
 
         /// <summary>
         /// 本地化多语言格式化
@@ -50,29 +44,14 @@ namespace CommonFeatures.Localization
             if (this.m_IsDirty)
             {
                 this.m_IsDirty = false;
-                if (this.m_IsHotfixLocalization)
+                var str = CFM.Localization.GetLocalizationStr(m_LocalizationKey);
+                if (m_LocalizationFormat.Count == 0)
                 {
-                    var str = CFM.Localization.GetHotfixLocalizationConfig(m_HotfixLocalizationKey);
-                    if (m_LocalizationFormat.Count == 0)
-                    {
-                        RefreshLocalization(str);
-                    }
-                    else
-                    {
-                        RefreshLocalization(string.Format(str, m_LocalizationFormat.ToArray()));
-                    }
+                    RefreshLocalization(str);
                 }
                 else
                 {
-                    var str = CFM.Localization.GetMainLocalization(m_MainLocalizationKey);
-                    if (m_LocalizationFormat.Count == 0)
-                    {
-                        RefreshLocalization(str);
-                    }
-                    else
-                    {
-                        RefreshLocalization(string.Format(str, m_LocalizationFormat.ToArray()));
-                    }
+                    RefreshLocalization(string.Format(str, m_LocalizationFormat.ToArray()));
                 }
             }
         }
@@ -126,23 +105,6 @@ namespace CommonFeatures.Localization
         }
 
         /// <summary>
-        /// 修改多语言格式化文本
-        /// </summary>
-        /// <param name="formatStr"></param>
-        public void AddLocalizationFormat(params string[] formatStr)
-        {
-            //清空所有
-            m_LocalizationFormat.Clear();
-            //重新添加
-            for (int i = 0; i < formatStr.Length; i++)
-            {
-                m_LocalizationFormat.Add(formatStr[i]);
-            }
-            //脏标记
-            this.m_IsDirty = true;
-        }
-
-        /// <summary>
         /// 清空多语言格式化文本
         /// </summary>
         public void ClearFormatStr()
@@ -156,21 +118,26 @@ namespace CommonFeatures.Localization
         /// 添加本地化key
         /// </summary>
         /// <param name="key"></param>
-        public void AddLocalizationKey(string key)
+        public void SetLocalizationKey(string key)
         {
-            this.m_MainLocalizationKey = key;
-            this.m_IsHotfixLocalization = false;
+            this.m_LocalizationKey = key;
             this.m_IsDirty = true;
         }
 
         /// <summary>
-        /// 添加本地化key
+        /// 修改多语言格式化文本
         /// </summary>
-        /// <param name="key"></param>
-        public void AddLocalizationKey(int key)
+        /// <param name="formatStr"></param>
+        public void SetLocalizationFormat(params string[] formatStr)
         {
-            this.m_HotfixLocalizationKey = key;
-            this.m_IsHotfixLocalization = true;
+            //清空所有
+            m_LocalizationFormat.Clear();
+            //重新添加
+            for (int i = 0; i < formatStr.Length; i++)
+            {
+                m_LocalizationFormat.Add(formatStr[i]);
+            }
+            //脏标记
             this.m_IsDirty = true;
         }
 
@@ -181,19 +148,8 @@ namespace CommonFeatures.Localization
         /// <param name="formatStr"></param>
         public void SetLocalization(string key, params string[] formatStr)
         {
-            AddLocalizationKey(key);
-            AddLocalizationFormat(formatStr);
-        }
-
-        /// <summary>
-        /// 设置本地化
-        /// </summary>
-        /// <param name="key"></param>
-        /// <param name="formatStr"></param>
-        public void SetLocalization(int key, params string[] formatStr)
-        {
-            AddLocalizationKey(key);
-            AddLocalizationFormat(formatStr);
+            SetLocalizationKey(key);
+            SetLocalizationFormat(formatStr);
         }
     }
 }
