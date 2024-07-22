@@ -10,24 +10,16 @@ namespace CommonFeatures.Config
     [CreateAssetMenu(menuName = "ScriptableObject/Log", fileName = "LogConfig")]
     public class LogConfig : ScriptableObject
     {
-        /// <summary>
-        /// 开启网络日志
-        /// </summary>
+        [Header("开启网络日志")]
         public bool EnableNet = true;
 
-        /// <summary>
-        /// 开启配置日志
-        /// </summary>
+        [Header("开启配置日志")]
         public bool EnableConfig = true;
 
-        /// <summary>
-        /// 开启标准日志
-        /// </summary>
+        [Header("开启标准日志")]
         public bool EnableTrace = true;
 
-        /// <summary>
-        /// 开启资源日志
-        /// </summary>
+        [Header("开启资源日志")]
         public bool EnableResource = true;
     }
 }

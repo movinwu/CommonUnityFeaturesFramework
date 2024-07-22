@@ -224,9 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a0acacd384f0fb4aa2a24989b8572b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IsHotfixLocalization: 1
-  m_MainLocalizationKey: 
-  m_HotfixLocalizationKey: 0
+  m_LocalizationKey: initialize_package_progress
 --- !u!1 &4734755997490067590
 GameObject:
   m_ObjectHideFlags: 0

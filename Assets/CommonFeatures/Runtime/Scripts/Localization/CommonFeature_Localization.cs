@@ -62,8 +62,8 @@ namespace CommonFeatures.Localization
 
             //需要保证配置Config模块加载完毕再读取多语言
             var localizationConfig = CFM.Config.GetConfig<LocalizationConfig>();
-            var assets = localizationConfig.MainHotfixAssets;
-            if (null != localizationConfig.MainHotfixAssets)
+            var assets = localizationConfig.MainLocalizationAssets;
+            if (null != localizationConfig.MainLocalizationAssets)
             {
                 for (int i = 0; i < assets.Length; i++)
                 {
@@ -111,7 +111,7 @@ namespace CommonFeatures.Localization
                     var keyValuePair = contents[i].Split(splitChar);
                     if (keyValuePair.Length != 2)
                     {
-                        CommonLog.LogError($"读取多语言配置出错, 行数: {i + 1}, 语言: {languageType}");
+                        CommonLog.LogWarning($"读取多语言配置出错, 行数: {i + 1}, 语言: {languageType}, 内容: {contents[i]}, 这一行被跳过");
                         continue;
                     }
                     var dic = m_LocalizationData[languageType];
@@ -122,7 +122,7 @@ namespace CommonFeatures.Localization
                     }
                     else
                     {
-                        m_LocalizationData[languageType].Add(keyValuePair[0], keyValuePair[1]);
+                        m_LocalizationData[languageType].Add(keyValuePair[0], StringUtility.StandardBackslash(keyValuePair[1]));
                     }
                 }
             }
@@ -153,12 +153,12 @@ namespace CommonFeatures.Localization
                 }
                 else
                 {
-                    CommonLog.ConfigError($"主包语言{language}的本地化配置中不存在key: {languageKey}");
+                    CommonLog.ConfigError($"语言{language}的本地化配置中不存在key: {languageKey}");
                 }
             }
             else
             {
-                CommonLog.ConfigError($"主包语言{language}的本地化配置不存在");
+                CommonLog.ConfigError($"语言{language}的本地化配置不存在");
             }
 
             return string.Empty;

@@ -15,11 +15,10 @@ namespace CommonFeatures.Config
         /// 主包多语言资源
         /// <para>文件第一行为语言枚举<see cref="CommonFeatures.Localization.ELanguage"/>对应数字</para>
         /// </summary>
-        public TextAsset[] MainHotfixAssets;
+        [Header("主包多语言资源")]
+        public TextAsset[] MainLocalizationAssets;
 
-        /// <summary>
-        /// 分隔符,用于分隔语言的key和value
-        /// </summary>
+        [Header("分隔符,用于分隔语言的key和value")]
         public char SplitChar;
     }
 }

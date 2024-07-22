@@ -87,24 +87,6 @@ namespace CommonFeatures.Localization
         }
 
         /// <summary>
-        /// 指定下标添加(修改)多语言格式化文本
-        /// </summary>
-        /// <param name="formatStr"></param>
-        /// <param name="index"></param>
-        public void AddLocalizationFormat(string formatStr, int index = 0)
-        {
-            //添加
-            for (int i = m_LocalizationFormat.Count; i <= index; i++)
-            {
-                m_LocalizationFormat.Add(string.Empty);
-            }
-            //修改
-            m_LocalizationFormat[index] = formatStr;
-            //脏标记
-            this.m_IsDirty = true;
-        }
-
-        /// <summary>
         /// 清空多语言格式化文本
         /// </summary>
         public void ClearFormatStr()
@@ -137,6 +119,24 @@ namespace CommonFeatures.Localization
             {
                 m_LocalizationFormat.Add(formatStr[i]);
             }
+            //脏标记
+            this.m_IsDirty = true;
+        }
+
+        /// <summary>
+        /// 指定下标添加(修改)多语言格式化文本
+        /// </summary>
+        /// <param name="formatStr"></param>
+        /// <param name="index"></param>
+        public void SetLocalizationFormat(string formatStr, int index = 0)
+        {
+            //添加
+            for (int i = m_LocalizationFormat.Count; i <= index; i++)
+            {
+                m_LocalizationFormat.Add(string.Empty);
+            }
+            //修改
+            m_LocalizationFormat[index] = formatStr;
             //脏标记
             this.m_IsDirty = true;
         }

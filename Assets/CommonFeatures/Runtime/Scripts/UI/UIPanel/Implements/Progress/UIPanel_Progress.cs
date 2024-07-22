@@ -56,7 +56,7 @@ namespace CommonFeatures.UI
             {
                 var progress = Mathf.Clamp01(getProgress?.Invoke() ?? 0);
                 m_Slider.fillAmount = progress;
-                m_Text.GetComponent<AutoLocalization>().AddLocalizationFormat((Mathf.RoundToInt(progress * 10000) / 100f).ToString());
+                m_Text.GetComponent<AutoLocalization>().SetLocalizationFormat((Mathf.RoundToInt(progress * 10000) / 100f).ToString());
             }, m_Token.Token);
         }
 

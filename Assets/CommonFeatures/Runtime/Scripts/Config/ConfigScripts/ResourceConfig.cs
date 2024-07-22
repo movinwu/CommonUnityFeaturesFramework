@@ -11,19 +11,13 @@ namespace CommonFeatures.Resource
     [CreateAssetMenu(menuName = "ScriptableObject/Resource", fileName = "ResourceConfig")]
     public class ResourceConfig : ScriptableObject
     {
-        /// <summary>
-        /// 游戏运行模式
-        /// </summary>
+        [Header("游戏运行模式")]
         public EPlayMode PlayMode = EPlayMode.EditorSimulateMode;
 
-        /// <summary>
-        /// 默认构建管线
-        /// </summary>
+        [Header("默认构建管线")]
         public EDefaultBuildPipeline DefaultBuildPipeline = EDefaultBuildPipeline.BuiltinBuildPipeline;
 
-        /// <summary>
-        /// 包名
-        /// </summary>
+        [Header("包名")]
         public string PackageName = "DefaultPackage";
     }
 }

@@ -11,24 +11,16 @@ namespace CommonFeatures.Config
     [CreateAssetMenu(menuName = "ScriptableObject/DataTable", fileName = "DataTableConfig")]
     public class DataTableConfig : ScriptableObject
     {
-        /// <summary>
-        /// 数据表加载方式
-        /// </summary>
+        [Header("数据表加载方式")]
         public EDataReadType DataReadType = EDataReadType.Binary;
 
-        /// <summary>
-        /// 数据字节文件地址
-        /// </summary>
+        [Header("数据字节文件地址")]
         public string BinaryPath = "Assets/Hotfix/Res/DataTable/Binary";
 
-        /// <summary>
-        /// 数据json文件地址
-        /// </summary>
+        [Header("数据json文件地址")]
         public string JsonPath = "Assets/Hotfix/Res/DataTable/Json";
 
-        /// <summary>
-        /// 热更程序集名称
-        /// </summary>
+        [Header("热更程序集名称")]
         public string AssemblyName = "HotfixScripts";
     }
 }

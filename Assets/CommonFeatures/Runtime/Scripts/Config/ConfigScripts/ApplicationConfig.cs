@@ -15,9 +15,7 @@ namespace CommonFeatures.Config
         /// </summary>
         public string ApplicationVersion { get => Application.version; }
 
-        /// <summary>
-        /// 热更新版本
-        /// </summary>
+        [Header("热更新版本")]
         public string HotfixVersion = "0";
 
         public string FullVersion { get => $"{ApplicationVersion}.{HotfixVersion}"; }
