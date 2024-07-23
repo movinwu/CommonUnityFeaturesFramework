@@ -15,8 +15,9 @@ namespace CommonFeatures.Localization
     /// </summary>
     public class CommonFeature_Localization : CommonFeature
     {
-        [Header("当前语言")]
-        [SerializeField]
+        /// <summary>
+        /// 当前语言
+        /// </summary>
         private ELanguage _CurLanguage = ELanguage.Null;
 
         /// <summary>
@@ -45,6 +46,10 @@ namespace CommonFeatures.Localization
             //读取主包本地化配置
             m_LocalizationData.Clear();
 
+            //需要保证配置Config模块加载完毕再读取多语言
+            var localizationConfig = CFM.Config.GetConfig<LocalizationConfig>();
+            _CurLanguage = localizationConfig.InitLanguage;
+
             //如果没有设置初始化多语言,采用用户当前多语言
             if (_CurLanguage == ELanguage.Null
                 || _CurLanguage == ELanguage.Max)
@@ -60,8 +65,6 @@ namespace CommonFeatures.Localization
                 }
             }
 
-            //需要保证配置Config模块加载完毕再读取多语言
-            var localizationConfig = CFM.Config.GetConfig<LocalizationConfig>();
             var assets = localizationConfig.MainLocalizationAssets;
             if (null != localizationConfig.MainLocalizationAssets)
             {

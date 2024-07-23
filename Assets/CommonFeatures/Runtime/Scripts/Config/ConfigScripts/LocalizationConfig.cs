@@ -20,5 +20,8 @@ namespace CommonFeatures.Config
 
         [Header("分隔符,用于分隔语言的key和value")]
         public char SplitChar;
+
+        [Header("初始化语言")]
+        public ELanguage InitLanguage = ELanguage.ChineseSimplified;
     }
 }

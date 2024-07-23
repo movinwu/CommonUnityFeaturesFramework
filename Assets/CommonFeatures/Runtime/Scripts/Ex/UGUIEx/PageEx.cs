@@ -14,11 +14,13 @@ namespace CommonFeatures.UIEx
     {
         public virtual UniTask OnShow()
         {
+            this.gameObject.SetActive(true);
             return UniTask.CompletedTask;
         }
 
         public virtual UniTask OnHide()
         {
+            this.gameObject.SetActive(false);
             return UniTask.CompletedTask;
         }
     }

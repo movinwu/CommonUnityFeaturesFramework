@@ -12,3 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 235360069fbe0bc45bc8cf822ae3c936, type: 3}
   m_Name: LocalizationConfig
   m_EditorClassIdentifier: 
+  MainLocalizationAssets:
+  - {fileID: 4900000, guid: be51f93369a69524bb944a949648dbe9, type: 3}
+  - {fileID: 4900000, guid: 6d907e12c0a5ddb45a496fcd44f188af, type: 3}
+  SplitChar: 9773
+  InitLanguage: 1

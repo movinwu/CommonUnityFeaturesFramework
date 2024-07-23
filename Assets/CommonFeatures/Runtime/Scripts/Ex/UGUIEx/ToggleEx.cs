@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,6 +26,8 @@ namespace CommonFeatures.UIEx
                 if (null == m_Button)
                 {
                     m_Button = GetComponent<Button>();
+                    //采用none,具体转变通过委托实现
+                    m_Button.transition = Selectable.Transition.None;
                 }
                 return m_Button;
             }
