@@ -16,17 +16,23 @@ namespace CommonFeatures.UI
 
         [SerializeField] private UIPanel_Debug_CommandPage m_CommandPage;
 
+        [SerializeField] private Button m_CloseButton;
+
         protected override UniTask OnShow()
         {
+            m_CloseButton.onClick.RemoveAllListeners();
+            m_CloseButton.onClick.AddListener(() =>
+            {
+                CFM.UI.GetLayerContainer<UILayerContainer_Debug>().HideDebugPanel();
+            });
+
             return m_ToggleGroup.Init(
                 onSelected: index =>
                 {
-                    CommonLog.LogError($"选中{index}");
                     return UniTask.CompletedTask;
                 },
                 onUnselected: index =>
                 {
-                    CommonLog.LogError($"取消选中{index}");
                     return UniTask.CompletedTask;
                 },
                 selectTransition: (toggle, index) =>

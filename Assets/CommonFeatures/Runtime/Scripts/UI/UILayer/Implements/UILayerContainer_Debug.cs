@@ -103,6 +103,18 @@ namespace CommonFeatures.UI
             await base.OnUpdate();
         }
 
+        /// <summary>
+        /// πÿ±’debug“≥√Ê
+        /// </summary>
+        public void HideDebugPanel()
+        {
+            if (m_IsShowing)
+            {
+                m_IsShowing = false;
+                m_DebugPanel.Hide();
+            }
+        }
+
         public override void LayerContainerScreenFit(Vector2 referenceResolution)
         {
             m_DebugPanel.PanelScreenFit(referenceResolution);

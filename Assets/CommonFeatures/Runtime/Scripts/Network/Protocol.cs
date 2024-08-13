@@ -38,7 +38,7 @@ namespace CommonFeatures.NetWork
             catch (System.Exception ex)
             {
                 CommonLog.NetError($"消息反序列化失败, 类型为: {this.Data.GetType()}");
-                CommonLog.NetException(ex);
+                CommonLog.NetError(ex);
             }
         }
 
@@ -71,7 +71,7 @@ namespace CommonFeatures.NetWork
             catch (System.Exception ex)
             {
                 CommonLog.NetError($"消息序列化失败,类型为: {this.Data.GetType()}");
-                CommonLog.NetException(ex);
+                CommonLog.NetError(ex);
             }
             finally
             {

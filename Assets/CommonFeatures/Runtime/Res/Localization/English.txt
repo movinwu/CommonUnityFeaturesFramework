@@ -1,8 +1,11 @@
 2
+close☭close
 debug_confirm☭confirm
 debug_clear☭clear
 debug_input☭input command...
 debug_input_empty☭input command empty
 debug_input_error☭input command error
+debug_command_title☭command
+debug_console_title☭console
 splash_welcome☭Welcome\r\nVersion:{0}
 initialize_package_progress☭initializing, current progress:{0}%

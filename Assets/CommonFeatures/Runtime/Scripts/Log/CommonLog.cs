@@ -15,18 +15,29 @@ namespace CommonFeatures.Log
 
         private static bool inited = false;
 
+        /// <summary>
+        /// 日志记录长度
+        /// </summary>
+        private const int LOG_RECORD_LENGTH = 500;
+
+        /// <summary>
+        /// 日志记录
+        /// </summary>
+        public static List<LogRecord> LogRecord { get; private set; } = new List<LogRecord>(LOG_RECORD_LENGTH);
+
+        /// <summary>
+        /// 当前记录下标,指向日志记录的第一条记录
+        /// </summary>
+        public static int RecordCurIndex { get; private set; }
+
         private static void Init()
         {
-            tags = ELogType.Null;
+            tags = ELogType.Config;//默认开启config配置
             var config = CFM.Config.GetConfig<LogConfig>();
             //检查配置
             if (config.EnableNet)
             {
                 tags |= ELogType.Net;
-            }
-            if (config.EnableConfig)
-            {
-                tags |= ELogType.Config;
             }
             if (config.EnableTrace)
             {
@@ -36,16 +47,14 @@ namespace CommonFeatures.Log
             {
                 tags |= ELogType.Resource;
             }
-        }
+            if (config.EnableDebug)
+            {
+                tags |= ELogType.Debug;
+            }
 
-        /// <summary>
-        /// 设置显示的日志类型,默认值不现实任何类型日志
-        /// </summary>
-        /// <param name="tag"></param>
-        //public static void SetTags(ELogType tag = ELogType.Null)
-        //{
-        //    tags = tag;
-        //}
+            LogRecord.Clear();
+            RecordCurIndex = -1;
+        }
 
         /// <summary>
         /// 打印某操作时间消耗,开始监视,配合<see cref="StopTimeWatch(System.Diagnostics.Stopwatch, string)"/>函数使用
@@ -53,7 +62,9 @@ namespace CommonFeatures.Log
         /// <param name="describe"></param>
         public static System.Diagnostics.Stopwatch StartTimeWatch(string describe = "Time")
         {
-            Debug.Log($"{describe} 计时开始");
+            UnityEngine.Debug.Log($"{describe} 计时开始");
+
+            AddRecord("ffffff", $"{describe} 计时开始", LogType.Log);
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             sw.Start();
             return sw;
@@ -68,7 +79,9 @@ namespace CommonFeatures.Log
         {
             sw.Stop();
             TimeSpan ts = sw.Elapsed;
-            Debug.Log($"{describe} 计时结束, 时间消耗: {ts.TotalMilliseconds}ms");
+            UnityEngine.Debug.Log($"{describe} 计时结束, 时间消耗: {ts.TotalMilliseconds}ms");
+
+            AddRecord("ffffff", $"{describe} 计时结束, 时间消耗: {ts.TotalMilliseconds}ms", LogType.Log);
         }
 
         /// <summary>
@@ -96,7 +109,9 @@ namespace CommonFeatures.Log
                     sb.Append("\n");
                 }
             }
-            Debug.Log(sb.ToString());
+            UnityEngine.Debug.Log(sb.ToString());
+
+            AddRecord("ffffff", sb.ToString(), LogType.Log);
         }
 
         /// <summary>
@@ -137,6 +152,15 @@ namespace CommonFeatures.Log
         }
 
         /// <summary>
+        /// debug日志打印
+        /// </summary>
+        /// <param name="msg"></param>
+        public static void Debug(object msg)
+        {
+            Print(ELogType.Debug, msg, LogType.Log, "ADD8E6");
+        }
+
+        /// <summary>
         /// 打印标准警告
         /// </summary>
         /// <param name="msg"></param>
@@ -171,6 +195,15 @@ namespace CommonFeatures.Log
         public static void ResourceWarning(object msg)
         {
             Print(ELogType.Resource, msg, LogType.Warning, "DAA520");
+        }
+
+        /// <summary>
+        /// debug日志警告
+        /// </summary>
+        /// <param name="msg"></param>
+        public static void DebugWarning(object msg)
+        {
+            Print(ELogType.Debug, msg, LogType.Warning, "ADD8E6");
         }
 
         /// <summary>
@@ -211,67 +244,12 @@ namespace CommonFeatures.Log
         }
 
         /// <summary>
-        /// 打印标准异常
+        /// debug日志错误
         /// </summary>
         /// <param name="msg"></param>
-        /// <param name="color"></param>
-        public static void TraceException(object msg, string color = "ffffff")
+        public static void DebugError(object msg)
         {
-            Print(ELogType.Trace, msg, LogType.Exception, color);
-        }
-
-        /// <summary>
-        /// 网络层日志异常
-        /// </summary>
-        /// <param name="msg"></param>
-        public static void NetException(object msg)
-        {
-            Print(ELogType.Net, msg, LogType.Exception, "ee7700");
-        }
-
-        /// <summary>
-        /// 数据层日志异常
-        /// </summary>
-        /// <param name="msg"></param>
-        public static void ModelException(object msg)
-        {
-            Print(ELogType.Net, msg, LogType.Exception, "9370DB");
-        }
-
-        /// <summary>
-        /// 业务层日志异常
-        /// </summary>
-        /// <param name="msg"></param>
-        public static void BusinessException(object msg)
-        {
-            Print(ELogType.Net, msg, LogType.Exception, "0000cd");
-        }
-
-        /// <summary>
-        /// 视图层日志异常
-        /// </summary>
-        /// <param name="msg"></param>
-        public static void ViewException(object msg)
-        {
-            Print(ELogType.Net, msg, LogType.Exception, "20B2AA");
-        }
-
-        /// <summary>
-        /// 配置日志异常
-        /// </summary>
-        /// <param name="msg"></param>
-        public static void ConfigException(object msg)
-        {
-            Print(ELogType.Net, msg, LogType.Exception, "708090");
-        }
-
-        /// <summary>
-        /// 资源日志异常
-        /// </summary>
-        /// <param name="msg"></param>
-        public static void ResourceException(object msg)
-        {
-            Print(ELogType.Resource, msg, LogType.Exception, "DAA520");
+            Print(ELogType.Debug, msg, LogType.Error, "ADD8E6");
         }
 
         /// <summary>
@@ -293,16 +271,18 @@ namespace CommonFeatures.Log
                 {
                     case LogType.Exception:
                     case LogType.Error:
-                        Debug.LogError($"<color=#{color}>{str}</color>");
+                        UnityEngine.Debug.LogError($"<color=#{color}>{str}</color>");
                         break;
                     case LogType.Warning:
-                        Debug.LogWarning($"<color=#{color}>{str}</color>");
+                        UnityEngine.Debug.LogWarning($"<color=#{color}>{str}</color>");
                         break;
                     case LogType.Log:
                     default:
-                        Debug.Log($"<color=#{color}>{str}</color>");
+                        UnityEngine.Debug.Log($"<color=#{color}>{str}</color>");
                         break;
                 }
+
+                AddRecord(color, str, type);
             }
             else if (msg is Exception ex)
             {
@@ -310,16 +290,18 @@ namespace CommonFeatures.Log
                 {
                     case LogType.Exception:
                     case LogType.Error:
-                        Debug.LogError($"<color=#{color}>{ex.Message}</color>\n<color=#{color}>{ex.StackTrace}</color>");
+                        UnityEngine.Debug.LogError($"<color=#{color}>{ex.Message}</color>\n<color=#{color}>{ex.StackTrace}</color>");
                         break;
                     case LogType.Warning:
-                        Debug.LogWarning($"<color=#{color}>{ex.Message}</color>\n<color=#{color}>{ex.StackTrace}</color>");
+                        UnityEngine.Debug.LogWarning($"<color=#{color}>{ex.Message}</color>\n<color=#{color}>{ex.StackTrace}</color>");
                         break;
                     case LogType.Log:
                     default:
-                        Debug.Log($"<color=#{color}>{ex.Message}</color>\n<color=#{color}>{ex.StackTrace}</color>");
+                        UnityEngine.Debug.Log($"<color=#{color}>{ex.Message}</color>\n<color=#{color}>{ex.StackTrace}</color>");
                         break;
                 }
+
+                AddRecord(color, ex.Message, type);
             }
             else
             {
@@ -327,16 +309,18 @@ namespace CommonFeatures.Log
                 {
                     case LogType.Exception:
                     case LogType.Error:
-                        Debug.LogError($"<color=#{color}>{msg.ToString()}</color>");
+                        UnityEngine.Debug.LogError($"<color=#{color}>{msg.ToString()}</color>");
                         break;
                     case LogType.Warning:
-                        Debug.LogWarning($"<color=#{color}>{msg.ToString()}</color>");
+                        UnityEngine.Debug.LogWarning($"<color=#{color}>{msg.ToString()}</color>");
                         break;
                     case LogType.Log:
                     default:
-                        Debug.Log($"<color=#{color}>{msg.ToString()}</color>");
+                        UnityEngine.Debug.Log($"<color=#{color}>{msg.ToString()}</color>");
                         break;
                 }
+
+                AddRecord(color, msg.ToString(), type);
             }
         }
 
@@ -348,6 +332,47 @@ namespace CommonFeatures.Log
                 Init();
             }
             return (tags & tag) != ELogType.Null;
+        }
+
+        /// <summary>
+        /// 添加记录
+        /// </summary>
+        /// <param name="color"></param>
+        /// <param name="msg"></param>
+        private static void AddRecord(string color, string msg, LogType logType)
+        {
+            if (RecordCurIndex < 0)
+            {
+                RecordCurIndex = 0;
+                var record = new LogRecord();
+                record.m_Color = color;
+                record.m_Record = msg;
+                record.m_LogType = logType;
+                LogRecord.Add(record);
+            }
+            else
+            {
+                if (LogRecord.Count < LOG_RECORD_LENGTH)
+                {
+                    var record = new LogRecord();
+                    record.m_Color = color;
+                    record.m_Record = msg;
+                    record.m_LogType = logType;
+                    LogRecord.Add(record);
+                }
+                else
+                {
+                    var record = LogRecord[RecordCurIndex];
+                    record.m_Color = color;
+                    record.m_Record = msg;
+                    record.m_LogType = logType;
+                    RecordCurIndex++;
+                    if (RecordCurIndex >= LOG_RECORD_LENGTH)
+                    {
+                        RecordCurIndex -= LOG_RECORD_LENGTH;
+                    }
+                }
+            }
         }
     }
 
@@ -380,5 +405,10 @@ namespace CommonFeatures.Log
         /// 资源日志
         /// </summary>
         Resource = 8,
+
+        /// <summary>
+        /// Debug日志
+        /// </summary>
+        Debug = 16,
     }
 }

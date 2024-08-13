@@ -514,7 +514,7 @@ namespace HotfixScripts
                     catch (System.Exception ex)
                     {
                         CommonLog.ConfigError($"表格 {file.FullName} 读取失败,检查是否已经打开表格");
-                        CommonLog.ConfigException(ex);
+                        CommonLog.ConfigError(ex);
                     }
                 }
             }

@@ -56,7 +56,7 @@ namespace CommonFeatures.DataTable
                         }
                         catch (System.Exception ex)
                         {
-                            CommonLog.ConfigException(ex);
+                            CommonLog.ConfigError(ex);
                         }
                     }
                 }
@@ -91,7 +91,7 @@ namespace CommonFeatures.DataTable
                         }
                         catch (System.Exception ex)
                         {
-                           CommonLog.ConfigException(ex);
+                           CommonLog.ConfigError(ex);
                         }
                     }
                 }

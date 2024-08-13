@@ -1,8 +1,11 @@
 1
+close☭关闭
 debug_confirm☭确认
 debug_clear☭清空
 debug_input☭输入命令...
 debug_input_empty☭输入命令为空
 debug_input_error☭输入命令错误
+debug_command_title☭命令行
+debug_console_title☭控制台
 splash_welcome☭欢迎使用\r\n版本号:{0}
 initialize_package_progress☭初始化中,当前进度:{0}%

@@ -13,13 +13,13 @@ namespace CommonFeatures.Config
         [Header("开启网络日志")]
         public bool EnableNet = true;
 
-        [Header("开启配置日志")]
-        public bool EnableConfig = true;
-
         [Header("开启标准日志")]
         public bool EnableTrace = true;
 
         [Header("开启资源日志")]
         public bool EnableResource = true;
+
+        [Header("开启debug日志")]
+        public bool EnableDebug = true;
     }
 }
